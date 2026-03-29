@@ -1,14 +1,1426 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" data-theme="dark">
 
 <head>
-    <title>Savage Dev Lab</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Hey Everett! This is the tab title that shows up in your browser -->
+    <title>SAVAGE ZONE — Everett Savage</title>
+
+    <!-- Google Fonts: Orbitron = techy/gaming, Rajdhani = clean body text -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+
+        /* ============================================================
+           CSS VARIABLES — Controls dark mode vs light mode colors
+           Change these hex values to retheme the whole site at once!
+           ============================================================ */
+        :root {
+            /* Dark Mode (default) */
+            --bg-primary:     #0a0a0a;
+            --bg-secondary:   #0d0d0d;
+            --bg-card:        #111827;
+            --bg-card-hover:  #1a2234;
+            --border-color:   #1f2937;
+            --accent-green:   #00ff88;  /* ← Main neon green color */
+            --accent-blue:    #00d4ff;  /* ← Electric blue accent */
+            --text-primary:   #f0f0f0;
+            --text-secondary: #9ca3af;
+            --shadow-glow:    0 0 20px rgba(0, 255, 136, 0.3);
+            --shadow-card:    0 4px 20px rgba(0, 0, 0, 0.5);
+            --nav-bg:         rgba(10, 10, 10, 0.88);
+        }
+
+        [data-theme="light"] {
+            /* Light Mode */
+            --bg-primary:     #f0f4f8;
+            --bg-secondary:   #e2e8f0;
+            --bg-card:        #ffffff;
+            --bg-card-hover:  #f8fafc;
+            --border-color:   #cbd5e1;
+            --accent-green:   #009955;
+            --accent-blue:    #0077aa;
+            --text-primary:   #1a1a2e;
+            --text-secondary: #475569;
+            --shadow-glow:    0 0 20px rgba(0, 153, 85, 0.2);
+            --shadow-card:    0 4px 20px rgba(0, 0, 0, 0.08);
+            --nav-bg:         rgba(240, 244, 248, 0.90);
+        }
+
+
+        /* ============================================================
+           RESET & BASE
+           ============================================================ */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        /* Custom scrollbar — stays on brand */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--accent-green); border-radius: 3px; }
+
+        /* Selection highlight */
+        ::selection {
+            background: rgba(0, 255, 136, 0.25);
+            color: var(--text-primary);
+        }
+
+
+        /* ============================================================
+           NAVIGATION BAR
+           ============================================================ */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.4s ease;
+        }
+
+        .nav-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 1.1rem;
+            letter-spacing: 3px;
+            color: var(--accent-green);
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover { color: var(--accent-green); }
+
+        /* Theme toggle button */
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            padding: 0.4rem 1rem;
+            cursor: pointer;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* Hamburger menu for small screens */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .hamburger span {
+            width: 22px;
+            height: 2px;
+            background: var(--text-primary);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        /* Nav right cluster */
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+
+        /* ============================================================
+           HERO SECTION
+           ============================================================ */
+        #hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 7rem 2rem 5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Subtle moving grid in the background */
+        #hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(0, 255, 136, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 136, 0.04) 1px, transparent 1px);
+            background-size: 55px 55px;
+            animation: gridScroll 25s linear infinite;
+            pointer-events: none;
+        }
+
+        [data-theme="light"] #hero::before {
+            background-image:
+                linear-gradient(rgba(0, 153, 85, 0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 153, 85, 0.06) 1px, transparent 1px);
+        }
+
+        @keyframes gridScroll {
+            from { transform: translateY(0); }
+            to   { transform: translateY(55px); }
+        }
+
+        /* Glowing blobs — atmospheric background lights */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.12;
+            pointer-events: none;
+            animation: orbDrift 10s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: var(--accent-green);
+            top: -150px;
+            left: -150px;
+            animation-duration: 10s;
+        }
+
+        .orb-2 {
+            width: 350px;
+            height: 350px;
+            background: var(--accent-blue);
+            bottom: -100px;
+            right: -80px;
+            animation-duration: 13s;
+            animation-delay: -5s;
+        }
+
+        @keyframes orbDrift {
+            0%, 100% { transform: translate(0px, 0px) scale(1); }
+            50%       { transform: translate(25px, -25px) scale(1.08); }
+        }
+
+        /* "// Welcome to the" label above main title */
+        .hero-eyebrow {
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 7px;
+            text-transform: uppercase;
+            color: var(--accent-green);
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            animation: fadeUp 0.8s ease forwards 0.4s;
+        }
+
+        /* ===== MAIN TITLE — "SAVAGE ZONE" ===== */
+        .hero-title {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            /* clamp(min, preferred, max) — scales with screen size */
+            font-size: clamp(3.2rem, 13vw, 9rem);
+            line-height: 1;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, var(--accent-green) 0%, var(--accent-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            animation: fadeUp 0.8s ease forwards 0.6s;
+        }
+
+        /* Glowing echo behind title */
+        .hero-title-glow {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: clamp(3.2rem, 13vw, 9rem);
+            line-height: 1;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, var(--accent-green) 0%, var(--accent-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            filter: blur(25px);
+            opacity: 0.35;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .hero-title-wrap {
+            position: relative;
+            display: inline-block;
+            z-index: 1;
+        }
+
+        /* "EVERETT SAVAGE" subtitle */
+        .hero-name {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: clamp(0.9rem, 3.5vw, 1.7rem);
+            letter-spacing: 10px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-top: 0.6rem;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            animation: fadeUp 0.8s ease forwards 0.8s;
+        }
+
+        /* Divider line between name and tagline */
+        .hero-divider {
+            width: 120px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-green), transparent);
+            margin: 2rem auto;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            animation: fadeUp 0.8s ease forwards 1s;
+        }
+
+        /* Typewriter tagline */
+        .hero-tagline {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1rem, 3.5vw, 1.6rem);
+            letter-spacing: 4px;
+            color: var(--text-primary);
+            min-height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            animation: fadeUp 0.8s ease forwards 1.2s;
+        }
+
+        /* The animated word that changes */
+        #typewriterWord { color: var(--accent-green); }
+
+        /* Blinking cursor after the typewriter word */
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1.1em;
+            background: var(--accent-green);
+            margin-left: 3px;
+            vertical-align: middle;
+            animation: cursorBlink 0.9s step-end infinite;
+        }
+
+        @keyframes cursorBlink {
+            0%, 100% { opacity: 1; }
+            50%       { opacity: 0; }
+        }
+
+        /* Scroll down hint at bottom of hero */
+        .scroll-hint {
+            position: absolute;
+            bottom: 2.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease forwards 2s;
+            z-index: 1;
+        }
+
+        .scroll-hint span {
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
+
+        .scroll-chevron {
+            width: 18px;
+            height: 18px;
+            border-right: 2px solid var(--accent-green);
+            border-bottom: 2px solid var(--accent-green);
+            transform: rotate(45deg);
+            animation: chevronBounce 1.4s ease-in-out infinite;
+        }
+
+        @keyframes chevronBounce {
+            0%, 100% { transform: rotate(45deg) translateY(0); }
+            50%       { transform: rotate(45deg) translateY(6px); }
+        }
+
+
+        /* ============================================================
+           SHARED SECTION STYLES
+           ============================================================ */
+        .section-wrap {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
+
+        /* Small label above section title — e.g. "// Level 2" */
+        .section-eyebrow {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: var(--accent-green);
+            margin-bottom: 0.6rem;
+        }
+
+        /* Section title — e.g. "Savage INTERESTS" */
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.6rem, 4.5vw, 2.8rem);
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+
+        .section-title .hl { color: var(--accent-green); }
+
+        /* Scroll-reveal base class — added by JS when in viewport */
+        .reveal {
+            opacity: 0;
+            transform: translateY(35px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+
+        /* ============================================================
+           SECTION 2: SAVAGE INTERESTS CARDS
+           ============================================================ */
+        .interests-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(265px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 2rem 1.8rem;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, background 0.4s ease;
+            cursor: default;
+        }
+
+        /* Subtle inner gradient on hover */
+        .card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 18px;
+            background: radial-gradient(ellipse at top left, var(--c-accent), transparent 65%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--c-accent);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.35), 0 0 25px var(--c-glow);
+            background: var(--bg-card-hover);
+        }
+
+        .card:hover::after { opacity: 0.05; }
+
+        /* Each card gets its own accent color via CSS custom props */
+        .card-roblox   { --c-accent: #00ff88; --c-glow: rgba(0, 255, 136, 0.25); }
+        .card-outdoor  { --c-accent: #ff7043; --c-glow: rgba(255, 112, 67, 0.25); }
+        .card-baseball { --c-accent: #00d4ff; --c-glow: rgba(0, 212, 255, 0.25); }
+        .card-coding   { --c-accent: #b06aff; --c-glow: rgba(176, 106, 255, 0.25); }
+
+        .card-icon {
+            font-size: 2.8rem;
+            display: block;
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .card-icon {
+            transform: scale(1.2) rotate(-6deg);
+        }
+
+        .card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--c-accent);
+            margin-bottom: 1rem;
+        }
+
+        .card-body {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .card-body strong {
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        /* Small pill badge at bottom of card */
+        .card-badge {
+            display: inline-block;
+            margin-top: 1.2rem;
+            padding: 0.2rem 0.8rem;
+            border: 1px solid var(--c-accent);
+            border-radius: 50px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--c-accent);
+            background: rgba(128, 128, 128, 0.08);
+        }
+
+
+        /* ============================================================
+           SECTION 3: SAVAGE CLICKS
+           ============================================================ */
+        #clicks-section {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .clicks-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 3.5rem 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Pulsing radial glow behind the counter */
+        .clicks-box::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70%;
+            padding-bottom: 70%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 255, 136, 0.06) 0%, transparent 70%);
+            animation: pulseGlow 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            50%       { opacity: 0.5; transform: translate(-50%, -50%) scale(1.15); }
+        }
+
+        .click-label-top {
+            font-size: 0.78rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* BIG number */
+        .click-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(5rem, 18vw, 9rem);
+            font-weight: 900;
+            line-height: 1;
+            color: var(--accent-green);
+            text-shadow: 0 0 30px rgba(0, 255, 136, 0.35);
+            transition: transform 0.12s ease, text-shadow 0.12s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Pop animation when button is clicked */
+        .click-number.pop {
+            transform: scale(1.18);
+            text-shadow: 0 0 60px rgba(0, 255, 136, 0.8);
+        }
+
+        /* Reaction message below counter */
+        .click-reaction {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(0.75rem, 2.2vw, 1rem);
+            letter-spacing: 2px;
+            color: var(--accent-blue);
+            min-height: 1.8em;
+            margin: 1.2rem 0 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* THE button */
+        .smash-btn {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #050505;
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
+            border: none;
+            padding: 1rem 3rem;
+            border-radius: 50px;
+            cursor: pointer;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 0 25px rgba(0, 255, 136, 0.4);
+        }
+
+        .smash-btn:hover {
+            transform: scale(1.06) translateY(-2px);
+            box-shadow: 0 0 45px rgba(0, 255, 136, 0.6);
+        }
+
+        .smash-btn:active { transform: scale(0.95); }
+
+
+        /* ============================================================
+           SECTION 4: SAVAGE FACTS
+           ============================================================ */
+        .facts-inner {
+            max-width: 720px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .fact-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 2.8rem 2.5rem;
+            min-height: 160px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 2rem;
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .fact-box.lit {
+            border-color: var(--accent-green);
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.12);
+        }
+
+        .fact-cat {
+            font-size: 0.72rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--accent-green);
+            font-weight: 700;
+        }
+
+        .fact-text {
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.65;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity 0.4s ease 0.1s, transform 0.4s ease 0.1s;
+        }
+
+        .fact-text.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fact-prompt {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .fact-btn {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent-green);
+            background: transparent;
+            border: 2px solid var(--accent-green);
+            padding: 0.85rem 2.8rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .fact-btn:hover {
+            background: var(--accent-green);
+            color: #050505;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .fact-btn:active { transform: translateY(0); }
+
+        .fact-tally {
+            display: block;
+            margin-top: 1.2rem;
+            font-size: 0.78rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
+
+
+        /* ============================================================
+           FOOTER
+           ============================================================ */
+        footer {
+            padding: 2.5rem 2rem;
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            text-align: center;
+        }
+
+        .footer-wordmark {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 900;
+            letter-spacing: 5px;
+            color: var(--accent-green);
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-credit {
+            font-size: 0.88rem;
+            letter-spacing: 2px;
+            color: var(--text-secondary);
+        }
+
+        .footer-credit .hl {
+            color: var(--accent-green);
+            font-weight: 700;
+        }
+
+
+        /* ============================================================
+           BASE ANIMATIONS
+           ============================================================ */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(22px); }
+            to   { opacity: 1; transform: translateY(0);    }
+        }
+
+
+        /* ============================================================
+           RESPONSIVE — MOBILE STYLES
+           ============================================================ */
+        @media (max-width: 768px) {
+            nav { padding: 1rem 1.2rem; }
+
+            /* Hide nav links, show hamburger */
+            .nav-links {
+                display: none;
+                position: fixed;
+                top: 61px;
+                left: 0;
+                width: 100%;
+                background: var(--nav-bg);
+                flex-direction: column;
+                padding: 1.5rem 1.5rem 2rem;
+                gap: 1.2rem;
+                border-bottom: 1px solid var(--border-color);
+                backdrop-filter: blur(12px);
+            }
+
+            .nav-links.open { display: flex; }
+            .hamburger { display: flex; }
+
+            .section-wrap { padding: 5rem 1.2rem; }
+
+            .interests-grid { grid-template-columns: 1fr; }
+
+            .hero-name { letter-spacing: 5px; }
+
+            .clicks-box { padding: 2.5rem 1.5rem; }
+
+            .fact-box { padding: 2rem 1.5rem; }
+        }
+
+        @media (max-width: 400px) {
+            .hero-title { letter-spacing: 2px; }
+            .smash-btn  { padding: 0.9rem 2rem; font-size: 0.8rem; }
+        }
+
+    </style>
 </head>
 
-<body style="background-color: #1a1a1a; color: white; font-family: sans-serif; text-align: center;">
-    <h1>🚀 Welcome to the Savage Dev Lab</h1>
-    <p>Future home of Rocket Logs and Baseball Stats.</p>
-    <div style="font-size: 50px;">⚾</div>
-</body>
+<body>
 
+    <!-- ============================================================
+         NAVIGATION
+         ============================================================ -->
+    <nav id="navbar">
+        <!-- Hey Everett! Change this to whatever you want the nav logo to say -->
+        <div class="nav-logo">⚡ SAVAGE ZONE</div>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#interests-section">Interests</a></li>
+            <li><a href="#clicks-section">Clicks</a></li>
+            <li><a href="#facts-section">Facts</a></li>
+        </ul>
+
+        <div class="nav-right">
+            <button class="theme-toggle" onclick="toggleTheme()">
+                <span id="themeIcon">☀️</span>
+                <span id="themeLabel">LIGHT</span>
+            </button>
+            <div class="hamburger" onclick="toggleNav()" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- ============================================================
+         SECTION 1: HERO
+         ============================================================ -->
+    <section id="hero">
+
+        <!-- Glowing atmospheric orbs -->
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+
+        <!-- // Welcome to the -->
+        <p class="hero-eyebrow">// Welcome to the</p>
+
+        <!-- BIG SITE TITLE — This is YOUR brand! -->
+        <div class="hero-title-wrap">
+            <div class="hero-title-glow" aria-hidden="true">SAVAGE ZONE</div>
+            <h1 class="hero-title">SAVAGE ZONE</h1>
+        </div>
+
+        <!-- YOUR NAME — Change this if you want your full name or a gamer tag! -->
+        <p class="hero-name">Everett Savage</p>
+
+        <div class="hero-divider"></div>
+
+        <!-- Typewriter tagline — the words that cycle through (edit in JS below!) -->
+        <p class="hero-tagline">
+            <span id="typewriterWord"></span><span class="cursor"></span>
+        </p>
+
+        <!-- Scroll hint -->
+        <div class="scroll-hint">
+            <span>Scroll</span>
+            <div class="scroll-chevron"></div>
+        </div>
+
+    </section>
+
+
+    <!-- ============================================================
+         SECTION 2: SAVAGE INTERESTS
+         ============================================================ -->
+    <div id="interests-section">
+        <div class="section-wrap">
+
+            <div class="section-header reveal">
+                <span class="section-eyebrow">// Level 2</span>
+                <h2 class="section-title">Savage <span class="hl">Interests</span></h2>
+            </div>
+
+            <div class="interests-grid">
+
+                <!-- ===== ROBLOX CARD ===== -->
+                <!-- Hey Everett! Change your username and favorite games here -->
+                <div class="card card-roblox reveal">
+                    <span class="card-icon">🎮</span>
+                    <h3 class="card-title">Roblox</h3>
+                    <div class="card-body">
+                        <!-- ↓ Change "YourUsernameHere" to your actual Roblox username! -->
+                        <p><strong>Username:</strong> YourUsernameHere</p>
+                        <br>
+                        <p><strong>Favorite Games:</strong></p>
+                        <!-- ↓ Swap these out for the games you actually play! -->
+                        <p>• Blox Fruits</p>
+                        <p>• Doors</p>
+                        <p>• Brookhaven</p>
+                        <p>• Natural Disaster Survival</p>
+                        <br>
+                        <p><strong>Playtime:</strong> Way too much 😅</p>
+                    </div>
+                    <span class="card-badge">🕹️ Gamer</span>
+                </div>
+
+                <!-- ===== HUNTING & FISHING CARD ===== -->
+                <!-- Hey Everett! Put your biggest catch and favorite spots here! -->
+                <div class="card card-outdoor reveal">
+                    <span class="card-icon">🏕️</span>
+                    <h3 class="card-title">Hunting &amp; Fishing</h3>
+                    <div class="card-body">
+                        <p><strong>Hunting:</strong></p>
+                        <!-- ↓ Add what you hunt! Deer, turkey, ducks... -->
+                        <p>• White-tail deer 🦌</p>
+                        <p>• Turkey season is elite</p>
+                        <br>
+                        <p><strong>Fishing:</strong></p>
+                        <!-- ↓ Replace with your real biggest catch! -->
+                        <p>• Bass fishing champion 🎣</p>
+                        <p>• Biggest catch: ??? lbs</p>
+                        <br>
+                        <!-- ↓ Add your secret spot — or keep it secret! -->
+                        <p><strong>Favorite spot:</strong> Classified 🤫</p>
+                    </div>
+                    <span class="card-badge">🌲 Outdoorsman</span>
+                </div>
+
+                <!-- ===== BASEBALL CARD ===== -->
+                <!-- Hey Everett! Fill in your team name, position, and real stats! -->
+                <div class="card card-baseball reveal">
+                    <span class="card-icon">⚾</span>
+                    <h3 class="card-title">Baseball</h3>
+                    <div class="card-body">
+                        <!-- ↓ Change to your actual team name! -->
+                        <p><strong>My Team:</strong> Your Team Name</p>
+                        <!-- ↓ Change to your position! (Pitcher, Shortstop, etc.) -->
+                        <p><strong>Position:</strong> Your Position</p>
+                        <br>
+                        <p><strong>Stats:</strong></p>
+                        <!-- ↓ Update these with your real stats! -->
+                        <p>• Batting Avg: .???</p>
+                        <p>• Home Runs: ?</p>
+                        <p>• RBIs: ?</p>
+                        <br>
+                        <!-- ↓ Change to YOUR favorite MLB team! -->
+                        <p><strong>Fav MLB Team:</strong> Your Fav Team</p>
+                    </div>
+                    <span class="card-badge">⚾ Baller</span>
+                </div>
+
+                <!-- ===== CODING CARD ===== -->
+                <!-- Hey Everett! Update this card as you learn new things! -->
+                <div class="card card-coding reveal">
+                    <span class="card-icon">💻</span>
+                    <h3 class="card-title">Computers &amp; Coding</h3>
+                    <div class="card-body">
+                        <p><strong>Currently learning:</strong></p>
+                        <!-- ↓ Add languages or topics as you learn them! -->
+                        <p>• HTML &amp; CSS</p>
+                        <p>• JavaScript</p>
+                        <br>
+                        <p><strong>Tools I use:</strong></p>
+                        <!-- ↓ Add your tools here! -->
+                        <p>• VS Code</p>
+                        <p>• Chrome DevTools</p>
+                        <br>
+                        <!-- This IS your first project — nice work! -->
+                        <p><strong>First project:</strong> This website! 🚀</p>
+                    </div>
+                    <span class="card-badge">🖥️ Coder</span>
+                </div>
+
+            </div><!-- /interests-grid -->
+
+        </div><!-- /section-wrap -->
+    </div>
+
+
+    <!-- ============================================================
+         SECTION 3: SAVAGE CLICKS
+         ============================================================ -->
+    <div id="clicks-section">
+        <div class="section-wrap">
+
+            <div class="section-header reveal">
+                <span class="section-eyebrow">// Challenge</span>
+                <h2 class="section-title">Savage <span class="hl">Clicks</span></h2>
+            </div>
+
+            <div class="clicks-box reveal">
+                <p class="click-label-top">Total Clicks This Session</p>
+
+                <!-- The big counter number — updated by JS -->
+                <div class="click-number" id="clickNumber">0</div>
+
+                <!-- Reaction message — changes at milestones, see JS below -->
+                <p class="click-reaction" id="clickReaction">Can you handle the Savage Zone? 👀</p>
+
+                <!-- THE BUTTON -->
+                <button class="smash-btn" onclick="handleClick()">⚡ SMASH THIS BUTTON</button>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ============================================================
+         SECTION 4: SAVAGE FACTS
+         ============================================================ -->
+    <div id="facts-section">
+        <div class="section-wrap">
+
+            <div class="section-header reveal">
+                <span class="section-eyebrow">// Did You Know?</span>
+                <h2 class="section-title">Savage <span class="hl">Facts</span></h2>
+            </div>
+
+            <div class="facts-inner reveal">
+
+                <div class="fact-box" id="factBox">
+                    <!-- Placeholder shown before first click -->
+                    <p class="fact-prompt" id="factPrompt">Hit the button to drop a Savage Fact 🔥</p>
+
+                    <!-- Fact content — hidden until first click -->
+                    <p class="fact-cat"  id="factCat"  style="display:none;"></p>
+                    <p class="fact-text" id="factText" style="display:none;"></p>
+                </div>
+
+                <button class="fact-btn" onclick="dropFact()">🎲 DROP A FACT</button>
+                <span class="fact-tally" id="factTally"></span>
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ============================================================
+         FOOTER
+         ============================================================ -->
+    <footer>
+        <p class="footer-wordmark">SAVAGE ZONE</p>
+        <!-- Hey Everett! The year updates automatically — no touching needed! -->
+        <p class="footer-credit">
+            Built by <span class="hl">Everett Savage</span> 🚀 &nbsp;|&nbsp; © <span id="footerYear"></span>
+        </p>
+    </footer>
+
+
+    <!-- ============================================================
+         JAVASCRIPT — THIS IS THE BRAIN OF THE SITE!
+         ============================================================ -->
+    <script>
+
+        // ============================================================
+        // TYPEWRITER ANIMATION
+        //
+        // Hey Everett! Change or add words to this list.
+        // Each word will type out and erase, one by one.
+        // ============================================================
+        const typewriterWords = [
+            "Gamer.",
+            "Hunter.",
+            "Angler.",
+            "Coder."
+            // ← Add more words here! Example: "Athlete.", "Legend."
+        ];
+
+        let twWordIdx = 0;
+        let twCharIdx = 0;
+        let twDeleting = false;
+        const twEl = document.getElementById('typewriterWord');
+
+        function runTypewriter() {
+            const word = typewriterWords[twWordIdx];
+
+            if (twDeleting) {
+                twEl.textContent = word.substring(0, twCharIdx - 1);
+                twCharIdx--;
+            } else {
+                twEl.textContent = word.substring(0, twCharIdx + 1);
+                twCharIdx++;
+            }
+
+            let delay = twDeleting ? 75 : 120;
+
+            if (!twDeleting && twCharIdx === word.length) {
+                // Finished typing — pause then start deleting
+                delay = 2000;
+                twDeleting = true;
+            } else if (twDeleting && twCharIdx === 0) {
+                // Finished deleting — move to next word
+                twDeleting = false;
+                twWordIdx = (twWordIdx + 1) % typewriterWords.length;
+                delay = 450;
+            }
+
+            setTimeout(runTypewriter, delay);
+        }
+
+        // Kick off the typewriter after the hero has faded in
+        setTimeout(runTypewriter, 1600);
+
+
+        // ============================================================
+        // DARK / LIGHT MODE TOGGLE
+        // ============================================================
+        function toggleTheme() {
+            const html  = document.documentElement;
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            document.getElementById('themeIcon').textContent  = isDark ? '🌙' : '☀️';
+            document.getElementById('themeLabel').textContent = isDark ? 'DARK' : 'LIGHT';
+        }
+
+
+        // ============================================================
+        // MOBILE NAV HAMBURGER TOGGLE
+        // ============================================================
+        function toggleNav() {
+            document.getElementById('navLinks').classList.toggle('open');
+        }
+
+        // Close mobile menu when any link is tapped
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navLinks').classList.remove('open');
+            });
+        });
+
+
+        // ============================================================
+        // SAVAGE CLICKS — COUNTER + MILESTONE REACTIONS
+        //
+        // Hey Everett! Add new milestones by copying a line below.
+        // Format is: [clicks_needed, "Your message here!"]
+        // ============================================================
+        let clicks = 0;
+
+        const milestones = [
+            [0,    "Can you handle the Savage Zone? 👀"],
+            [1,    "LET'S GO! Keep clicking! 🔥"],
+            [5,    "You're warming up... 😏"],
+            [10,   "Not bad... not bad at all."],
+            [25,   "Getting into beast mode! 💪"],
+            [50,   "FIFTY CLICKS! Going full savage! 🐻"],
+            [75,   "You cannot stop. I respect it."],
+            [100,  "ONE HUNDRED CLICKS! ABSOLUTELY SAVAGE! 🔥🔥🔥"],
+            [150,  "At this point you just live here 😂"],
+            [200,  "200 CLICKS?! You're built different. 🤯"],
+            [300,  "Legend status: UNLOCKED 🏆"],
+            [500,  "FIVE HUNDRED! YOU ARE THE SAVAGE ZONE! 👑"],
+            [750,  "Okay this is getting out of hand..."],
+            [1000, "1,000 CLICKS — HALL OF FAME! 🌟🌟🌟"]
+            // ← Add your own milestones here!
+        ];
+
+        function getReaction(n) {
+            // Finds the highest milestone the click count has passed
+            let msg = milestones[0][1];
+            for (const [threshold, text] of milestones) {
+                if (n >= threshold) msg = text;
+            }
+            return msg;
+        }
+
+        function handleClick() {
+            clicks++;
+
+            // Update the number
+            const numEl = document.getElementById('clickNumber');
+            numEl.textContent = clicks.toLocaleString();
+
+            // Trigger the pop animation
+            numEl.classList.remove('pop');
+            void numEl.offsetWidth; // Forces browser to reset animation
+            numEl.classList.add('pop');
+            setTimeout(() => numEl.classList.remove('pop'), 200);
+
+            // Update the reaction message
+            document.getElementById('clickReaction').textContent = getReaction(clicks);
+        }
+
+
+        // ============================================================
+        // SAVAGE FACTS — RANDOM FACT GENERATOR
+        //
+        // Hey Everett! This is your fact vault. Add your own facts!
+        // Just copy any line below and change the text.
+        // The "category" label shows what topic the fact is from.
+        // ============================================================
+        const facts = [
+
+            // ===== HUNTING FACTS — add more hunting facts here! =====
+            {
+                category: "🦌 Hunting",
+                text: "White-tailed deer can sprint up to 30 mph and leap 8 feet into the air — they're basically superheroes of the forest."
+            },
+            {
+                category: "🦌 Hunting",
+                text: "A male turkey is called a 'tom' and they can gobble loud enough to be heard an entire mile away."
+            },
+            {
+                category: "🦌 Hunting",
+                text: "Deer can detect your scent from half a mile away — that's why hunters use scent-blocking sprays!"
+            },
+            {
+                category: "🦌 Hunting",
+                text: "A group of turkeys is called a 'rafter.' A group of deer is called a 'herd.' Random, but true."
+            },
+            {
+                category: "🦌 Hunting",
+                text: "Whitetail bucks shed and fully regrow their antlers EVERY single year. They're basically living skyscrapers on their heads."
+            },
+            {
+                category: "🦌 Hunting",
+                text: "The oldest hunting tools ever found are wooden spears from 400,000 years ago. Humans have always been hunters."
+            },
+
+            // ===== FISHING FACTS — add more fishing facts here! =====
+            {
+                category: "🎣 Fishing",
+                text: "Largemouth bass have nearly 360-degree vision — they can see in almost every direction at once."
+            },
+            {
+                category: "🎣 Fishing",
+                text: "The world record largemouth bass weighed 22 lbs 4 oz. It was caught in Japan in 2009."
+            },
+            {
+                category: "🎣 Fishing",
+                text: "Fish don't have eyelids, so they literally never close their eyes. They sleep with their eyes open. Creepy? Yeah."
+            },
+            {
+                category: "🎣 Fishing",
+                text: "Catfish have about 100,000 taste buds spread all over their entire body — their SKIN can taste!"
+            },
+            {
+                category: "🎣 Fishing",
+                text: "The oldest fish fossil ever found is 530 million years old. Fish have been around way longer than dinosaurs."
+            },
+            {
+                category: "🎣 Fishing",
+                text: "Bass can sense vibrations in the water through a special organ called the 'lateral line' that runs down their sides."
+            },
+
+            // ===== BASEBALL FACTS — add more baseball facts here! =====
+            {
+                category: "⚾ Baseball",
+                text: "A Major League baseball only lasts about 6-7 pitches before it gets replaced. Each game uses roughly 100 baseballs!"
+            },
+            {
+                category: "⚾ Baseball",
+                text: "The fastest pitch ever thrown was 105.1 mph by Aroldis Chapman in 2010. That's basically a speeding car."
+            },
+            {
+                category: "⚾ Baseball",
+                text: "Baseball is the only major team sport where the defense controls the ball. Pretty unique!"
+            },
+            {
+                category: "⚾ Baseball",
+                text: "The official rules of baseball were written in 1845. The game is almost 180 years old."
+            },
+            {
+                category: "⚾ Baseball",
+                text: "MLB teams play 162 games in a regular season — that's nearly one game every single day for 6 months."
+            },
+            {
+                category: "⚾ Baseball",
+                text: "There are exactly 108 double stitches on every official baseball. Someone has to sew all of those by hand."
+            },
+
+            // ===== ROBLOX FACTS — add more Roblox facts here! =====
+            {
+                category: "🎮 Roblox",
+                text: "Roblox has over 200 million registered users and over 50 million people log in every single day."
+            },
+            {
+                category: "🎮 Roblox",
+                text: "Roblox was created in 2004 but didn't launch publicly until 2006 — it's been around longer than you have!"
+            },
+            {
+                category: "🎮 Roblox",
+                text: "There are over 40 million games on Roblox, and almost all of them were built by regular players."
+            },
+            {
+                category: "🎮 Roblox",
+                text: "The most-visited Roblox game of all time, MeepCity, has had over 10 BILLION visits. 10 billion!"
+            },
+            {
+                category: "🎮 Roblox",
+                text: "Roblox games are built with a real programming language called Lua. Playing Roblox teaches you actual coding!"
+            },
+            {
+                category: "🎮 Roblox",
+                text: "Some Roblox developers make over $1 million dollars a year selling virtual items. Gaming is a real career."
+            }
+
+            // ← Keep adding your own facts here! Copy the format above.
+        ];
+
+        let factsDropped = 0;
+        let lastFactIdx   = -1;
+
+        function dropFact() {
+            // Pick a random fact, making sure it's not the same as last time
+            let idx;
+            do {
+                idx = Math.floor(Math.random() * facts.length);
+            } while (idx === lastFactIdx && facts.length > 1);
+            lastFactIdx = idx;
+
+            const fact = facts[idx];
+            factsDropped++;
+
+            // Elements
+            const box      = document.getElementById('factBox');
+            const prompt   = document.getElementById('factPrompt');
+            const catEl    = document.getElementById('factCat');
+            const textEl   = document.getElementById('factText');
+            const tallyEl  = document.getElementById('factTally');
+
+            // Hide placeholder on first drop
+            if (prompt) prompt.style.display = 'none';
+
+            // Show fact elements
+            catEl.style.display  = 'block';
+            textEl.style.display = 'block';
+
+            // Animate: briefly hide then fade in new content
+            textEl.classList.remove('show');
+            catEl.style.opacity = '0';
+
+            setTimeout(() => {
+                textEl.textContent = fact.text;
+                catEl.textContent  = fact.category;
+
+                textEl.classList.add('show');
+                catEl.style.opacity   = '1';
+                catEl.style.transition = 'opacity 0.4s ease';
+
+                box.classList.add('lit');
+            }, 180);
+
+            // Update tally
+            tallyEl.textContent = `${factsDropped} fact${factsDropped !== 1 ? 's' : ''} dropped  ·  ${facts.length} total in the vault`;
+        }
+
+
+        // ============================================================
+        // SCROLL REVEAL ANIMATION
+        //
+        // Watches for elements with class "reveal" and fades them in
+        // when they scroll into view. No changes needed here!
+        // ============================================================
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+
+                // Stagger cards in the grid for a cool sequential effect
+                const grid  = entry.target.closest('.interests-grid');
+                const delay = grid
+                    ? Array.from(grid.children).indexOf(entry.target) * 110
+                    : 0;
+
+                setTimeout(() => entry.target.classList.add('visible'), delay);
+                revealObserver.unobserve(entry.target);
+            });
+        }, { threshold: 0.12 });
+
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+
+        // ============================================================
+        // AUTO FOOTER YEAR
+        //
+        // Updates itself automatically every year — no changes needed!
+        // ============================================================
+        document.getElementById('footerYear').textContent = new Date().getFullYear();
+
+    </script>
+
+</body>
 </html>
