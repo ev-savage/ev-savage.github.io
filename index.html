@@ -990,7 +990,7 @@
 
         .snake-dpad-btn:active { background: var(--accent-green); color: #050505; transform: scale(0.9); }
 
-        @media (pointer: coarse) { .snake-dpad { display: flex; } }
+        .snake-dpad { display: flex; }
 
         .snake-legend {
             display: flex;
@@ -1902,6 +1902,7 @@
         const sCanvas = document.getElementById('snakeCanvas');
         const sCtx    = sCanvas.getContext('2d');
         let sCell = 20;
+        let sFlash = 0; // frames to flash green on eat
 
         document.getElementById('snakeBestEl').textContent = sBest;
 
@@ -1917,7 +1918,6 @@
         window.addEventListener('resize', snakeResize);
         setTimeout(snakeResize, 80);
 
-        // Cross-browser rounded rect helper
         function sRR(x, y, w, h, r) {
             sCtx.beginPath();
             sCtx.moveTo(x + r, y);
@@ -1932,43 +1932,87 @@
             sCtx.closePath();
         }
 
+        // 3-2-1 countdown then go
         function startSnake() {
+            document.getElementById('snakeOverlay').style.display = 'none';
+            let count = 3;
+            sRunning = false;
+
+            // Show countdown on canvas
+            function drawCountdown(n) {
+                snakeDraw();
+                sCtx.save();
+                sCtx.font = `bold ${Math.round(sCell * 4)}px Orbitron, sans-serif`;
+                sCtx.textAlign = 'center';
+                sCtx.textBaseline = 'middle';
+                sCtx.fillStyle = n === 0 ? '#00ff88' : '#ffffff';
+                sCtx.shadowColor = n === 0 ? '#00ff88' : '#ffffff';
+                sCtx.shadowBlur = 30;
+                sCtx.fillText(n === 0 ? 'GO!' : n, sCanvas.width / 2, sCanvas.height / 2);
+                sCtx.restore();
+            }
+
+            // Reset state
             sSnake     = [{ x: 10, y: 10 }, { x: 9, y: 10 }, { x: 8, y: 10 }];
             sDir       = { x: 1, y: 0 };
             sNextDir   = { x: 1, y: 0 };
             sScore     = 0;
             sFoodEaten = 0;
             sLevel     = 1;
-            sRunning   = true;
+            sFlash     = 0;
             document.getElementById('snakeScore').textContent = '0';
             document.getElementById('snakeLevel').textContent = '1';
-            document.getElementById('snakeOverlay').style.display = 'none';
             sSpawnFood();
-            clearInterval(sInterval);
-            sInterval = setInterval(snakeTick, 180);
+            snakeDraw();
+            drawCountdown(3);
+
+            const tick = setInterval(() => {
+                count--;
+                snakeDraw();
+                if (count > 0) {
+                    drawCountdown(count);
+                } else {
+                    drawCountdown(0);
+                    clearInterval(tick);
+                    setTimeout(() => {
+                        sRunning = true;
+                        clearInterval(sInterval);
+                        sInterval = setInterval(snakeTick, 220);
+                    }, 500);
+                }
+            }, 800);
         }
 
         function snakeTick() {
             sDir = sNextDir;
             const head = { x: sSnake[0].x + sDir.x, y: sSnake[0].y + sDir.y };
-            if (head.x < 0 || head.x >= SCOLS || head.y < 0 || head.y >= SROWS) return snakeEnd();
-            if (sSnake.some(s => s.x === head.x && s.y === head.y))              return snakeEnd();
+
+            // Wrap walls — pass through edges instead of dying (more fun for beginners)
+            head.x = (head.x + SCOLS) % SCOLS;
+            head.y = (head.y + SROWS) % SROWS;
+
+            // Only die if you hit yourself
+            if (sSnake.some(s => s.x === head.x && s.y === head.y)) return snakeEnd();
+
             sSnake.unshift(head);
             if (head.x === sFood.x && head.y === sFood.y) {
                 sScore += sFood.pts;
                 sFoodEaten++;
+                sFlash = 3;
                 document.getElementById('snakeScore').textContent = sScore;
-                const newLv = Math.min(10, 1 + Math.floor(sFoodEaten / 3));
+                // Speed up gently every 5 eaten, cap at 110ms
+                const newLv = Math.min(8, 1 + Math.floor(sFoodEaten / 5));
                 if (newLv > sLevel) {
                     sLevel = newLv;
                     document.getElementById('snakeLevel').textContent = sLevel;
                     clearInterval(sInterval);
-                    sInterval = setInterval(snakeTick, Math.max(65, 180 - (sLevel - 1) * 13));
+                    sInterval = setInterval(snakeTick, Math.max(110, 220 - (sLevel - 1) * 14));
                 }
                 sSpawnFood();
             } else {
                 sSnake.pop();
             }
+            if (sFlash > 0) sFlash--;
             snakeDraw();
         }
 
@@ -1985,10 +2029,12 @@
         }
 
         function snakeDraw() {
-            // Background + grid
-            sCtx.fillStyle = '#0a0a0a';
+            // Background
+            sCtx.fillStyle = sFlash > 0 ? 'rgba(0,255,136,0.08)' : '#0a0a0a';
             sCtx.fillRect(0, 0, sCanvas.width, sCanvas.height);
-            sCtx.strokeStyle = 'rgba(0,255,136,0.04)';
+
+            // Grid
+            sCtx.strokeStyle = 'rgba(0,255,136,0.05)';
             sCtx.lineWidth = 0.5;
             for (let x = 0; x <= SCOLS; x++) {
                 sCtx.beginPath(); sCtx.moveTo(x * sCell, 0); sCtx.lineTo(x * sCell, sCanvas.height); sCtx.stroke();
@@ -1996,44 +2042,46 @@
             for (let y = 0; y <= SROWS; y++) {
                 sCtx.beginPath(); sCtx.moveTo(0, y * sCell); sCtx.lineTo(sCanvas.width, y * sCell); sCtx.stroke();
             }
-            if (!sRunning || !sSnake || !sFood) return;
+
+            if (!sSnake || !sFood) return;
 
             // Food glow + emoji
-            const fp = Math.round(sCell * 0.1);
+            const fp = Math.round(sCell * 0.08);
             sCtx.save();
             sCtx.shadowColor = sFood.color;
-            sCtx.shadowBlur  = 16;
-            sCtx.fillStyle   = sFood.color + '28';
-            sRR(sFood.x * sCell + fp, sFood.y * sCell + fp, sCell - fp * 2, sCell - fp * 2, 4);
+            sCtx.shadowBlur  = 18;
+            sCtx.fillStyle   = sFood.color + '30';
+            sRR(sFood.x * sCell + fp, sFood.y * sCell + fp, sCell - fp * 2, sCell - fp * 2, 5);
             sCtx.fill();
             sCtx.restore();
-            sCtx.font = `${Math.round(sCell * 0.74)}px serif`;
+            sCtx.font = `${Math.round(sCell * 0.76)}px serif`;
             sCtx.textAlign = 'center';
             sCtx.textBaseline = 'middle';
             sCtx.fillText(sFood.emoji, sFood.x * sCell + sCell / 2, sFood.y * sCell + sCell / 2 + 1);
 
-            // Snake
+            // Snake body
             const gap = Math.max(1, Math.floor(sCell * 0.1));
-            const rad = Math.max(2, Math.round(sCell * 0.22));
+            const rad = Math.max(2, Math.round(sCell * 0.28));
             for (let i = sSnake.length - 1; i >= 0; i--) {
                 const seg    = sSnake[i];
                 const isHead = i === 0;
-                const t      = (sSnake.length - i) / sSnake.length;
+                const t      = 1 - i / sSnake.length;
                 sCtx.save();
                 if (isHead) {
                     sCtx.shadowColor = '#00ff88';
-                    sCtx.shadowBlur  = 14;
+                    sCtx.shadowBlur  = 16;
                     sCtx.fillStyle   = '#00ff88';
                 } else {
-                    sCtx.fillStyle = `rgba(0,${Math.round(140 + t * 95)},80,${(0.45 + t * 0.55).toFixed(2)})`;
+                    const g = Math.round(120 + t * 115);
+                    const a = (0.35 + t * 0.65).toFixed(2);
+                    sCtx.fillStyle = `rgba(0,${g},68,${a})`;
                 }
                 sRR(seg.x * sCell + gap, seg.y * sCell + gap, sCell - gap * 2, sCell - gap * 2, rad);
                 sCtx.fill();
                 sCtx.restore();
 
-                // Eyes on head
                 if (isHead) {
-                    const es = Math.max(2, Math.round(sCell * 0.12));
+                    const es = Math.max(2, Math.round(sCell * 0.13));
                     const c  = sCell;
                     let e1x, e1y, e2x, e2y;
                     if      (sDir.x ===  1) { e1x=0.70; e1y=0.28; e2x=0.70; e2y=0.72; }
@@ -2050,6 +2098,13 @@
         function snakeEnd() {
             sRunning = false;
             clearInterval(sInterval);
+
+            // Flash red on death
+            sCtx.save();
+            sCtx.fillStyle = 'rgba(255,50,50,0.18)';
+            sCtx.fillRect(0, 0, sCanvas.width, sCanvas.height);
+            sCtx.restore();
+
             const isNewBest = sScore > sBest;
             if (isNewBest) {
                 sBest = sScore;
@@ -2064,17 +2119,21 @@
             document.getElementById('snakeStartBtn').textContent = '🔄 PLAY AGAIN';
         }
 
-        // Arrow / WASD keys
+        // Arrow / WASD — always prevent scroll when snake tab is active
         document.addEventListener('keydown', e => {
+            const arrowKeys = ['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'];
+            const snakePanel = document.getElementById('panel-snake');
+            if (arrowKeys.includes(e.key) && snakePanel && snakePanel.style.display !== 'none') {
+                e.preventDefault();
+            }
             if (!sRunning) return;
             const map = {
-                ArrowUp:    {x:0,y:-1}, w:{x:0,y:-1},
-                ArrowDown:  {x:0,y:1},  s:{x:0,y:1},
-                ArrowLeft:  {x:-1,y:0}, a:{x:-1,y:0},
-                ArrowRight: {x:1,y:0},  d:{x:1,y:0},
+                ArrowUp:    {x:0,y:-1}, W:{x:0,y:-1}, w:{x:0,y:-1},
+                ArrowDown:  {x:0,y:1},  S:{x:0,y:1},  s:{x:0,y:1},
+                ArrowLeft:  {x:-1,y:0}, A:{x:-1,y:0}, a:{x:-1,y:0},
+                ArrowRight: {x:1,y:0},  D:{x:1,y:0},  d:{x:1,y:0},
             };
             if (!map[e.key]) return;
-            e.preventDefault();
             const nd = map[e.key];
             if (nd.x !== -sDir.x || nd.y !== -sDir.y) sNextDir = nd;
         });
@@ -2084,13 +2143,13 @@
             if (x !== -sDir.x || y !== -sDir.y) sNextDir = { x, y };
         }
 
-        // Swipe controls on canvas
+        // Swipe on canvas
         let sTX = 0, sTY = 0;
         sCanvas.addEventListener('touchstart', e => { sTX = e.touches[0].clientX; sTY = e.touches[0].clientY; e.preventDefault(); }, { passive: false });
         sCanvas.addEventListener('touchend',   e => {
             const dx = e.changedTouches[0].clientX - sTX;
             const dy = e.changedTouches[0].clientY - sTY;
-            if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return;
+            if (Math.abs(dx) < 12 && Math.abs(dy) < 12) return;
             Math.abs(dx) > Math.abs(dy) ? snakeSetDir(dx > 0 ? 1 : -1, 0) : snakeSetDir(0, dy > 0 ? 1 : -1);
             e.preventDefault();
         }, { passive: false });
