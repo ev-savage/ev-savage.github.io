@@ -564,6 +564,141 @@
 
 
         /* ============================================================
+           GALLERY HINT on outdoor card
+           ============================================================ */
+        .gallery-hint {
+            margin-top: 0.8rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #ff7043;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+        .card-outdoor:hover .gallery-hint { opacity: 1; }
+
+        /* ============================================================
+           GALLERY MODAL
+           ============================================================ */
+        .gallery-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(6px);
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        .gallery-modal.open { display: flex; }
+
+        .gallery-modal-content {
+            background: var(--bg-card);
+            border: 1px solid #ff7043;
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 900px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 0 40px rgba(255, 112, 67, 0.25);
+        }
+
+        .gallery-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            color: #ff7043;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        .gallery-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        .gallery-close:hover { border-color: #ff7043; color: #ff7043; }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .gallery-item {
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .gallery-item:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 16px rgba(255,112,67,0.4);
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+        }
+        .gallery-item-label {
+            padding: 0.4rem 0.6rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        /* ============================================================
+           LIGHTBOX
+           ============================================================ */
+        .lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 3000;
+            background: rgba(0,0,0,0.95);
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .lightbox.open { display: flex; }
+        .lightbox img {
+            max-width: 90vw;
+            max-height: 80vh;
+            border-radius: 8px;
+            object-fit: contain;
+            box-shadow: 0 0 40px rgba(255,112,67,0.3);
+        }
+        .lightbox-close { position: absolute; top: 1.5rem; right: 1.5rem; }
+        .lightbox-label {
+            color: #ff7043;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+        }
+
+        /* ============================================================
            SECTION 3: SAVAGE CLICKS
            ============================================================ */
         #clicks-section {
@@ -952,7 +1087,7 @@
 
                 <!-- ===== HUNTING & FISHING CARD ===== -->
                 <!-- Hey Everett! Put your biggest catch and favorite spots here! -->
-                <div class="card card-outdoor reveal">
+                <div class="card card-outdoor reveal" id="outdoorCard" style="cursor:pointer;" onclick="openGallery()" title="Click to see the gallery!">
                     <span class="card-icon">🏕️</span>
                     <h3 class="card-title">Hunting &amp; Fishing</h3>
                     <div class="card-body">
@@ -970,7 +1105,9 @@
                         <p><strong>Favorite spot:</strong> Classified 🤫</p>
                     </div>
                     <span class="card-badge">🌲 Outdoorsman</span>
+                    <div class="gallery-hint">📸 View Gallery</div>
                 </div>
+
 
                 <!-- ===== BASEBALL CARD ===== -->
                 <!-- Hey Everett! Fill in your team name, position, and real stats! -->
@@ -1418,6 +1555,39 @@
 
 
         // ============================================================
+        // HUNTING & FISHING GALLERY
+        // ============================================================
+        function openGallery() {
+            document.getElementById('galleryModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeGallery(e) {
+            if (e && e.target !== document.getElementById('galleryModal')) return;
+            document.getElementById('galleryModal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function openLightbox(src, label) {
+            const lb = document.getElementById('lightbox');
+            document.getElementById('lightboxImg').src = src;
+            document.getElementById('lightboxLabel').textContent = label;
+            lb.classList.add('open');
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('open');
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeLightbox();
+                document.getElementById('galleryModal').classList.remove('open');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // ============================================================
         // AUTO FOOTER YEAR
         //
         // Updates itself automatically every year — no changes needed!
@@ -1425,6 +1595,28 @@
         document.getElementById('footerYear').textContent = new Date().getFullYear();
 
     </script>
+
+    <!-- ===== GALLERY MODAL (body-level so fixed positioning works) ===== -->
+    <div id="galleryModal" class="gallery-modal" onclick="closeGallery(event)">
+        <div class="gallery-modal-content">
+            <button class="gallery-close" onclick="closeGallery()">&times;</button>
+            <h2 class="gallery-title">Hunting &amp; Fishing Gallery</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item" onclick="openLightbox('photos/catfish1.JPG', 'Catfish')">
+                    <img src="photos/catfish1.JPG" alt="Catfish catch" loading="lazy">
+                    <div class="gallery-item-label">Catfish 🐟</div>
+                </div>
+                <!-- Add more photos here! Just copy the block above and change the src and label -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox for full-size photo view -->
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+        <button class="gallery-close lightbox-close" onclick="closeLightbox()">&times;</button>
+        <img id="lightboxImg" src="" alt="">
+        <div id="lightboxLabel" class="lightbox-label"></div>
+    </div>
 
 </body>
 </html>
