@@ -701,7 +701,7 @@
         /* ============================================================
            SECTION 3: SAVAGE HUNT
            ============================================================ */
-        #clicks-section {
+        #games-section {
             background: var(--bg-secondary);
             border-top: 1px solid var(--border-color);
             border-bottom: 1px solid var(--border-color);
@@ -913,6 +913,190 @@
 
 
         /* ============================================================
+           GAME TABS
+           ============================================================ */
+        .games-tabs {
+            display: flex;
+            gap: 0.6rem;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .games-tab {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            padding: 0.55rem 1.4rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.25s ease;
+        }
+
+        .games-tab:hover { border-color: var(--accent-green); color: var(--accent-green); }
+
+        .games-tab.active {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+            color: #050505;
+            box-shadow: 0 0 20px rgba(0,255,136,0.35);
+        }
+
+        /* ============================================================
+           SNAKE GAME
+           ============================================================ */
+        .snake-canvas-wrap {
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+
+        #snakeCanvas {
+            display: block;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            max-width: 100%;
+        }
+
+        .snake-dpad {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            margin-top: 0.85rem;
+        }
+
+        .snake-dpad-row { display: flex; gap: 0.25rem; }
+
+        .snake-dpad-btn {
+            width: 56px;
+            height: 56px;
+            font-size: 1.35rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            cursor: pointer;
+            color: var(--text-primary);
+            transition: all 0.1s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .snake-dpad-btn:active { background: var(--accent-green); color: #050505; transform: scale(0.9); }
+
+        @media (pointer: coarse) { .snake-dpad { display: flex; } }
+
+        .snake-legend {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            margin-top: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        /* ============================================================
+           CLICKS GAME (restored)
+           ============================================================ */
+        .clicks-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 3.5rem 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .clicks-box::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70%;
+            padding-bottom: 70%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,255,136,0.06) 0%, transparent 70%);
+            animation: pulseGlow 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+            50%       { opacity: 0.5; transform: translate(-50%,-50%) scale(1.15); }
+        }
+
+        .click-label-top {
+            font-size: 0.78rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .click-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(5rem, 18vw, 9rem);
+            font-weight: 900;
+            line-height: 1;
+            color: var(--accent-green);
+            text-shadow: 0 0 30px rgba(0,255,136,0.35);
+            transition: transform 0.12s ease, text-shadow 0.12s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .click-number.pop { transform: scale(1.18); text-shadow: 0 0 60px rgba(0,255,136,0.8); }
+
+        .click-reaction {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(0.75rem, 2.2vw, 1rem);
+            letter-spacing: 2px;
+            color: var(--accent-blue);
+            min-height: 1.8em;
+            margin: 1.2rem 0 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .smash-btn {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #050505;
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
+            border: none;
+            padding: 1rem 3rem;
+            border-radius: 50px;
+            cursor: pointer;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 0 25px rgba(0,255,136,0.4);
+        }
+
+        .smash-btn:hover { transform: scale(1.06) translateY(-2px); box-shadow: 0 0 45px rgba(0,255,136,0.6); }
+        .smash-btn:active { transform: scale(0.95); }
+
+        /* ============================================================
            SECTION 4: SAVAGE FACTS
            ============================================================ */
         .facts-inner {
@@ -1077,6 +1261,7 @@
 
             .hunt-box { padding: 1.5rem 1rem; }
             .hunt-grid { gap: 0.45rem; }
+            .clicks-box { padding: 2.5rem 1.2rem; }
 
             .fact-box { padding: 2rem 1.5rem; }
         }
@@ -1084,6 +1269,7 @@
         @media (max-width: 400px) {
             .hero-title { letter-spacing: 2px; }
             .hunt-start-btn { padding: 0.8rem 1.8rem; font-size: 0.78rem; }
+            .smash-btn { padding: 0.9rem 2rem; font-size: 0.8rem; }
         }
 
     </style>
@@ -1101,7 +1287,7 @@
         <ul class="nav-links" id="navLinks">
             <li><a href="#hero">Home</a></li>
             <li><a href="#interests-section">Interests</a></li>
-            <li><a href="#clicks-section">Hunt</a></li>
+            <li><a href="#games-section">Games</a></li>
             <li><a href="#facts-section">Facts</a></li>
         </ul>
 
@@ -1266,60 +1452,124 @@
 
 
     <!-- ============================================================
-         SECTION 3: SAVAGE HUNT
+         SECTION 3: SAVAGE GAMES
          ============================================================ -->
-    <div id="clicks-section">
+    <div id="games-section">
         <div class="section-wrap">
 
             <div class="section-header reveal">
-                <span class="section-eyebrow">// Game</span>
-                <h2 class="section-title">Savage <span class="hl">Hunt</span></h2>
+                <span class="section-eyebrow">// Arcade</span>
+                <h2 class="section-title">Savage <span class="hl">Games</span></h2>
             </div>
 
-            <div class="hunt-box reveal">
+            <!-- Tab bar -->
+            <div class="games-tabs reveal">
+                <button class="games-tab active" data-game="snake" onclick="switchGame('snake')">🐍 Snake</button>
+                <button class="games-tab" data-game="hunt" onclick="switchGame('hunt')">🎯 Hunt</button>
+                <button class="games-tab" data-game="clicks" onclick="switchGame('clicks')">⚡ Clicks</button>
+            </div>
 
-                <!-- HUD: score / timer / best -->
-                <div class="hunt-hud">
-                    <div class="hunt-hud-stat">
-                        <span class="hunt-hud-label">Score</span>
-                        <div class="hunt-hud-value" id="huntScore">0</div>
+            <!-- ===== SNAKE PANEL ===== -->
+            <div class="game-panel" id="panel-snake">
+                <div class="hunt-box">
+                    <div class="hunt-hud">
+                        <div class="hunt-hud-stat">
+                            <span class="hunt-hud-label">Score</span>
+                            <div class="hunt-hud-value" id="snakeScore">0</div>
+                        </div>
+                        <div class="hunt-hud-stat">
+                            <span class="hunt-hud-label">Level</span>
+                            <div class="hunt-hud-value" id="snakeLevel">1</div>
+                        </div>
+                        <div class="hunt-hud-stat">
+                            <span class="hunt-hud-label">Best</span>
+                            <div class="hunt-hud-value" id="snakeBestEl">0</div>
+                        </div>
                     </div>
-                    <div class="hunt-hud-stat">
-                        <span class="hunt-hud-label">Time</span>
-                        <div class="hunt-hud-value" id="huntTimer">30</div>
+
+                    <div class="snake-canvas-wrap" id="snakeCanvasWrap">
+                        <canvas id="snakeCanvas"></canvas>
                     </div>
-                    <div class="hunt-hud-stat">
-                        <span class="hunt-hud-label">Best</span>
-                        <div class="hunt-hud-value" id="huntBest">0</div>
+
+                    <!-- D-pad for touch screens -->
+                    <div class="snake-dpad">
+                        <div class="snake-dpad-row">
+                            <button class="snake-dpad-btn" onclick="snakeSetDir(0,-1)">▲</button>
+                        </div>
+                        <div class="snake-dpad-row">
+                            <button class="snake-dpad-btn" onclick="snakeSetDir(-1,0)">◀</button>
+                            <button class="snake-dpad-btn" style="visibility:hidden;pointer-events:none"></button>
+                            <button class="snake-dpad-btn" onclick="snakeSetDir(1,0)">▶</button>
+                        </div>
+                        <div class="snake-dpad-row">
+                            <button class="snake-dpad-btn" onclick="snakeSetDir(0,1)">▼</button>
+                        </div>
+                    </div>
+
+                    <div class="snake-legend">
+                        <span>🦌 1pt</span>
+                        <span>🦆 2pts</span>
+                        <span>🐟 3pts</span>
+                        <span>🦃 5pts</span>
+                    </div>
+
+                    <div class="hunt-overlay" id="snakeOverlay">
+                        <div class="hunt-overlay-title" id="snakeOverlayTitle">🐍 SAVAGE SNAKE</div>
+                        <div class="hunt-overlay-sub" id="snakeOverlaySub">
+                            Arrow keys or WASD to steer.<br>
+                            Eat animals to grow. Hit a wall or yourself = game over!
+                        </div>
+                        <button class="hunt-start-btn" id="snakeStartBtn" onclick="startSnake()">⚡ START GAME</button>
                     </div>
                 </div>
+            </div>
 
-                <!-- Draining timer bar -->
-                <div class="hunt-timer-bar-wrap">
-                    <div class="hunt-timer-bar" id="huntTimerBar"></div>
-                </div>
-
-                <!-- Point key -->
-                <div class="hunt-legend">
-                    <span>🦌 Deer = 1pt</span>
-                    <span>🦆 Duck = 2pts</span>
-                    <span>🐟 Fish = 3pts</span>
-                    <span>🦃 Turkey = 5pts</span>
-                </div>
-
-                <!-- 16-hole grid built by JS -->
-                <div class="hunt-grid" id="huntGrid"></div>
-
-                <!-- Start / game-over overlay -->
-                <div class="hunt-overlay" id="huntOverlay">
-                    <div class="hunt-overlay-title" id="huntOverlayTitle">🎯 SAVAGE HUNT</div>
-                    <div class="hunt-overlay-sub" id="huntOverlaySub">
-                        Tap targets before they escape!<br>
-                        Rarer animals = more points. You've got 30 seconds.
+            <!-- ===== HUNT PANEL ===== -->
+            <div class="game-panel" id="panel-hunt" style="display:none">
+                <div class="hunt-box">
+                    <div class="hunt-hud">
+                        <div class="hunt-hud-stat">
+                            <span class="hunt-hud-label">Score</span>
+                            <div class="hunt-hud-value" id="huntScore">0</div>
+                        </div>
+                        <div class="hunt-hud-stat">
+                            <span class="hunt-hud-label">Time</span>
+                            <div class="hunt-hud-value" id="huntTimer">30</div>
+                        </div>
+                        <div class="hunt-hud-stat">
+                            <span class="hunt-hud-label">Best</span>
+                            <div class="hunt-hud-value" id="huntBest">0</div>
+                        </div>
                     </div>
-                    <button class="hunt-start-btn" id="huntStartBtn" onclick="startHunt()">⚡ START HUNTING</button>
+                    <div class="hunt-timer-bar-wrap">
+                        <div class="hunt-timer-bar" id="huntTimerBar"></div>
+                    </div>
+                    <div class="hunt-legend">
+                        <span>🦌 Deer = 1pt</span>
+                        <span>🦆 Duck = 2pts</span>
+                        <span>🐟 Fish = 3pts</span>
+                        <span>🦃 Turkey = 5pts</span>
+                    </div>
+                    <div class="hunt-grid" id="huntGrid"></div>
+                    <div class="hunt-overlay" id="huntOverlay">
+                        <div class="hunt-overlay-title" id="huntOverlayTitle">🎯 SAVAGE HUNT</div>
+                        <div class="hunt-overlay-sub" id="huntOverlaySub">
+                            Tap targets before they escape!<br>
+                            Rarer animals = more points. You've got 30 seconds.
+                        </div>
+                        <button class="hunt-start-btn" id="huntStartBtn" onclick="startHunt()">⚡ START HUNTING</button>
+                    </div>
                 </div>
+            </div>
 
+            <!-- ===== CLICKS PANEL ===== -->
+            <div class="game-panel" id="panel-clicks" style="display:none">
+                <div class="clicks-box">
+                    <p class="click-label-top">Total Clicks This Session</p>
+                    <div class="click-number" id="clickNumber">0</div>
+                    <p class="click-reaction" id="clickReaction">Can you handle the Savage Zone? 👀</p>
+                    <button class="smash-btn" onclick="handleClick()">⚡ SMASH THIS BUTTON</button>
+                </div>
             </div>
 
         </div>
@@ -1617,6 +1867,272 @@
             subEl.innerHTML       = `You scored&nbsp;<strong style="color:var(--accent-green);font-family:'Orbitron',sans-serif;font-size:1.5em">${huntScore}</strong>&nbsp;points`
                                   + (isNewBest ? '<br>🔥 That\'s a new best!' : `<br>Best so far: <strong>${huntBest}</strong>`);
             btnEl.textContent     = '🔄 PLAY AGAIN';
+        }
+
+
+        // ============================================================
+        // GAME TAB SWITCHER
+        // ============================================================
+        function switchGame(name) {
+            document.querySelectorAll('.games-tab').forEach(t => {
+                t.classList.toggle('active', t.dataset.game === name);
+            });
+            ['snake', 'hunt', 'clicks'].forEach(g => {
+                document.getElementById('panel-' + g).style.display = g === name ? '' : 'none';
+            });
+            if (name === 'snake') setTimeout(snakeResize, 30);
+        }
+
+
+        // ============================================================
+        // SAVAGE SNAKE
+        // ============================================================
+        const SCOLS = 20, SROWS = 20;
+        const SFOODS = [
+            { emoji: '🦌', pts: 1, color: '#00ff88' },
+            { emoji: '🦆', pts: 2, color: '#00d4ff' },
+            { emoji: '🐟', pts: 3, color: '#b06aff' },
+            { emoji: '🦃', pts: 5, color: '#ffd700' },
+        ];
+        const SFOOD_W = [50, 28, 15, 7];
+
+        let sSnake, sDir, sNextDir, sFood, sScore, sFoodEaten, sLevel, sRunning, sInterval;
+        let sBest = parseInt(localStorage.getItem('savageSnakeBest') || '0');
+
+        const sCanvas = document.getElementById('snakeCanvas');
+        const sCtx    = sCanvas.getContext('2d');
+        let sCell = 20;
+
+        document.getElementById('snakeBestEl').textContent = sBest;
+
+        function snakeResize() {
+            const wrap = document.getElementById('snakeCanvasWrap');
+            if (!wrap || wrap.clientWidth === 0) return;
+            sCell = Math.floor(Math.min(wrap.clientWidth, 440) / SCOLS);
+            sCanvas.width  = sCell * SCOLS;
+            sCanvas.height = sCell * SROWS;
+            snakeDraw();
+        }
+
+        window.addEventListener('resize', snakeResize);
+        setTimeout(snakeResize, 80);
+
+        // Cross-browser rounded rect helper
+        function sRR(x, y, w, h, r) {
+            sCtx.beginPath();
+            sCtx.moveTo(x + r, y);
+            sCtx.lineTo(x + w - r, y);
+            sCtx.arcTo(x + w, y,     x + w, y + r,     r);
+            sCtx.lineTo(x + w, y + h - r);
+            sCtx.arcTo(x + w, y + h, x + w - r, y + h, r);
+            sCtx.lineTo(x + r, y + h);
+            sCtx.arcTo(x,     y + h, x,         y + h - r, r);
+            sCtx.lineTo(x,     y + r);
+            sCtx.arcTo(x,     y,     x + r,     y,         r);
+            sCtx.closePath();
+        }
+
+        function startSnake() {
+            sSnake     = [{ x: 10, y: 10 }, { x: 9, y: 10 }, { x: 8, y: 10 }];
+            sDir       = { x: 1, y: 0 };
+            sNextDir   = { x: 1, y: 0 };
+            sScore     = 0;
+            sFoodEaten = 0;
+            sLevel     = 1;
+            sRunning   = true;
+            document.getElementById('snakeScore').textContent = '0';
+            document.getElementById('snakeLevel').textContent = '1';
+            document.getElementById('snakeOverlay').style.display = 'none';
+            sSpawnFood();
+            clearInterval(sInterval);
+            sInterval = setInterval(snakeTick, 180);
+        }
+
+        function snakeTick() {
+            sDir = sNextDir;
+            const head = { x: sSnake[0].x + sDir.x, y: sSnake[0].y + sDir.y };
+            if (head.x < 0 || head.x >= SCOLS || head.y < 0 || head.y >= SROWS) return snakeEnd();
+            if (sSnake.some(s => s.x === head.x && s.y === head.y))              return snakeEnd();
+            sSnake.unshift(head);
+            if (head.x === sFood.x && head.y === sFood.y) {
+                sScore += sFood.pts;
+                sFoodEaten++;
+                document.getElementById('snakeScore').textContent = sScore;
+                const newLv = Math.min(10, 1 + Math.floor(sFoodEaten / 3));
+                if (newLv > sLevel) {
+                    sLevel = newLv;
+                    document.getElementById('snakeLevel').textContent = sLevel;
+                    clearInterval(sInterval);
+                    sInterval = setInterval(snakeTick, Math.max(65, 180 - (sLevel - 1) * 13));
+                }
+                sSpawnFood();
+            } else {
+                sSnake.pop();
+            }
+            snakeDraw();
+        }
+
+        function sSpawnFood() {
+            const empty = [];
+            for (let x = 0; x < SCOLS; x++)
+                for (let y = 0; y < SROWS; y++)
+                    if (!sSnake.some(s => s.x === x && s.y === y)) empty.push({ x, y });
+            const pos = empty[Math.floor(Math.random() * empty.length)];
+            const roll = Math.random() * 100;
+            let cum = 0, fi = 0;
+            for (let i = 0; i < SFOOD_W.length; i++) { cum += SFOOD_W[i]; if (roll < cum) { fi = i; break; } }
+            sFood = { ...pos, ...SFOODS[fi] };
+        }
+
+        function snakeDraw() {
+            // Background + grid
+            sCtx.fillStyle = '#0a0a0a';
+            sCtx.fillRect(0, 0, sCanvas.width, sCanvas.height);
+            sCtx.strokeStyle = 'rgba(0,255,136,0.04)';
+            sCtx.lineWidth = 0.5;
+            for (let x = 0; x <= SCOLS; x++) {
+                sCtx.beginPath(); sCtx.moveTo(x * sCell, 0); sCtx.lineTo(x * sCell, sCanvas.height); sCtx.stroke();
+            }
+            for (let y = 0; y <= SROWS; y++) {
+                sCtx.beginPath(); sCtx.moveTo(0, y * sCell); sCtx.lineTo(sCanvas.width, y * sCell); sCtx.stroke();
+            }
+            if (!sRunning || !sSnake || !sFood) return;
+
+            // Food glow + emoji
+            const fp = Math.round(sCell * 0.1);
+            sCtx.save();
+            sCtx.shadowColor = sFood.color;
+            sCtx.shadowBlur  = 16;
+            sCtx.fillStyle   = sFood.color + '28';
+            sRR(sFood.x * sCell + fp, sFood.y * sCell + fp, sCell - fp * 2, sCell - fp * 2, 4);
+            sCtx.fill();
+            sCtx.restore();
+            sCtx.font = `${Math.round(sCell * 0.74)}px serif`;
+            sCtx.textAlign = 'center';
+            sCtx.textBaseline = 'middle';
+            sCtx.fillText(sFood.emoji, sFood.x * sCell + sCell / 2, sFood.y * sCell + sCell / 2 + 1);
+
+            // Snake
+            const gap = Math.max(1, Math.floor(sCell * 0.1));
+            const rad = Math.max(2, Math.round(sCell * 0.22));
+            for (let i = sSnake.length - 1; i >= 0; i--) {
+                const seg    = sSnake[i];
+                const isHead = i === 0;
+                const t      = (sSnake.length - i) / sSnake.length;
+                sCtx.save();
+                if (isHead) {
+                    sCtx.shadowColor = '#00ff88';
+                    sCtx.shadowBlur  = 14;
+                    sCtx.fillStyle   = '#00ff88';
+                } else {
+                    sCtx.fillStyle = `rgba(0,${Math.round(140 + t * 95)},80,${(0.45 + t * 0.55).toFixed(2)})`;
+                }
+                sRR(seg.x * sCell + gap, seg.y * sCell + gap, sCell - gap * 2, sCell - gap * 2, rad);
+                sCtx.fill();
+                sCtx.restore();
+
+                // Eyes on head
+                if (isHead) {
+                    const es = Math.max(2, Math.round(sCell * 0.12));
+                    const c  = sCell;
+                    let e1x, e1y, e2x, e2y;
+                    if      (sDir.x ===  1) { e1x=0.70; e1y=0.28; e2x=0.70; e2y=0.72; }
+                    else if (sDir.x === -1) { e1x=0.30; e1y=0.28; e2x=0.30; e2y=0.72; }
+                    else if (sDir.y === -1) { e1x=0.28; e1y=0.30; e2x=0.72; e2y=0.30; }
+                    else                    { e1x=0.28; e1y=0.70; e2x=0.72; e2y=0.70; }
+                    sCtx.fillStyle = '#030303';
+                    sCtx.beginPath(); sCtx.arc(seg.x*c + e1x*c, seg.y*c + e1y*c, es, 0, Math.PI*2); sCtx.fill();
+                    sCtx.beginPath(); sCtx.arc(seg.x*c + e2x*c, seg.y*c + e2y*c, es, 0, Math.PI*2); sCtx.fill();
+                }
+            }
+        }
+
+        function snakeEnd() {
+            sRunning = false;
+            clearInterval(sInterval);
+            const isNewBest = sScore > sBest;
+            if (isNewBest) {
+                sBest = sScore;
+                localStorage.setItem('savageSnakeBest', sBest);
+                document.getElementById('snakeBestEl').textContent = sBest;
+            }
+            document.getElementById('snakeOverlay').style.display = '';
+            document.getElementById('snakeOverlayTitle').textContent = isNewBest ? '🏆 NEW HIGH SCORE!' : '💀 GAME OVER';
+            document.getElementById('snakeOverlaySub').innerHTML =
+                `Score: <strong style="color:var(--accent-green);font-family:'Orbitron',sans-serif;font-size:1.4em">${sScore}</strong>`
+                + (isNewBest ? '<br>🔥 New record!' : `<br>Best so far: <strong>${sBest}</strong>`);
+            document.getElementById('snakeStartBtn').textContent = '🔄 PLAY AGAIN';
+        }
+
+        // Arrow / WASD keys
+        document.addEventListener('keydown', e => {
+            if (!sRunning) return;
+            const map = {
+                ArrowUp:    {x:0,y:-1}, w:{x:0,y:-1},
+                ArrowDown:  {x:0,y:1},  s:{x:0,y:1},
+                ArrowLeft:  {x:-1,y:0}, a:{x:-1,y:0},
+                ArrowRight: {x:1,y:0},  d:{x:1,y:0},
+            };
+            if (!map[e.key]) return;
+            e.preventDefault();
+            const nd = map[e.key];
+            if (nd.x !== -sDir.x || nd.y !== -sDir.y) sNextDir = nd;
+        });
+
+        function snakeSetDir(x, y) {
+            if (!sRunning) return;
+            if (x !== -sDir.x || y !== -sDir.y) sNextDir = { x, y };
+        }
+
+        // Swipe controls on canvas
+        let sTX = 0, sTY = 0;
+        sCanvas.addEventListener('touchstart', e => { sTX = e.touches[0].clientX; sTY = e.touches[0].clientY; e.preventDefault(); }, { passive: false });
+        sCanvas.addEventListener('touchend',   e => {
+            const dx = e.changedTouches[0].clientX - sTX;
+            const dy = e.changedTouches[0].clientY - sTY;
+            if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return;
+            Math.abs(dx) > Math.abs(dy) ? snakeSetDir(dx > 0 ? 1 : -1, 0) : snakeSetDir(0, dy > 0 ? 1 : -1);
+            e.preventDefault();
+        }, { passive: false });
+
+
+        // ============================================================
+        // SAVAGE CLICKS — COUNTER + MILESTONE REACTIONS
+        // ============================================================
+        let clicks = 0;
+
+        const milestones = [
+            [0,    "Can you handle the Savage Zone? 👀"],
+            [1,    "LET'S GO! Keep clicking! 🔥"],
+            [5,    "You're warming up... 😏"],
+            [10,   "Not bad... not bad at all."],
+            [25,   "Getting into beast mode! 💪"],
+            [50,   "FIFTY CLICKS! Going full savage! 🐻"],
+            [75,   "You cannot stop. I respect it."],
+            [100,  "ONE HUNDRED CLICKS! ABSOLUTELY SAVAGE! 🔥🔥🔥"],
+            [150,  "At this point you just live here 😂"],
+            [200,  "200 CLICKS?! You're built different. 🤯"],
+            [300,  "Legend status: UNLOCKED 🏆"],
+            [500,  "FIVE HUNDRED! YOU ARE THE SAVAGE ZONE! 👑"],
+            [750,  "Okay this is getting out of hand..."],
+            [1000, "1,000 CLICKS — HALL OF FAME! 🌟🌟🌟"]
+        ];
+
+        function getReaction(n) {
+            let msg = milestones[0][1];
+            for (const [t, text] of milestones) { if (n >= t) msg = text; }
+            return msg;
+        }
+
+        function handleClick() {
+            clicks++;
+            const numEl = document.getElementById('clickNumber');
+            numEl.textContent = clicks.toLocaleString();
+            numEl.classList.remove('pop');
+            void numEl.offsetWidth;
+            numEl.classList.add('pop');
+            setTimeout(() => numEl.classList.remove('pop'), 200);
+            document.getElementById('clickReaction').textContent = getReaction(clicks);
         }
 
 
