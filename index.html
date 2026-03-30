@@ -948,6 +948,49 @@
         }
 
         /* ============================================================
+           TETRIS LAYOUT
+           ============================================================ */
+        .tetris-layout {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .tetris-side {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.6rem;
+            padding-top: 0.2rem;
+        }
+
+        .tetris-side-label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            font-weight: 700;
+        }
+
+        #tetNext {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: #0a0a0a;
+        }
+
+        .tetris-controls-help {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            line-height: 1.9;
+            text-align: left;
+            letter-spacing: 0.5px;
+            margin-top: 0.4rem;
+        }
+
+        /* ============================================================
            SNAKE GAME
            ============================================================ */
         .snake-canvas-wrap {
@@ -1465,6 +1508,7 @@
             <!-- Tab bar -->
             <div class="games-tabs reveal">
                 <button class="games-tab active" data-game="snake" onclick="switchGame('snake')">🐍 Snake</button>
+                <button class="games-tab" data-game="tetris" onclick="switchGame('tetris')">🟦 Tetris</button>
                 <button class="games-tab" data-game="hunt" onclick="switchGame('hunt')">🎯 Hunt</button>
                 <button class="games-tab" data-game="clicks" onclick="switchGame('clicks')">⚡ Clicks</button>
             </div>
@@ -1558,6 +1602,67 @@
                             Rarer animals = more points. You've got 30 seconds.
                         </div>
                         <button class="hunt-start-btn" id="huntStartBtn" onclick="startHunt()">⚡ START HUNTING</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== TETRIS PANEL ===== -->
+            <div class="game-panel" id="panel-tetris" style="display:none">
+                <div class="hunt-box">
+                    <div class="hunt-hud">
+                        <div class="hunt-hud-stat">
+                            <span class="hunt-hud-label">Score</span>
+                            <div class="hunt-hud-value" id="tetScore">0</div>
+                        </div>
+                        <div class="hunt-hud-stat">
+                            <span class="hunt-hud-label">Level</span>
+                            <div class="hunt-hud-value" id="tetLevel">1</div>
+                        </div>
+                        <div class="hunt-hud-stat">
+                            <span class="hunt-hud-label">Best</span>
+                            <div class="hunt-hud-value" id="tetBest">0</div>
+                        </div>
+                    </div>
+
+                    <div class="tetris-layout">
+                        <div class="snake-canvas-wrap" id="tetCanvasWrap">
+                            <canvas id="tetCanvas"></canvas>
+                        </div>
+                        <div class="tetris-side">
+                            <div class="tetris-side-label">Next</div>
+                            <canvas id="tetNext" width="80" height="80"></canvas>
+                            <div class="tetris-controls-help">
+                                <div>← → Move</div>
+                                <div>↑ Rotate</div>
+                                <div>↓ Drop</div>
+                                <div>Space Hard drop</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mobile controls -->
+                    <div class="snake-dpad" style="margin-top:0.7rem">
+                        <div class="snake-dpad-row">
+                            <button class="snake-dpad-btn" onclick="tetRotate()">↻</button>
+                        </div>
+                        <div class="snake-dpad-row">
+                            <button class="snake-dpad-btn" onclick="tetMove(-1)">◀</button>
+                            <button class="snake-dpad-btn" onclick="tetHardDrop()">▼▼</button>
+                            <button class="snake-dpad-btn" onclick="tetMove(1)">▶</button>
+                        </div>
+                        <div class="snake-dpad-row">
+                            <button class="snake-dpad-btn" onclick="tetSoftDrop()">▼</button>
+                        </div>
+                    </div>
+
+                    <div class="hunt-overlay" id="tetOverlay">
+                        <div class="hunt-overlay-title" id="tetOverlayTitle">🟦 SAVAGE TETRIS</div>
+                        <div class="hunt-overlay-sub" id="tetOverlaySub">
+                            Clear lines to score.<br>
+                            Clear 4 at once for a TETRIS bonus!<br>
+                            Arrow keys or buttons below.
+                        </div>
+                        <button class="hunt-start-btn" id="tetStartBtn" onclick="startTetris()">⚡ START GAME</button>
                     </div>
                 </div>
             </div>
@@ -1877,11 +1982,306 @@
             document.querySelectorAll('.games-tab').forEach(t => {
                 t.classList.toggle('active', t.dataset.game === name);
             });
-            ['snake', 'hunt', 'clicks'].forEach(g => {
+            ['snake', 'tetris', 'hunt', 'clicks'].forEach(g => {
                 document.getElementById('panel-' + g).style.display = g === name ? '' : 'none';
             });
-            if (name === 'snake') setTimeout(snakeResize, 30);
+            if (name === 'snake')  setTimeout(snakeResize, 30);
+            if (name === 'tetris') setTimeout(tetResize, 30);
         }
+
+
+        // ============================================================
+        // SAVAGE TETRIS
+        // ============================================================
+        const TET_COLS = 10, TET_ROWS = 20;
+
+        const TET_PIECES = [
+            { shape: [[1,1,1,1]],                         color: '#00d4ff' }, // I
+            { shape: [[1,1],[1,1]],                       color: '#ffd700' }, // O
+            { shape: [[0,1,0],[1,1,1]],                   color: '#b06aff' }, // T
+            { shape: [[1,0],[1,0],[1,1]],                 color: '#ff7043' }, // L
+            { shape: [[0,1],[0,1],[1,1]],                 color: '#00ff88' }, // J (flipped)
+            { shape: [[0,1,1],[1,1,0]],                   color: '#ff4444' }, // S
+            { shape: [[1,1,0],[0,1,1]],                   color: '#44ff88' }, // Z
+        ];
+
+        let tBoard, tPiece, tNext, tScore, tLevel, tLines, tRunning, tInterval, tLockDelay;
+        let tBest = parseInt(localStorage.getItem('savageTetrisBest') || '0');
+        let tCell = 28;
+
+        const tCanvas  = document.getElementById('tetCanvas');
+        const tCtx     = tCanvas.getContext('2d');
+        const tNCanvas = document.getElementById('tetNext');
+        const tNCtx    = tNCanvas.getContext('2d');
+
+        document.getElementById('tetBest').textContent = tBest;
+
+        function tetResize() {
+            const wrap = document.getElementById('tetCanvasWrap');
+            if (!wrap || wrap.clientWidth === 0) return;
+            tCell = Math.floor(Math.min(wrap.clientWidth - 100, 320) / TET_COLS);
+            tCell = Math.max(18, tCell);
+            tCanvas.width  = tCell * TET_COLS;
+            tCanvas.height = tCell * TET_ROWS;
+            tetDraw();
+        }
+        window.addEventListener('resize', tetResize);
+        setTimeout(tetResize, 80);
+
+        function tNewBoard() {
+            return Array.from({ length: TET_ROWS }, () => Array(TET_COLS).fill(0));
+        }
+
+        function tRandomPiece() {
+            const p = TET_PIECES[Math.floor(Math.random() * TET_PIECES.length)];
+            return {
+                shape: p.shape.map(r => [...r]),
+                color: p.color,
+                x: Math.floor((TET_COLS - p.shape[0].length) / 2),
+                y: 0,
+            };
+        }
+
+        function startTetris() {
+            tBoard   = tNewBoard();
+            tScore   = 0;
+            tLevel   = 1;
+            tLines   = 0;
+            tRunning = true;
+            document.getElementById('tetScore').textContent = '0';
+            document.getElementById('tetLevel').textContent = '1';
+            document.getElementById('tetOverlay').style.display = 'none';
+            tNext  = tRandomPiece();
+            tPiece = tRandomPiece();
+            tPiece.x = Math.floor((TET_COLS - tPiece.shape[0].length) / 2);
+            tPiece.y = 0;
+            tetDrawNext();
+            clearInterval(tInterval);
+            tInterval = setInterval(tetTick, tetSpeed());
+        }
+
+        function tetSpeed() { return Math.max(80, 800 - (tLevel - 1) * 70); }
+
+        function tCollides(shape, ox, oy) {
+            for (let r = 0; r < shape.length; r++)
+                for (let c = 0; c < shape[r].length; c++)
+                    if (shape[r][c]) {
+                        const nx = ox + c, ny = oy + r;
+                        if (nx < 0 || nx >= TET_COLS || ny >= TET_ROWS) return true;
+                        if (ny >= 0 && tBoard[ny][nx]) return true;
+                    }
+            return false;
+        }
+
+        function tLock() {
+            for (let r = 0; r < tPiece.shape.length; r++)
+                for (let c = 0; c < tPiece.shape[r].length; c++)
+                    if (tPiece.shape[r][c]) {
+                        if (tPiece.y + r < 0) { tetGameOver(); return; }
+                        tBoard[tPiece.y + r][tPiece.x + c] = tPiece.color;
+                    }
+            tClearLines();
+            tPiece = tNext;
+            tPiece.x = Math.floor((TET_COLS - tPiece.shape[0].length) / 2);
+            tPiece.y = 0;
+            tNext = tRandomPiece();
+            tetDrawNext();
+            if (tCollides(tPiece.shape, tPiece.x, tPiece.y)) { tetGameOver(); return; }
+        }
+
+        function tClearLines() {
+            let cleared = 0;
+            for (let r = TET_ROWS - 1; r >= 0; r--) {
+                if (tBoard[r].every(c => c !== 0)) {
+                    tBoard.splice(r, 1);
+                    tBoard.unshift(Array(TET_COLS).fill(0));
+                    cleared++;
+                    r++; // recheck same row index
+                }
+            }
+            if (!cleared) return;
+            tLines += cleared;
+            const pts = [0, 100, 300, 500, 800][cleared] * tLevel;
+            tScore += pts;
+            document.getElementById('tetScore').textContent = tScore;
+            const newLv = Math.min(15, 1 + Math.floor(tLines / 10));
+            if (newLv > tLevel) {
+                tLevel = newLv;
+                document.getElementById('tetLevel').textContent = tLevel;
+                clearInterval(tInterval);
+                tInterval = setInterval(tetTick, tetSpeed());
+            }
+        }
+
+        function tetTick() {
+            if (!tRunning) return;
+            if (tCollides(tPiece.shape, tPiece.x, tPiece.y + 1)) {
+                tLock();
+            } else {
+                tPiece.y++;
+            }
+            tetDraw();
+        }
+
+        function tetMove(dir) {
+            if (!tRunning) return;
+            if (!tCollides(tPiece.shape, tPiece.x + dir, tPiece.y)) tPiece.x += dir;
+            tetDraw();
+        }
+
+        function tetRotate() {
+            if (!tRunning) return;
+            const rot = tPiece.shape[0].map((_, i) => tPiece.shape.map(r => r[i]).reverse());
+            // wall kick: try center, then shift left/right
+            for (const kick of [0, 1, -1, 2, -2]) {
+                if (!tCollides(rot, tPiece.x + kick, tPiece.y)) {
+                    tPiece.shape = rot;
+                    tPiece.x += kick;
+                    break;
+                }
+            }
+            tetDraw();
+        }
+
+        function tetSoftDrop() {
+            if (!tRunning) return;
+            if (!tCollides(tPiece.shape, tPiece.x, tPiece.y + 1)) {
+                tPiece.y++;
+                tScore++;
+                document.getElementById('tetScore').textContent = tScore;
+            }
+            tetDraw();
+        }
+
+        function tetHardDrop() {
+            if (!tRunning) return;
+            let dropped = 0;
+            while (!tCollides(tPiece.shape, tPiece.x, tPiece.y + 1)) { tPiece.y++; dropped++; }
+            tScore += dropped * 2;
+            document.getElementById('tetScore').textContent = tScore;
+            tLock();
+            tetDraw();
+        }
+
+        function tGhostY() {
+            let gy = tPiece.y;
+            while (!tCollides(tPiece.shape, tPiece.x, gy + 1)) gy++;
+            return gy;
+        }
+
+        function tetDraw() {
+            tCtx.fillStyle = '#0a0a0a';
+            tCtx.fillRect(0, 0, tCanvas.width, tCanvas.height);
+
+            // Grid lines
+            tCtx.strokeStyle = 'rgba(0,255,136,0.05)';
+            tCtx.lineWidth = 0.5;
+            for (let x = 0; x <= TET_COLS; x++) {
+                tCtx.beginPath(); tCtx.moveTo(x * tCell, 0); tCtx.lineTo(x * tCell, tCanvas.height); tCtx.stroke();
+            }
+            for (let y = 0; y <= TET_ROWS; y++) {
+                tCtx.beginPath(); tCtx.moveTo(0, y * tCell); tCtx.lineTo(tCanvas.width, y * tCell); tCtx.stroke();
+            }
+
+            // Locked board cells
+            for (let r = 0; r < TET_ROWS; r++)
+                for (let c = 0; c < TET_COLS; c++)
+                    if (tBoard[r][c]) tDrawCell(tCtx, c, r, tBoard[r][c], tCell, 1);
+
+            if (!tPiece) return;
+
+            // Ghost piece
+            const gy = tGhostY();
+            if (gy !== tPiece.y) {
+                for (let r = 0; r < tPiece.shape.length; r++)
+                    for (let c = 0; c < tPiece.shape[r].length; c++)
+                        if (tPiece.shape[r][c])
+                            tDrawCell(tCtx, tPiece.x + c, gy + r, tPiece.color, tCell, 0.18);
+            }
+
+            // Active piece
+            for (let r = 0; r < tPiece.shape.length; r++)
+                for (let c = 0; c < tPiece.shape[r].length; c++)
+                    if (tPiece.shape[r][c])
+                        tDrawCell(tCtx, tPiece.x + c, tPiece.y + r, tPiece.color, tCell, 1);
+        }
+
+        function tDrawCell(ctx, cx, cy, color, cell, alpha) {
+            const gap = Math.max(1, Math.round(cell * 0.07));
+            const r   = Math.max(2, Math.round(cell * 0.18));
+            const x   = cx * cell + gap, y = cy * cell + gap;
+            const w   = cell - gap * 2,  h = cell - gap * 2;
+            ctx.save();
+            ctx.globalAlpha = alpha;
+            ctx.fillStyle = color;
+            if (alpha > 0.5) { ctx.shadowColor = color; ctx.shadowBlur = 8; }
+            ctx.beginPath();
+            ctx.moveTo(x + r, y);
+            ctx.lineTo(x + w - r, y); ctx.arcTo(x + w, y,     x + w, y + r,     r);
+            ctx.lineTo(x + w, y + h - r); ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
+            ctx.lineTo(x + r, y + h); ctx.arcTo(x,     y + h, x,         y + h - r, r);
+            ctx.lineTo(x,     y + r); ctx.arcTo(x,     y,     x + r,     y,         r);
+            ctx.closePath();
+            ctx.fill();
+            // Shine highlight
+            if (alpha > 0.5) {
+                ctx.globalAlpha = 0.25;
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(x + gap, y + gap, w - gap * 2, Math.round(h * 0.35));
+            }
+            ctx.restore();
+        }
+
+        function tetDrawNext() {
+            tNCtx.fillStyle = '#0a0a0a';
+            tNCtx.fillRect(0, 0, tNCanvas.width, tNCanvas.height);
+            if (!tNext) return;
+            const cell  = Math.floor(Math.min(tNCanvas.width, tNCanvas.height) / 5);
+            const offX  = Math.floor((tNCanvas.width  - tNext.shape[0].length * cell) / 2);
+            const offY  = Math.floor((tNCanvas.height - tNext.shape.length    * cell) / 2);
+            for (let r = 0; r < tNext.shape.length; r++)
+                for (let c = 0; c < tNext.shape[r].length; c++)
+                    if (tNext.shape[r][c]) {
+                        const px = offX + c * cell, py = offY + r * cell;
+                        tNCtx.save();
+                        tNCtx.fillStyle   = tNext.color;
+                        tNCtx.shadowColor = tNext.color;
+                        tNCtx.shadowBlur  = 8;
+                        tNCtx.fillRect(px + 1, py + 1, cell - 2, cell - 2);
+                        tNCtx.restore();
+                    }
+        }
+
+        function tetGameOver() {
+            tRunning = false;
+            clearInterval(tInterval);
+            const isNewBest = tScore > tBest;
+            if (isNewBest) {
+                tBest = tScore;
+                localStorage.setItem('savageTetrisBest', tBest);
+                document.getElementById('tetBest').textContent = tBest;
+            }
+            document.getElementById('tetOverlay').style.display = '';
+            document.getElementById('tetOverlayTitle').textContent = isNewBest ? '🏆 NEW HIGH SCORE!' : '💀 GAME OVER';
+            document.getElementById('tetOverlaySub').innerHTML =
+                `Score: <strong style="color:var(--accent-green);font-family:'Orbitron',sans-serif;font-size:1.4em">${tScore}</strong>`
+                + (isNewBest ? '<br>🔥 New record!' : `<br>Best so far: <strong>${tBest}</strong>`);
+            document.getElementById('tetStartBtn').textContent = '🔄 PLAY AGAIN';
+        }
+
+        // Keyboard controls for Tetris
+        document.addEventListener('keydown', e => {
+            const tetPanel = document.getElementById('panel-tetris');
+            if (!tetPanel || tetPanel.style.display === 'none') return;
+            const preventKeys = ['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' '];
+            if (preventKeys.includes(e.key)) e.preventDefault();
+            if (!tRunning) return;
+            if (e.key === 'ArrowLeft')  tetMove(-1);
+            if (e.key === 'ArrowRight') tetMove(1);
+            if (e.key === 'ArrowUp')    tetRotate();
+            if (e.key === 'ArrowDown')  tetSoftDrop();
+            if (e.key === ' ')          tetHardDrop();
+        });
 
 
         // ============================================================
