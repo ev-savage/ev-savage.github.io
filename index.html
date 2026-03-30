@@ -699,7 +699,7 @@
         }
 
         /* ============================================================
-           SECTION 3: SAVAGE CLICKS
+           SECTION 3: SAVAGE HUNT
            ============================================================ */
         #clicks-section {
             background: var(--bg-secondary);
@@ -707,105 +707,209 @@
             border-bottom: 1px solid var(--border-color);
         }
 
-        .clicks-box {
+        .hunt-box {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 24px;
-            padding: 3.5rem 2rem;
-            max-width: 600px;
+            padding: 2rem 1.8rem;
+            max-width: 680px;
             margin: 0 auto;
             text-align: center;
             position: relative;
-            overflow: hidden;
         }
 
-        /* Pulsing radial glow behind the counter */
-        .clicks-box::before {
-            content: '';
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 70%;
-            padding-bottom: 70%;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(0, 255, 136, 0.06) 0%, transparent 70%);
-            animation: pulseGlow 4s ease-in-out infinite;
-            pointer-events: none;
+        /* HUD row */
+        .hunt-hud {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.1rem;
+            gap: 0.5rem;
         }
 
-        @keyframes pulseGlow {
-            0%, 100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-            50%       { opacity: 0.5; transform: translate(-50%, -50%) scale(1.15); }
-        }
+        .hunt-hud-stat { text-align: center; flex: 1; }
 
-        .click-label-top {
-            font-size: 0.78rem;
-            letter-spacing: 5px;
+        .hunt-hud-label {
+            font-size: 0.62rem;
+            letter-spacing: 4px;
             text-transform: uppercase;
             color: var(--text-secondary);
             font-weight: 700;
-            margin-bottom: 0.75rem;
-            position: relative;
-            z-index: 1;
+            display: block;
+            margin-bottom: 0.15rem;
         }
 
-        /* BIG number */
-        .click-number {
+        .hunt-hud-value {
             font-family: 'Orbitron', sans-serif;
-            font-size: clamp(5rem, 18vw, 9rem);
+            font-size: 1.9rem;
             font-weight: 900;
-            line-height: 1;
             color: var(--accent-green);
-            text-shadow: 0 0 30px rgba(0, 255, 136, 0.35);
-            transition: transform 0.12s ease, text-shadow 0.12s ease;
+            line-height: 1;
+        }
+
+        .hunt-hud-value.timer-urgent {
+            color: #ff4444;
+            animation: timerPulse 0.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes timerPulse {
+            from { text-shadow: 0 0 6px rgba(255,68,68,0.3); }
+            to   { text-shadow: 0 0 22px rgba(255,68,68,0.9); }
+        }
+
+        /* Timer drain bar */
+        .hunt-timer-bar-wrap {
+            background: var(--border-color);
+            border-radius: 4px;
+            height: 6px;
+            margin-bottom: 1.2rem;
+            overflow: hidden;
+        }
+
+        .hunt-timer-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
+            border-radius: 4px;
+            transition: width 1s linear, background 0.5s ease;
+            width: 100%;
+        }
+
+        .hunt-timer-bar.urgent { background: linear-gradient(90deg, #ff4444, #ff7043); }
+
+        /* Point legend */
+        .hunt-legend {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            text-transform: uppercase;
+        }
+
+        /* Game grid */
+        .hunt-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.65rem;
+            margin-bottom: 0;
+            user-select: none;
+        }
+
+        .hunt-hole {
+            aspect-ratio: 1;
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
             position: relative;
-            z-index: 1;
+            overflow: hidden;
+            transition: border-color 0.15s ease, background 0.15s ease;
         }
 
-        /* Pop animation when button is clicked */
-        .click-number.pop {
-            transform: scale(1.18);
-            text-shadow: 0 0 60px rgba(0, 255, 136, 0.8);
+        .hunt-hole:hover { border-color: var(--accent-green); }
+
+        .hunt-target {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(1.5rem, 4.5vw, 2.2rem);
+            transform: translateY(110%);
+            transition: transform 0.14s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: none;
         }
 
-        /* Reaction message below counter */
-        .click-reaction {
+        .hunt-hole.active .hunt-target { transform: translateY(0); }
+        .hunt-hole.hit  { background: rgba(0, 255, 136, 0.15); border-color: var(--accent-green); }
+        .hunt-hole.miss { background: rgba(255, 68, 68, 0.12); border-color: #ff4444; }
+
+        /* Floating score pop */
+        .score-pop {
+            position: absolute;
             font-family: 'Orbitron', sans-serif;
-            font-size: clamp(0.75rem, 2.2vw, 1rem);
-            letter-spacing: 2px;
-            color: var(--accent-blue);
-            min-height: 1.8em;
-            margin: 1.2rem 0 2rem;
-            transition: all 0.3s ease;
-            position: relative;
-            z-index: 1;
+            font-weight: 900;
+            font-size: 1rem;
+            color: var(--accent-green);
+            pointer-events: none;
+            animation: scorePop 0.65s ease forwards;
+            z-index: 10;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
-        /* THE button */
-        .smash-btn {
+        @keyframes scorePop {
+            0%   { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-40px) scale(1.5); }
+        }
+
+        .score-pop.pts-2 { color: var(--accent-blue); }
+        .score-pop.pts-3 { color: #b06aff; }
+        .score-pop.pts-5 { color: #ffd700; font-size: 1.3rem; }
+
+        /* Start / Game-over overlay */
+        .hunt-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(10,10,10,0.9);
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            backdrop-filter: blur(4px);
+            z-index: 5;
+            padding: 2rem;
+        }
+
+        .hunt-overlay-title {
             font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.3rem, 4vw, 2rem);
+            font-weight: 900;
+            color: var(--accent-green);
+            text-shadow: 0 0 20px rgba(0,255,136,0.5);
+            text-align: center;
+        }
+
+        .hunt-overlay-sub {
             font-size: 0.95rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-align: center;
+            line-height: 1.7;
+        }
+
+        .hunt-start-btn {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.88rem;
             font-weight: 700;
             letter-spacing: 3px;
             text-transform: uppercase;
             color: #050505;
             background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
             border: none;
-            padding: 1rem 3rem;
+            padding: 0.9rem 2.5rem;
             border-radius: 50px;
             cursor: pointer;
-            position: relative;
-            z-index: 1;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 0 25px rgba(0, 255, 136, 0.4);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 0 25px rgba(0,255,136,0.4);
         }
 
-        .smash-btn:hover {
+        .hunt-start-btn:hover {
             transform: scale(1.06) translateY(-2px);
-            box-shadow: 0 0 45px rgba(0, 255, 136, 0.6);
+            box-shadow: 0 0 45px rgba(0,255,136,0.6);
         }
 
-        .smash-btn:active { transform: scale(0.95); }
+        .hunt-start-btn:active { transform: scale(0.95); }
 
 
         /* ============================================================
@@ -971,14 +1075,15 @@
 
             .hero-name { letter-spacing: 5px; }
 
-            .clicks-box { padding: 2.5rem 1.5rem; }
+            .hunt-box { padding: 1.5rem 1rem; }
+            .hunt-grid { gap: 0.45rem; }
 
             .fact-box { padding: 2rem 1.5rem; }
         }
 
         @media (max-width: 400px) {
             .hero-title { letter-spacing: 2px; }
-            .smash-btn  { padding: 0.9rem 2rem; font-size: 0.8rem; }
+            .hunt-start-btn { padding: 0.8rem 1.8rem; font-size: 0.78rem; }
         }
 
     </style>
@@ -996,7 +1101,7 @@
         <ul class="nav-links" id="navLinks">
             <li><a href="#hero">Home</a></li>
             <li><a href="#interests-section">Interests</a></li>
-            <li><a href="#clicks-section">Clicks</a></li>
+            <li><a href="#clicks-section">Hunt</a></li>
             <li><a href="#facts-section">Facts</a></li>
         </ul>
 
@@ -1161,27 +1266,60 @@
 
 
     <!-- ============================================================
-         SECTION 3: SAVAGE CLICKS
+         SECTION 3: SAVAGE HUNT
          ============================================================ -->
     <div id="clicks-section">
         <div class="section-wrap">
 
             <div class="section-header reveal">
-                <span class="section-eyebrow">// Challenge</span>
-                <h2 class="section-title">Savage <span class="hl">Clicks</span></h2>
+                <span class="section-eyebrow">// Game</span>
+                <h2 class="section-title">Savage <span class="hl">Hunt</span></h2>
             </div>
 
-            <div class="clicks-box reveal">
-                <p class="click-label-top">Total Clicks This Session</p>
+            <div class="hunt-box reveal">
 
-                <!-- The big counter number — updated by JS -->
-                <div class="click-number" id="clickNumber">0</div>
+                <!-- HUD: score / timer / best -->
+                <div class="hunt-hud">
+                    <div class="hunt-hud-stat">
+                        <span class="hunt-hud-label">Score</span>
+                        <div class="hunt-hud-value" id="huntScore">0</div>
+                    </div>
+                    <div class="hunt-hud-stat">
+                        <span class="hunt-hud-label">Time</span>
+                        <div class="hunt-hud-value" id="huntTimer">30</div>
+                    </div>
+                    <div class="hunt-hud-stat">
+                        <span class="hunt-hud-label">Best</span>
+                        <div class="hunt-hud-value" id="huntBest">0</div>
+                    </div>
+                </div>
 
-                <!-- Reaction message — changes at milestones, see JS below -->
-                <p class="click-reaction" id="clickReaction">Can you handle the Savage Zone? 👀</p>
+                <!-- Draining timer bar -->
+                <div class="hunt-timer-bar-wrap">
+                    <div class="hunt-timer-bar" id="huntTimerBar"></div>
+                </div>
 
-                <!-- THE BUTTON -->
-                <button class="smash-btn" onclick="handleClick()">⚡ SMASH THIS BUTTON</button>
+                <!-- Point key -->
+                <div class="hunt-legend">
+                    <span>🦌 Deer = 1pt</span>
+                    <span>🦆 Duck = 2pts</span>
+                    <span>🐟 Fish = 3pts</span>
+                    <span>🦃 Turkey = 5pts</span>
+                </div>
+
+                <!-- 16-hole grid built by JS -->
+                <div class="hunt-grid" id="huntGrid"></div>
+
+                <!-- Start / game-over overlay -->
+                <div class="hunt-overlay" id="huntOverlay">
+                    <div class="hunt-overlay-title" id="huntOverlayTitle">🎯 SAVAGE HUNT</div>
+                    <div class="hunt-overlay-sub" id="huntOverlaySub">
+                        Tap targets before they escape!<br>
+                        Rarer animals = more points. You've got 30 seconds.
+                    </div>
+                    <button class="hunt-start-btn" id="huntStartBtn" onclick="startHunt()">⚡ START HUNTING</button>
+                </div>
+
             </div>
 
         </div>
@@ -1314,55 +1452,171 @@
 
 
         // ============================================================
-        // SAVAGE CLICKS — COUNTER + MILESTONE REACTIONS
-        //
-        // Hey Everett! Add new milestones by copying a line below.
-        // Format is: [clicks_needed, "Your message here!"]
+        // SAVAGE HUNT — whack-a-mole style game
         // ============================================================
-        let clicks = 0;
+        const HUNT_DURATION = 30;
+        const HUNT_HOLES    = 16;
 
-        const milestones = [
-            [0,    "Can you handle the Savage Zone? 👀"],
-            [1,    "LET'S GO! Keep clicking! 🔥"],
-            [5,    "You're warming up... 😏"],
-            [10,   "Not bad... not bad at all."],
-            [25,   "Getting into beast mode! 💪"],
-            [50,   "FIFTY CLICKS! Going full savage! 🐻"],
-            [75,   "You cannot stop. I respect it."],
-            [100,  "ONE HUNDRED CLICKS! ABSOLUTELY SAVAGE! 🔥🔥🔥"],
-            [150,  "At this point you just live here 😂"],
-            [200,  "200 CLICKS?! You're built different. 🤯"],
-            [300,  "Legend status: UNLOCKED 🏆"],
-            [500,  "FIVE HUNDRED! YOU ARE THE SAVAGE ZONE! 👑"],
-            [750,  "Okay this is getting out of hand..."],
-            [1000, "1,000 CLICKS — HALL OF FAME! 🌟🌟🌟"]
-            // ← Add your own milestones here!
+        // Targets: emoji, points, how long they stay visible (ms)
+        const HUNT_TARGETS = [
+            { emoji: '🦌', pts: 1, speed: 1100 },
+            { emoji: '🦆', pts: 2, speed: 900  },
+            { emoji: '🐟', pts: 3, speed: 750  },
+            { emoji: '🦃', pts: 5, speed: 580  },
         ];
+        // Spawn weights (out of 100) — deer most common, turkey rarest
+        const HUNT_WEIGHTS = [50, 25, 15, 10];
 
-        function getReaction(n) {
-            // Finds the highest milestone the click count has passed
-            let msg = milestones[0][1];
-            for (const [threshold, text] of milestones) {
-                if (n >= threshold) msg = text;
-            }
-            return msg;
+        let huntScore         = 0;
+        let huntTimeLeft      = HUNT_DURATION;
+        let huntRunning       = false;
+        let huntTimerInterval = null;
+        let huntSpawnTimeout  = null;
+        let huntActiveHoles   = new Set();
+        let huntHoleTimers    = {};
+
+        // Build the 16-hole grid
+        const huntGrid = document.getElementById('huntGrid');
+        for (let i = 0; i < HUNT_HOLES; i++) {
+            const hole = document.createElement('div');
+            hole.className = 'hunt-hole';
+            hole.innerHTML = `<div class="hunt-target" id="htarget-${i}"></div>`;
+            hole.addEventListener('click', () => huntHit(i));
+            huntGrid.appendChild(hole);
         }
 
-        function handleClick() {
-            clicks++;
+        // Load saved high score
+        let huntBest = parseInt(localStorage.getItem('savageHuntBest') || '0');
+        document.getElementById('huntBest').textContent = huntBest;
 
-            // Update the number
-            const numEl = document.getElementById('clickNumber');
-            numEl.textContent = clicks.toLocaleString();
+        function startHunt() {
+            huntScore    = 0;
+            huntTimeLeft = HUNT_DURATION;
+            huntRunning  = true;
+            huntActiveHoles.clear();
 
-            // Trigger the pop animation
-            numEl.classList.remove('pop');
-            void numEl.offsetWidth; // Forces browser to reset animation
-            numEl.classList.add('pop');
-            setTimeout(() => numEl.classList.remove('pop'), 200);
+            for (let i = 0; i < HUNT_HOLES; i++) huntClearHole(i);
 
-            // Update the reaction message
-            document.getElementById('clickReaction').textContent = getReaction(clicks);
+            document.getElementById('huntScore').textContent = '0';
+            document.getElementById('huntTimer').textContent = HUNT_DURATION;
+            document.getElementById('huntTimer').classList.remove('timer-urgent');
+            const bar = document.getElementById('huntTimerBar');
+            bar.style.width = '100%';
+            bar.classList.remove('urgent');
+            document.getElementById('huntOverlay').style.display = 'none';
+
+            huntTimerInterval = setInterval(() => {
+                huntTimeLeft--;
+                const timerEl = document.getElementById('huntTimer');
+                const barEl   = document.getElementById('huntTimerBar');
+                timerEl.textContent = huntTimeLeft;
+                barEl.style.width   = (huntTimeLeft / HUNT_DURATION * 100) + '%';
+                if (huntTimeLeft <= 10) {
+                    timerEl.classList.add('timer-urgent');
+                    barEl.classList.add('urgent');
+                }
+                if (huntTimeLeft <= 0) huntEnd();
+            }, 1000);
+
+            huntScheduleSpawn();
+        }
+
+        function huntScheduleSpawn() {
+            if (!huntRunning) return;
+            const elapsed   = HUNT_DURATION - huntTimeLeft;
+            const maxActive = elapsed < 5 ? 1 : elapsed < 12 ? 2 : elapsed < 20 ? 3 : 4;
+            if (huntActiveHoles.size < maxActive) huntSpawn();
+            const interval = Math.max(280, 880 - elapsed * 20);
+            huntSpawnTimeout = setTimeout(huntScheduleSpawn, interval);
+        }
+
+        function huntSpawn() {
+            const empty = [];
+            for (let i = 0; i < HUNT_HOLES; i++) {
+                if (!huntActiveHoles.has(i)) empty.push(i);
+            }
+            if (!empty.length) return;
+
+            const idx  = empty[Math.floor(Math.random() * empty.length)];
+            const roll = Math.random() * 100;
+            let cum = 0, ti = 0;
+            for (let i = 0; i < HUNT_WEIGHTS.length; i++) {
+                cum += HUNT_WEIGHTS[i];
+                if (roll < cum) { ti = i; break; }
+            }
+            const target   = HUNT_TARGETS[ti];
+            const hole     = huntGrid.children[idx];
+            const targetEl = document.getElementById(`htarget-${idx}`);
+
+            targetEl.textContent  = target.emoji;
+            targetEl.dataset.pts  = target.pts;
+            huntActiveHoles.add(idx);
+            hole.classList.add('active');
+
+            huntHoleTimers[idx] = setTimeout(() => huntClearHole(idx), target.speed);
+        }
+
+        function huntClearHole(idx) {
+            huntActiveHoles.delete(idx);
+            clearTimeout(huntHoleTimers[idx]);
+            const hole = huntGrid.children[idx];
+            hole.classList.remove('active', 'hit', 'miss');
+        }
+
+        function huntHit(idx) {
+            if (!huntRunning) return;
+            const hole     = huntGrid.children[idx];
+            const targetEl = document.getElementById(`htarget-${idx}`);
+
+            if (huntActiveHoles.has(idx)) {
+                const pts  = parseInt(targetEl.dataset.pts);
+                huntScore += pts;
+                document.getElementById('huntScore').textContent = huntScore;
+                clearTimeout(huntHoleTimers[idx]);
+                huntActiveHoles.delete(idx);
+                hole.classList.add('hit');
+                huntScorePop(hole, pts);
+                setTimeout(() => {
+                    hole.classList.remove('active');
+                    setTimeout(() => hole.classList.remove('hit'), 150);
+                }, 80);
+            } else {
+                hole.classList.add('miss');
+                setTimeout(() => hole.classList.remove('miss'), 250);
+            }
+        }
+
+        function huntScorePop(hole, pts) {
+            const pop = document.createElement('div');
+            pop.className = `score-pop pts-${pts}`;
+            pop.textContent = `+${pts}`;
+            hole.appendChild(pop);
+            setTimeout(() => pop.remove(), 700);
+        }
+
+        function huntEnd() {
+            huntRunning = false;
+            clearInterval(huntTimerInterval);
+            clearTimeout(huntSpawnTimeout);
+            for (let i = 0; i < HUNT_HOLES; i++) huntClearHole(i);
+
+            const isNewBest = huntScore > huntBest;
+            if (isNewBest) {
+                huntBest = huntScore;
+                localStorage.setItem('savageHuntBest', huntBest);
+                document.getElementById('huntBest').textContent = huntBest;
+            }
+
+            const overlay  = document.getElementById('huntOverlay');
+            const titleEl  = document.getElementById('huntOverlayTitle');
+            const subEl    = document.getElementById('huntOverlaySub');
+            const btnEl    = document.getElementById('huntStartBtn');
+
+            overlay.style.display = '';
+            titleEl.textContent   = isNewBest ? '🏆 NEW HIGH SCORE!' : '🎯 TIME\'S UP!';
+            subEl.innerHTML       = `You scored&nbsp;<strong style="color:var(--accent-green);font-family:'Orbitron',sans-serif;font-size:1.5em">${huntScore}</strong>&nbsp;points`
+                                  + (isNewBest ? '<br>🔥 That\'s a new best!' : `<br>Best so far: <strong>${huntBest}</strong>`);
+            btnEl.textContent     = '🔄 PLAY AGAIN';
         }
 
 
