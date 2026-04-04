@@ -1320,7 +1320,7 @@
         /* Stats row */
         .artemis-stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+            grid-template-columns: repeat(4, 1fr);
             gap: 1rem;
             margin-bottom: 3rem;
         }
@@ -1328,29 +1328,34 @@
         .astat {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 1.5rem 1rem;
+            border-radius: 16px;
+            padding: 2rem 1rem;
             text-align: center;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         .astat:hover {
             border-color: var(--accent-blue);
-            box-shadow: 0 0 20px rgba(0,212,255,0.1);
+            box-shadow: 0 0 24px rgba(0,212,255,0.15);
         }
 
         .astat-value {
             font-family: 'Orbitron', sans-serif;
-            font-size: clamp(0.9rem, 2.5vw, 1.3rem);
-            font-weight: 700;
+            font-size: clamp(1.1rem, 2.2vw, 2rem);
+            font-weight: 900;
             color: var(--accent-blue);
             letter-spacing: 1px;
-            margin-bottom: 0.4rem;
-            min-height: 1.8rem;
+            margin-bottom: 0.6rem;
+            /* tabular-nums keeps digit widths fixed so the clock never causes reflow */
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-shadow: 0 0 18px rgba(0,212,255,0.45);
         }
 
         .astat-label {
-            font-size: 0.68rem;
+            font-size: 0.72rem;
             font-weight: 700;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -1533,6 +1538,7 @@
         @media (max-width: 600px) {
             .artemis-phases { gap: 0.25rem; }
             .artemis-phase  { font-size: 0.52rem; padding: 0.25rem 0.55rem; }
+            .artemis-stats  { grid-template-columns: repeat(2, 1fr); }
             .crew-grid      { grid-template-columns: repeat(2, 1fr); }
             .artemis-tracker iframe { height: 300px; }
         }
