@@ -1621,6 +1621,22 @@
             margin-bottom: 1.5rem;
         }
 
+        .artemis-stream-wrap {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            background: #000;
+        }
+        .artemis-stream-wrap iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
+
         .artemis-stream-links {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -1957,12 +1973,21 @@
 
             <!-- NASA Live Stream -->
             <div class="reveal">
-                <p class="artemis-gallery-sub">— NASA Live Stream —</p>
-                <div class="artemis-stream-links">
-                    <a class="stream-card" href="https://www.youtube.com/@NASA/streams" target="_blank" rel="noopener">
+                <p class="artemis-gallery-sub">— Live Views From Orion —</p>
+                <div class="artemis-stream-wrap">
+                    <iframe
+                        src="https://www.youtube.com/embed/6RwfNBtepa4?autoplay=1&mute=1"
+                        title="NASA Artemis II Live Views From Orion"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="artemis-stream-links" style="margin-top:1rem;">
+                    <a class="stream-card" href="https://www.youtube.com/watch?v=m3kR2KK8TEs" target="_blank" rel="noopener">
                         <span class="stream-card-icon">📡</span>
-                        <span class="stream-card-title">NASA Live on YouTube</span>
-                        <span class="stream-card-sub">Watch current Artemis II coverage &amp; crew cam</span>
+                        <span class="stream-card-title">Mission Coverage + Commentary</span>
+                        <span class="stream-card-sub">Official NASA broadcast with live crew comms</span>
                     </a>
                     <a class="stream-card" href="https://plus.nasa.gov" target="_blank" rel="noopener" style="--sc:var(--accent-green);">
                         <span class="stream-card-icon">🚀</span>
