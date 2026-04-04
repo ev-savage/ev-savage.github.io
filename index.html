@@ -1404,21 +1404,82 @@
 
         .astat-value {
             font-family: 'Orbitron', sans-serif;
-            font-size: 5rem;
+            font-size: 3rem;
             font-weight: 900;
             color: var(--accent-blue);
             font-variant-numeric: tabular-nums;
-            text-shadow: 0 0 22px rgba(0,212,255,0.5);
+            text-shadow: 0 0 18px rgba(0,212,255,0.45);
             line-height: 1.1;
             margin-bottom: 0.2rem;
         }
 
         .astat-label {
-            font-size: 0.85rem;
+            font-size: 0.78rem;
             font-weight: 700;
             letter-spacing: 2px;
             text-transform: uppercase;
             color: var(--text-secondary);
+        }
+
+        /* Earth → Moon progress tracker */
+        .artemis-progress {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.4rem 1.8rem;
+            margin-bottom: 3rem;
+        }
+
+        .progress-track {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .progress-planet { font-size: 2rem; flex-shrink: 0; }
+
+        .progress-bar-wrap {
+            flex: 1;
+            height: 14px;
+            background: var(--border-color);
+            border-radius: 7px;
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
+            border-radius: 7px;
+            width: 0%;
+            transition: width 1.2s ease;
+        }
+
+        .progress-rocket {
+            position: absolute;
+            top: 50%;
+            left: 0%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+            transition: left 1.2s ease;
+            filter: drop-shadow(0 0 6px rgba(0,212,255,0.7));
+        }
+
+        .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
+
+        .progress-pct {
+            color: var(--accent-blue);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
         }
 
         /* Crew grid */
@@ -1821,6 +1882,23 @@
                 <div class="astat">
                     <div class="astat-value" id="astat-speed">---</div>
                     <div class="astat-label">miles per hour</div>
+                </div>
+            </div>
+
+            <!-- Earth → Moon Progress Bar -->
+            <div class="artemis-progress reveal">
+                <div class="progress-track">
+                    <span class="progress-planet">🌍</span>
+                    <div class="progress-bar-wrap">
+                        <div class="progress-bar-fill" id="progress-fill"></div>
+                        <span class="progress-rocket" id="progress-rocket">🚀</span>
+                    </div>
+                    <span class="progress-planet">🌕</span>
+                </div>
+                <div class="progress-labels">
+                    <span>Earth</span>
+                    <span class="progress-pct" id="progress-pct">calculating...</span>
+                    <span>Moon</span>
                 </div>
             </div>
 
@@ -3360,6 +3438,16 @@
         }
 
         // ---- Estimated position (fallback when API unavailable) ----
+        function updateProgress(distFromEarth) {
+            const pct = Math.min(Math.max(distFromEarth / 238855, 0), 1);
+            const fill   = document.getElementById('progress-fill');
+            const rocket = document.getElementById('progress-rocket');
+            const label  = document.getElementById('progress-pct');
+            if (fill)   fill.style.width = (pct * 100).toFixed(1) + '%';
+            if (rocket) rocket.style.left = (pct * 100).toFixed(1) + '%';
+            if (label)  label.textContent = Math.round(pct * 100) + '% of the way to the Moon';
+        }
+
         function a2SetEstimated() {
             const now = new Date();
             if (now < A2.launch) {
@@ -3386,6 +3474,7 @@
             document.getElementById('astat-dist-earth').textContent = '~' + Math.round(distFromEarth).toLocaleString();
             document.getElementById('astat-dist-moon').textContent  = '~' + Math.round(distToMoon).toLocaleString();
             document.getElementById('astat-speed').textContent      = '~' + Math.round(speed).toLocaleString();
+            updateProgress(distFromEarth);
         }
 
         // ---- JPL HORIZONS real position fetch ----
@@ -3419,6 +3508,7 @@
                 const distMi = distKm * 0.621371;
                 document.getElementById('astat-dist-earth').textContent = Math.round(distMi).toLocaleString();
                 document.getElementById('astat-dist-moon').textContent  = Math.round(Math.max(0, 238855 - distMi)).toLocaleString();
+                updateProgress(distMi);
                 if (vxm && vym && vzm) {
                     const spdKms = Math.sqrt(parseFloat(vxm[1])**2 + parseFloat(vym[1])**2 + parseFloat(vzm[1])**2);
                     document.getElementById('astat-speed').textContent = Math.round(spdKms * 2236.94).toLocaleString();
