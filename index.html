@@ -3724,19 +3724,19 @@
                 const earthX = pad, earthY = H * 0.5;
                 const moonX  = W - pad, moonY = H * 0.5;
 
-                // Free-return trajectory: Earth → gentle arc above → loop around Moon → gentle arc below → Earth
+                // Free-return trajectory — nearly flat, like the real path looks from the side
                 const moonR = Math.max(W, H) * 0.028;
-                const loopR = moonR * 2.4; // tight loop radius around Moon
+                const loopR = moonR * 1.8;
 
-                // Outbound bezier: slight curve above center line
-                const o1x = W*0.35, o1y = H*0.30;
-                const o2x = W*0.70, o2y = H*0.22;
-                const outEndX = moonX, outEndY = moonY - loopR; // arrive above Moon
+                // Outbound: stays close to the horizontal Earth-Moon line, curves just slightly above
+                const o1x = W*0.38, o1y = H*0.46;
+                const o2x = W*0.72, o2y = H*0.43;
+                const outEndX = moonX, outEndY = moonY - loopR;
 
-                // Return bezier: slight curve below center line
-                const r1x = W*0.70, r1y = H*0.78;
-                const r2x = W*0.35, r2y = H*0.70;
-                const retStartX = moonX, retStartY = moonY + loopR; // leave below Moon
+                // Return: mirror below
+                const retStartX = moonX, retStartY = moonY + loopR;
+                const r1x = W*0.72, r1y = H*0.57;
+                const r2x = W*0.38, r2y = H*0.54;
 
                 // --- Artemis position from REAL distance data ---
                 const MOON_DIST = 238855;
