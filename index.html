@@ -1564,53 +1564,49 @@
             border-radius: 16px;
             border: 1px solid var(--accent-blue);
             margin-bottom: 3rem;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(0,212,255,0.1);
+        }
+
+        #orbit-canvas {
+            display: block;
+            width: 100%;
+            height: 320px;
+            background: #04040f;
+            cursor: default;
+        }
+
+        .tracker-footer {
             background: var(--bg-card);
-            box-shadow: 0 0 30px rgba(0,212,255,0.08);
-            text-align: center;
-            padding: 3rem 2rem;
-        }
-
-        .tracker-icon { font-size: 4rem; display: block; margin-bottom: 1rem; }
-
-        .tracker-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 700;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--text-primary);
-            margin-bottom: 0.6rem;
-        }
-
-        .tracker-desc {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-bottom: 1.8rem;
-            max-width: 480px;
-            margin-left: auto;
-            margin-right: auto;
+            border-top: 1px solid var(--border-color);
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
         }
 
         .tracker-btn {
             display: inline-flex;
             align-items: center;
-            gap: 0.6rem;
+            gap: 0.5rem;
             background: var(--accent-blue);
             color: #000;
             font-family: 'Orbitron', sans-serif;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             font-weight: 900;
             letter-spacing: 2px;
             text-transform: uppercase;
             text-decoration: none;
-            padding: 0.9rem 2rem;
+            padding: 0.6rem 1.4rem;
             border-radius: 50px;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
         .tracker-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 0 25px rgba(0,212,255,0.5);
+            box-shadow: 0 0 20px rgba(0,212,255,0.5);
         }
 
         /* NASA images gallery */
@@ -1927,18 +1923,12 @@
                 </div>
             </div>
 
-            <!-- NASA Eyes 3D Trajectory -->
+            <!-- Live Orbital Tracker Canvas -->
             <div class="artemis-tracker reveal">
-                <span class="tracker-icon">📡</span>
-                <div class="tracker-title">Track the Mission Live</div>
-                <p class="tracker-desc">Go to NASA's official pages to see where Orion is right now.</p>
-                <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
-                    <a class="tracker-btn" href="https://www.nasa.gov/trackartemis" target="_blank" rel="noopener">
-                        🛰️ Live Orbit Tracker
-                    </a>
-                    <a class="tracker-btn" href="https://www.nasa.gov/blogs/missions/" target="_blank" rel="noopener" style="background:var(--accent-green);">
-                        📋 Mission Updates
-                    </a>
+                <canvas id="orbit-canvas"></canvas>
+                <div class="tracker-footer">
+                    <a class="tracker-btn" href="https://www.nasa.gov/trackartemis" target="_blank" rel="noopener">🛰️ NASA Live Tracker</a>
+                    <a class="tracker-btn" href="https://www.nasa.gov/blogs/missions/" target="_blank" rel="noopener" style="background:var(--accent-green);">📋 Mission Updates</a>
                 </div>
             </div>
 
@@ -3639,12 +3629,140 @@
         }
 
         // ---- Init ----
+        // ---- Orbital Map Canvas ----
+        let orionDistMi = 0; // updated by position fetchers
+
+        function initOrbitCanvas() {
+            const canvas = document.getElementById('orbit-canvas');
+            if (!canvas) return;
+            function resize() {
+                canvas.width  = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+            let frame = 0;
+
+            // Stable star positions (deterministic)
+            const stars = Array.from({length: 180}, (_, i) => ({
+                x: (Math.sin(i * 127.1 + 3) * 0.5 + 0.5),
+                y: (Math.cos(i * 311.7 + 1) * 0.5 + 0.5),
+                r: (Math.sin(i * 53.3) * 0.5 + 0.5) * 1.4 + 0.3,
+                speed: (Math.sin(i * 17.1) * 0.5 + 0.5) * 0.04 + 0.01,
+            }));
+
+            function draw() {
+                frame++;
+                const W = canvas.width, H = canvas.height;
+                const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, W, H);
+
+                // Space background
+                ctx.fillStyle = '#04040f';
+                ctx.fillRect(0, 0, W, H);
+
+                // Stars with gentle twinkle
+                stars.forEach(s => {
+                    const alpha = 0.5 + Math.sin(frame * s.speed + s.x * 10) * 0.4;
+                    ctx.beginPath();
+                    ctx.arc(s.x * W, s.y * H, s.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255,255,255,${alpha})`;
+                    ctx.fill();
+                });
+
+                // Layout
+                const pad  = Math.min(W, H) * 0.12;
+                const earthX = pad + 20, earthY = H / 2;
+                const moonX  = W - pad - 10, moonY = H / 2;
+
+                // Trajectory arcs (bezier)
+                const outCP1x = W * 0.35, outCP1y = H * 0.08;
+                const outCP2x = W * 0.72, outCP2y = H * 0.10;
+                const retCP1x = W * 0.72, retCP1y = H * 0.92;
+                const retCP2x = W * 0.35, retCP2y = H * 0.90;
+
+                // Outbound dashed
+                ctx.beginPath();
+                ctx.moveTo(earthX, earthY);
+                ctx.bezierCurveTo(outCP1x, outCP1y, outCP2x, outCP2y, moonX, moonY);
+                ctx.strokeStyle = 'rgba(0,212,255,0.22)';
+                ctx.lineWidth = 1.5;
+                ctx.setLineDash([7, 9]);
+                ctx.stroke();
+                // Return dashed
+                ctx.beginPath();
+                ctx.moveTo(moonX, moonY);
+                ctx.bezierCurveTo(retCP1x, retCP1y, retCP2x, retCP2y, earthX, earthY);
+                ctx.strokeStyle = 'rgba(0,255,136,0.18)';
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                // Earth
+                const eg = ctx.createRadialGradient(earthX, earthY, 2, earthX, earthY, 28);
+                eg.addColorStop(0, '#5bc8fa'); eg.addColorStop(0.45, '#1a6bbf'); eg.addColorStop(1, 'rgba(10,40,120,0)');
+                ctx.beginPath(); ctx.arc(earthX, earthY, 28, 0, Math.PI * 2);
+                ctx.fillStyle = eg; ctx.fill();
+                ctx.beginPath(); ctx.arc(earthX, earthY, 17, 0, Math.PI * 2);
+                ctx.fillStyle = '#1e88e5'; ctx.fill();
+                ctx.font = '700 11px Rajdhani, sans-serif';
+                ctx.fillStyle = 'rgba(255,255,255,0.55)';
+                ctx.textAlign = 'center';
+                ctx.fillText('EARTH', earthX, earthY + 42);
+
+                // Moon
+                const mg = ctx.createRadialGradient(moonX, moonY, 2, moonX, moonY, 20);
+                mg.addColorStop(0, '#e8e8e8'); mg.addColorStop(0.5, '#9e9e9e'); mg.addColorStop(1, 'rgba(100,100,100,0)');
+                ctx.beginPath(); ctx.arc(moonX, moonY, 20, 0, Math.PI * 2);
+                ctx.fillStyle = mg; ctx.fill();
+                ctx.beginPath(); ctx.arc(moonX, moonY, 12, 0, Math.PI * 2);
+                ctx.fillStyle = '#bdbdbd'; ctx.fill();
+                ctx.fillStyle = 'rgba(255,255,255,0.55)';
+                ctx.fillText('MOON', moonX, moonY + 36);
+
+                // Orion position on path
+                const moonDist   = 238855;
+                const flybyFrac  = (A2.flyby - A2.launch) / (A2.splashdown - A2.launch);
+                const totalFrac  = Math.min(Math.max((new Date() - A2.launch) / (A2.splashdown - A2.launch), 0), 1);
+                let ox, oy;
+                if (totalFrac <= flybyFrac) {
+                    const t = flybyFrac > 0 ? totalFrac / flybyFrac : 0;
+                    const m = 1 - t;
+                    ox = m*m*m*earthX + 3*m*m*t*outCP1x + 3*m*t*t*outCP2x + t*t*t*moonX;
+                    oy = m*m*m*earthY + 3*m*m*t*outCP1y + 3*m*t*t*outCP2y + t*t*t*moonY;
+                } else {
+                    const t = (totalFrac - flybyFrac) / (1 - flybyFrac);
+                    const m = 1 - t;
+                    ox = m*m*m*moonX + 3*m*m*t*retCP1x + 3*m*t*t*retCP2x + t*t*t*earthX;
+                    oy = m*m*m*moonY + 3*m*m*t*retCP1y + 3*m*t*t*retCP2y + t*t*t*earthY;
+                }
+
+                // Orion pulse glow
+                const pulse = 0.55 + Math.sin(frame * 0.07) * 0.35;
+                const og = ctx.createRadialGradient(ox, oy, 0, ox, oy, 22);
+                og.addColorStop(0, `rgba(0,212,255,${pulse})`);
+                og.addColorStop(1, 'rgba(0,212,255,0)');
+                ctx.beginPath(); ctx.arc(ox, oy, 22, 0, Math.PI * 2);
+                ctx.fillStyle = og; ctx.fill();
+                ctx.beginPath(); ctx.arc(ox, oy, 5, 0, Math.PI * 2);
+                ctx.fillStyle = '#00d4ff'; ctx.fill();
+
+                // Orion label
+                ctx.font = '700 10px Orbitron, sans-serif';
+                ctx.fillStyle = '#00d4ff';
+                ctx.fillText('ORION', ox, oy - 16);
+
+                requestAnimationFrame(draw);
+            }
+            draw();
+        }
+
         function initArtemis() {
             a2UpdatePhases();
             a2Tick();
             setInterval(a2Tick, 1000);
             a2FetchPosition();
-            setInterval(a2FetchPosition, 5 * 60 * 1000); // refresh every 5 min
+            setInterval(a2FetchPosition, 5 * 60 * 1000);
+            initOrbitCanvas();
             a2RenderCrew();
             a2LoadImages();
         }
