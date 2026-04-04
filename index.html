@@ -380,6 +380,24 @@
             50%       { opacity: 0; }
         }
 
+        .visitor-counter {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1.4rem;
+            padding: 0.5rem 1.2rem;
+            background: rgba(0,212,255,0.07);
+            border: 1px solid rgba(0,212,255,0.25);
+            border-radius: 999px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            color: var(--accent-blue);
+        }
+        .visitor-counter .visitor-icon { font-size: 1rem; }
+        #visitor-count { font-weight: 700; font-size: 1rem; }
+        .visitor-label { color: rgba(255,255,255,0.5); font-size: 0.72rem; letter-spacing: 3px; text-transform: uppercase; }
+
         /* Scroll down hint at bottom of hero */
         .scroll-hint {
             position: absolute;
@@ -1867,6 +1885,13 @@
             <span id="typewriterWord"></span><span class="cursor"></span>
         </p>
 
+        <!-- Visitor Counter -->
+        <div class="visitor-counter">
+            <span class="visitor-icon">👁️</span>
+            <span id="visitor-count">2,000</span>
+            <span class="visitor-label">visitors</span>
+        </div>
+
         <!-- Scroll hint -->
         <div class="scroll-hint">
             <span>Scroll</span>
@@ -2392,6 +2417,27 @@
 
         // Kick off the typewriter after the hero has faded in
         setTimeout(runTypewriter, 1600);
+
+        // ---- Visitor counter ----
+        (function() {
+            const BASE = 2000;
+            const el = document.getElementById('visitor-count');
+            function fmt(n) { return n.toLocaleString(); }
+
+            // Increment via CountAPI (free, no auth needed, persists across all visitors)
+            fetch('https://api.countapi.xyz/hit/ev-savage.github.io/visitors')
+                .then(r => r.json())
+                .then(data => {
+                    const total = BASE + (data.value || 1);
+                    el.textContent = fmt(total);
+                })
+                .catch(() => {
+                    // Fallback: localStorage so at least the device remembers
+                    let v = parseInt(localStorage.getItem('sz_visits') || '0') + 1;
+                    localStorage.setItem('sz_visits', v);
+                    el.textContent = fmt(BASE + v);
+                });
+        })();
 
 
         // ============================================================
