@@ -3747,26 +3747,14 @@
                 const pastLoop     = now >= moonDoneTime;
                 let ox, oy;
 
-                ctx.lineWidth = 1.5;
-                ctx.setLineDash([6, 10]);
-
-                // Always draw dim outbound arc
-                ctx.beginPath(); ctx.moveTo(earthX, earthY);
-                ctx.bezierCurveTo(o1x, o1y, o2x, o2y, outEndX, outEndY);
-                ctx.strokeStyle = 'rgba(0,212,255,0.15)'; ctx.stroke();
-
-                // Only draw dim Moon loop + dim return AFTER flyby
-                if (pastFlyby) {
-                    ctx.beginPath();
-                    ctx.arc(moonX, moonY, loopR, -Math.PI/2, Math.PI/2, false);
-                    ctx.strokeStyle = 'rgba(0,212,255,0.15)'; ctx.stroke();
+                // Helper: split cubic bezier at t using De Casteljau — returns control points for first segment
+                function splitBez(t, p0x,p0y,p1x,p1y,p2x,p2y) {
+                    // p3 is ox,oy (already computed as the point at t)
+                    const q1x = p0x + (p1x-p0x)*t, q1y = p0y + (p1y-p0y)*t;
+                    const m1x = p1x + (p2x-p1x)*t, m1y = p1y + (p2y-p1y)*t;
+                    const q2x = q1x + (m1x-q1x)*t, q2y = q1y + (m1y-q1y)*t;
+                    return [q1x, q1y, q2x, q2y];
                 }
-                if (pastLoop) {
-                    ctx.beginPath(); ctx.moveTo(retStartX, retStartY);
-                    ctx.bezierCurveTo(r1x, r1y, r2x, r2y, earthX, earthY);
-                    ctx.strokeStyle = 'rgba(0,255,136,0.12)'; ctx.stroke();
-                }
-                ctx.setLineDash([]);
 
                 if (now < A2.flyby) {
                     // Outbound — driven by actual JPL distance
@@ -3775,10 +3763,12 @@
                     ox = m*m*m*earthX   + 3*m*m*pathT*o1x + 3*m*pathT*pathT*o2x + pathT*pathT*pathT*outEndX;
                     oy = m*m*m*earthY   + 3*m*m*pathT*o1y + 3*m*pathT*pathT*o2y + pathT*pathT*pathT*outEndY;
 
-                    // Lit outbound path so far
+                    // Only draw the traveled portion — no future dashed arc causing boomerang
+                    const [c1x,c1y,c2x,c2y] = splitBez(pathT, earthX,earthY, o1x,o1y, o2x,o2y);
                     ctx.beginPath(); ctx.moveTo(earthX, earthY);
-                    ctx.bezierCurveTo(o1x, o1y, o2x, o2y, ox, oy);
-                    ctx.strokeStyle = 'rgba(0,212,255,0.7)'; ctx.lineWidth = 2; ctx.stroke();
+                    ctx.bezierCurveTo(c1x,c1y, c2x,c2y, ox,oy);
+                    ctx.strokeStyle = 'rgba(0,212,255,0.8)'; ctx.lineWidth = 2;
+                    ctx.setLineDash([]); ctx.stroke();
 
                 } else if (now < A2.splashdown) {
                     // Full outbound lit
