@@ -1318,39 +1318,69 @@
         .artemis-phase-arrow { color: var(--border-color); font-size: 0.7rem; }
 
         /* Stats row */
-        /* Mission elapsed time — standalone big clock */
+        /* Mission elapsed time — segmented clock */
         .artemis-clock {
             background: var(--bg-card);
             border: 1px solid var(--accent-blue);
             border-radius: 16px;
-            padding: 1.2rem 2rem;
+            padding: 1.5rem 1rem 1.2rem;
             text-align: center;
             margin-bottom: 1.2rem;
             box-shadow: 0 0 30px rgba(0,212,255,0.12);
         }
 
-        .artemis-clock-value {
+        .clock-segments {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .clock-seg {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 3.5ch;
+        }
+
+        .clock-num {
             font-family: 'Orbitron', sans-serif;
-            font-size: clamp(2rem, 7vw, 4.5rem);
+            font-size: clamp(2.4rem, 7vw, 5rem);
             font-weight: 900;
             color: var(--accent-blue);
-            letter-spacing: 4px;
             font-variant-numeric: tabular-nums;
-            white-space: nowrap;
             text-shadow: 0 0 28px rgba(0,212,255,0.6);
-            line-height: 1.1;
+            line-height: 1;
+        }
+
+        .clock-unit {
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-top: 0.3rem;
+        }
+
+        .clock-colon {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 900;
+            color: rgba(0,212,255,0.35);
+            line-height: 1;
+            padding-top: 0.05em;
         }
 
         .artemis-clock-label {
-            font-size: 0.72rem;
+            font-size: 0.68rem;
             font-weight: 700;
             letter-spacing: 4px;
             text-transform: uppercase;
             color: var(--text-secondary);
-            margin-top: 0.4rem;
+            margin-top: 0.8rem;
         }
 
-        /* 3-stat row below the clock */
+        /* 3-stat row — big numbers, almost no padding */
         .artemis-stats {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -1362,7 +1392,7 @@
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 14px;
-            padding: 1rem 0.75rem;
+            padding: 0.75rem 0.5rem 0.6rem;
             text-align: center;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
@@ -1374,20 +1404,21 @@
 
         .astat-value {
             font-family: 'Orbitron', sans-serif;
-            font-size: clamp(1.4rem, 4vw, 3rem);
+            font-size: clamp(1.6rem, 4.5vw, 4rem);
             font-weight: 900;
             color: var(--accent-blue);
             letter-spacing: 1px;
-            margin-bottom: 0.35rem;
+            margin-bottom: 0.25rem;
             font-variant-numeric: tabular-nums;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            text-shadow: 0 0 20px rgba(0,212,255,0.5);
+            text-shadow: 0 0 22px rgba(0,212,255,0.5);
+            line-height: 1.1;
         }
 
         .astat-label {
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             font-weight: 700;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -1759,7 +1790,27 @@
 
             <!-- Mission Elapsed Time Clock -->
             <div class="artemis-clock reveal">
-                <div class="artemis-clock-value" id="astat-elapsed">--D --H --M --S</div>
+                <div class="clock-segments">
+                    <div class="clock-seg">
+                        <span class="clock-num" id="clock-d">--</span>
+                        <span class="clock-unit">Days</span>
+                    </div>
+                    <span class="clock-colon">:</span>
+                    <div class="clock-seg">
+                        <span class="clock-num" id="clock-h">--</span>
+                        <span class="clock-unit">Hours</span>
+                    </div>
+                    <span class="clock-colon">:</span>
+                    <div class="clock-seg">
+                        <span class="clock-num" id="clock-m">--</span>
+                        <span class="clock-unit">Minutes</span>
+                    </div>
+                    <span class="clock-colon">:</span>
+                    <div class="clock-seg">
+                        <span class="clock-num" id="clock-s">--</span>
+                        <span class="clock-unit">Seconds</span>
+                    </div>
+                </div>
                 <div class="artemis-clock-label">Mission Elapsed Time</div>
             </div>
 
@@ -3304,16 +3355,14 @@
 
         // ---- Elapsed time clock (ticks every second) ----
         function a2Tick() {
-            const now = new Date();
-            const el  = document.getElementById('astat-elapsed');
-            if (!el) return;
+            const now  = new Date();
             const diff = now - A2.launch;
-            if (diff < 0) { el.textContent = 'Pre-Launch'; return; }
-            const d = Math.floor(diff / 86400000);
-            const h = Math.floor((diff % 86400000) / 3600000);
-            const m = Math.floor((diff % 3600000) / 60000);
-            const s = Math.floor((diff % 60000) / 1000);
-            el.textContent = `${String(d).padStart(2,'0')}D ${String(h).padStart(2,'0')}H ${String(m).padStart(2,'0')}M ${String(s).padStart(2,'0')}S`;
+            const set  = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+            if (diff < 0) { set('clock-d','--'); set('clock-h','--'); set('clock-m','--'); set('clock-s','--'); return; }
+            set('clock-d', String(Math.floor(diff / 86400000)).padStart(2,'0'));
+            set('clock-h', String(Math.floor((diff % 86400000) / 3600000)).padStart(2,'0'));
+            set('clock-m', String(Math.floor((diff % 3600000) / 60000)).padStart(2,'0'));
+            set('clock-s', String(Math.floor((diff % 60000) / 1000)).padStart(2,'0'));
         }
 
         // ---- Estimated position (fallback when API unavailable) ----
