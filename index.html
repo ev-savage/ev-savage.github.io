@@ -1345,7 +1345,7 @@
 
         .clock-num {
             font-family: 'Orbitron', sans-serif;
-            font-size: clamp(2.4rem, 7vw, 5rem);
+            font-size: 6rem;
             font-weight: 900;
             color: var(--accent-blue);
             font-variant-numeric: tabular-nums;
@@ -1354,17 +1354,17 @@
         }
 
         .clock-unit {
-            font-size: 0.65rem;
+            font-size: 0.8rem;
             font-weight: 700;
             letter-spacing: 3px;
             text-transform: uppercase;
             color: var(--text-secondary);
-            margin-top: 0.3rem;
+            margin-top: 0.4rem;
         }
 
         .clock-colon {
             font-family: 'Orbitron', sans-serif;
-            font-size: clamp(2rem, 6vw, 4rem);
+            font-size: 5rem;
             font-weight: 900;
             color: rgba(0,212,255,0.35);
             line-height: 1;
@@ -1404,21 +1404,17 @@
 
         .astat-value {
             font-family: 'Orbitron', sans-serif;
-            font-size: clamp(1.6rem, 4.5vw, 4rem);
+            font-size: 3.8rem;
             font-weight: 900;
             color: var(--accent-blue);
-            letter-spacing: 1px;
-            margin-bottom: 0.25rem;
             font-variant-numeric: tabular-nums;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
             text-shadow: 0 0 22px rgba(0,212,255,0.5);
             line-height: 1.1;
+            margin-bottom: 0.2rem;
         }
 
         .astat-label {
-            font-size: 0.68rem;
+            font-size: 0.75rem;
             font-weight: 700;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -1601,7 +1597,10 @@
         @media (max-width: 600px) {
             .artemis-phases { gap: 0.25rem; }
             .artemis-phase  { font-size: 0.52rem; padding: 0.25rem 0.55rem; }
+            .clock-num      { font-size: 3rem; }
+            .clock-colon    { font-size: 2.5rem; }
             .artemis-stats  { grid-template-columns: repeat(1, 1fr); }
+            .astat-value    { font-size: 3rem; }
             .crew-grid      { grid-template-columns: repeat(2, 1fr); }
             .artemis-tracker iframe { height: 300px; }
         }
@@ -1817,16 +1816,16 @@
             <!-- Live Stats — 3 col -->
             <div class="artemis-stats reveal">
                 <div class="astat">
-                    <div class="astat-value astat-loading" id="astat-dist-earth">Fetching…</div>
-                    <div class="astat-label">Distance from Earth</div>
+                    <div class="astat-value astat-loading" id="astat-dist-earth">---</div>
+                    <div class="astat-label">miles from Earth</div>
                 </div>
                 <div class="astat">
-                    <div class="astat-value astat-loading" id="astat-dist-moon">Fetching…</div>
-                    <div class="astat-label">Distance to Moon</div>
+                    <div class="astat-value astat-loading" id="astat-dist-moon">---</div>
+                    <div class="astat-label">miles to the Moon</div>
                 </div>
                 <div class="astat">
-                    <div class="astat-value astat-loading" id="astat-speed">Fetching…</div>
-                    <div class="astat-label">Spacecraft Speed</div>
+                    <div class="astat-value astat-loading" id="astat-speed">---</div>
+                    <div class="astat-label">miles per hour</div>
                 </div>
             </div>
 
@@ -3369,15 +3368,15 @@
         function a2SetEstimated() {
             const now = new Date();
             if (now < A2.launch) {
-                document.getElementById('astat-dist-earth').textContent = '0 mi';
-                document.getElementById('astat-dist-moon').textContent  = '238,855 mi';
-                document.getElementById('astat-speed').textContent      = '0 mph';
+                document.getElementById('astat-dist-earth').textContent = '0';
+                document.getElementById('astat-dist-moon').textContent  = '238,855';
+                document.getElementById('astat-speed').textContent      = '0';
                 return;
             }
             if (now < A2.tli) {
-                document.getElementById('astat-dist-earth').textContent = '~250 mi';
-                document.getElementById('astat-dist-moon').textContent  = '~238,600 mi';
-                document.getElementById('astat-speed').textContent      = '~17,500 mph';
+                document.getElementById('astat-dist-earth').textContent = '~250';
+                document.getElementById('astat-dist-moon').textContent  = '~238,600';
+                document.getElementById('astat-speed').textContent      = '~17,500';
                 return;
             }
             const totalMs = A2.transitEnd - A2.tli;
@@ -3389,9 +3388,9 @@
             const distToMoon    = Math.max(0, moonDist - distFromEarth);
             // Speed: ~25k mph at TLI, ~2k at closest approach
             const speed = 25000 * (1 - doneFrac * 0.92);
-            document.getElementById('astat-dist-earth').textContent = '~' + Math.round(distFromEarth).toLocaleString() + ' mi';
-            document.getElementById('astat-dist-moon').textContent  = '~' + Math.round(distToMoon).toLocaleString() + ' mi';
-            document.getElementById('astat-speed').textContent      = '~' + Math.round(speed).toLocaleString() + ' mph';
+            document.getElementById('astat-dist-earth').textContent = '~' + Math.round(distFromEarth).toLocaleString();
+            document.getElementById('astat-dist-moon').textContent  = '~' + Math.round(distToMoon).toLocaleString();
+            document.getElementById('astat-speed').textContent      = '~' + Math.round(speed).toLocaleString();
         }
 
         // ---- JPL HORIZONS real position fetch ----
@@ -3423,11 +3422,11 @@
                 if (!xm || !ym || !zm) { a2SetEstimated(); return; }
                 const distKm = Math.sqrt(parseFloat(xm[1])**2 + parseFloat(ym[1])**2 + parseFloat(zm[1])**2);
                 const distMi = distKm * 0.621371;
-                document.getElementById('astat-dist-earth').textContent = Math.round(distMi).toLocaleString() + ' mi';
-                document.getElementById('astat-dist-moon').textContent  = Math.round(Math.max(0, 238855 - distMi)).toLocaleString() + ' mi';
+                document.getElementById('astat-dist-earth').textContent = Math.round(distMi).toLocaleString();
+                document.getElementById('astat-dist-moon').textContent  = Math.round(Math.max(0, 238855 - distMi)).toLocaleString();
                 if (vxm && vym && vzm) {
                     const spdKms = Math.sqrt(parseFloat(vxm[1])**2 + parseFloat(vym[1])**2 + parseFloat(vzm[1])**2);
-                    document.getElementById('astat-speed').textContent = Math.round(spdKms * 2236.94).toLocaleString() + ' mph';
+                    document.getElementById('astat-speed').textContent = Math.round(spdKms * 2236.94).toLocaleString();
                 }
             } catch(e) {
                 a2SetEstimated();
