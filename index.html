@@ -3656,11 +3656,18 @@
                 const moonDoneTime = new Date(A2.flyby.getTime() + moonPhaseMs);
                 const pastFlyby    = now >= A2.flyby;
                 const pastLoop     = now >= moonDoneTime;
-                let ox, oy;
+                let ox, oy, rocketAngle = 0;
+
+                // Cubic bezier tangent (direction of travel) at parameter t
+                function bezTangent(t, p0x,p0y,p1x,p1y,p2x,p2y,p3x,p3y) {
+                    const m = 1 - t;
+                    const dx = 3*(m*m*(p1x-p0x) + 2*m*t*(p2x-p1x) + t*t*(p3x-p2x));
+                    const dy = 3*(m*m*(p1y-p0y) + 2*m*t*(p2y-p1y) + t*t*(p3y-p2y));
+                    return Math.atan2(dy, dx);
+                }
 
                 // Helper: split cubic bezier at t using De Casteljau — returns control points for first segment
                 function splitBez(t, p0x,p0y,p1x,p1y,p2x,p2y) {
-                    // p3 is ox,oy (already computed as the point at t)
                     const q1x = p0x + (p1x-p0x)*t, q1y = p0y + (p1y-p0y)*t;
                     const m1x = p1x + (p2x-p1x)*t, m1y = p1y + (p2y-p1y)*t;
                     const q2x = q1x + (m1x-q1x)*t, q2y = q1y + (m1y-q1y)*t;
@@ -3673,6 +3680,7 @@
                     const m = 1 - pathT;
                     ox = m*m*m*earthX   + 3*m*m*pathT*o1x + 3*m*pathT*pathT*o2x + pathT*pathT*pathT*outEndX;
                     oy = m*m*m*earthY   + 3*m*m*pathT*o1y + 3*m*pathT*pathT*o2y + pathT*pathT*pathT*outEndY;
+                    rocketAngle = bezTangent(pathT, earthX,earthY, o1x,o1y, o2x,o2y, outEndX,outEndY) + Math.PI/2;
 
                     // Only draw the traveled portion — no future dashed arc causing boomerang
                     const [c1x,c1y,c2x,c2y] = splitBez(pathT, earthX,earthY, o1x,o1y, o2x,o2y);
@@ -3693,6 +3701,8 @@
                         const angle = -Math.PI/2 + Math.PI * loopT;
                         ox = moonX + Math.cos(angle) * loopR;
                         oy = moonY + Math.sin(angle) * loopR;
+                        // Tangent to circle = perpendicular to radius, clockwise
+                        rocketAngle = angle + Math.PI;
                         ctx.beginPath();
                         ctx.arc(moonX, moonY, loopR, -Math.PI/2, angle, false);
                         ctx.strokeStyle = 'rgba(0,212,255,0.7)'; ctx.stroke();
@@ -3706,6 +3716,7 @@
                         const m = 1 - pathT;
                         ox = m*m*m*retStartX + 3*m*m*pathT*r1x + 3*m*pathT*pathT*r2x + pathT*pathT*pathT*earthX;
                         oy = m*m*m*retStartY + 3*m*m*pathT*r1y + 3*m*pathT*pathT*r2y + pathT*pathT*pathT*earthY;
+                        rocketAngle = bezTangent(pathT, retStartX,retStartY, r1x,r1y, r2x,r2y, earthX,earthY) + Math.PI/2;
 
                         ctx.beginPath(); ctx.moveTo(retStartX, retStartY);
                         ctx.bezierCurveTo(r1x, r1y, r2x, r2y, ox, oy);
@@ -3740,11 +3751,9 @@
                 og.addColorStop(0, `rgba(0,212,255,${pulse * 0.6})`);
                 og.addColorStop(1, 'rgba(0,212,255,0)');
                 ctx.beginPath(); ctx.arc(ox, oy, 30, 0, Math.PI * 2); ctx.fillStyle = og; ctx.fill();
-                // Rotate rocket to face toward the Moon
-                const angle = Math.atan2(moonY - oy, moonX - ox) + Math.PI / 2;
                 ctx.save();
                 ctx.translate(ox, oy);
-                ctx.rotate(angle);
+                ctx.rotate(rocketAngle);
                 ctx.font = `${Math.round(H * 0.07)}px serif`;
                 ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
                 ctx.fillText('🚀', 0, 0);
