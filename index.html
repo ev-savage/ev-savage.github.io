@@ -3738,27 +3738,35 @@
                 const r2x = W*0.35, r2y = H*0.70;
                 const retStartX = moonX, retStartY = moonY + loopR; // leave below Moon
 
-                // Draw dim full outbound
-                ctx.beginPath(); ctx.moveTo(earthX, earthY);
-                ctx.bezierCurveTo(o1x, o1y, o2x, o2y, outEndX, outEndY);
-                ctx.strokeStyle = 'rgba(0,212,255,0.15)'; ctx.lineWidth = 1.5;
-                ctx.setLineDash([6, 10]); ctx.stroke();
-
-                // Draw dim loop around Moon (right side, top → bottom clockwise)
-                ctx.beginPath();
-                ctx.arc(moonX, moonY, loopR, -Math.PI/2, Math.PI/2, false);
-                ctx.strokeStyle = 'rgba(0,212,255,0.15)'; ctx.stroke();
-
-                // Draw dim return
-                ctx.beginPath(); ctx.moveTo(retStartX, retStartY);
-                ctx.bezierCurveTo(r1x, r1y, r2x, r2y, earthX, earthY);
-                ctx.strokeStyle = 'rgba(0,255,136,0.12)'; ctx.stroke();
-                ctx.setLineDash([]);
-
                 // --- Artemis position from REAL distance data ---
                 const MOON_DIST = 238855;
                 const now = new Date();
+                const moonPhaseMs  = 3 * 3600000;
+                const moonDoneTime = new Date(A2.flyby.getTime() + moonPhaseMs);
+                const pastFlyby    = now >= A2.flyby;
+                const pastLoop     = now >= moonDoneTime;
                 let ox, oy;
+
+                ctx.lineWidth = 1.5;
+                ctx.setLineDash([6, 10]);
+
+                // Always draw dim outbound arc
+                ctx.beginPath(); ctx.moveTo(earthX, earthY);
+                ctx.bezierCurveTo(o1x, o1y, o2x, o2y, outEndX, outEndY);
+                ctx.strokeStyle = 'rgba(0,212,255,0.15)'; ctx.stroke();
+
+                // Only draw dim Moon loop + dim return AFTER flyby
+                if (pastFlyby) {
+                    ctx.beginPath();
+                    ctx.arc(moonX, moonY, loopR, -Math.PI/2, Math.PI/2, false);
+                    ctx.strokeStyle = 'rgba(0,212,255,0.15)'; ctx.stroke();
+                }
+                if (pastLoop) {
+                    ctx.beginPath(); ctx.moveTo(retStartX, retStartY);
+                    ctx.bezierCurveTo(r1x, r1y, r2x, r2y, earthX, earthY);
+                    ctx.strokeStyle = 'rgba(0,255,136,0.12)'; ctx.stroke();
+                }
+                ctx.setLineDash([]);
 
                 if (now < A2.flyby) {
                     // Outbound — driven by actual JPL distance
@@ -3767,48 +3775,40 @@
                     ox = m*m*m*earthX   + 3*m*m*pathT*o1x + 3*m*pathT*pathT*o2x + pathT*pathT*pathT*outEndX;
                     oy = m*m*m*earthY   + 3*m*m*pathT*o1y + 3*m*pathT*pathT*o2y + pathT*pathT*pathT*outEndY;
 
-                    // Lit outbound path
+                    // Lit outbound path so far
                     ctx.beginPath(); ctx.moveTo(earthX, earthY);
                     ctx.bezierCurveTo(o1x, o1y, o2x, o2y, ox, oy);
-                    ctx.strokeStyle = 'rgba(0,212,255,0.6)'; ctx.lineWidth = 2;
-                    ctx.setLineDash([]); ctx.stroke();
+                    ctx.strokeStyle = 'rgba(0,212,255,0.7)'; ctx.lineWidth = 2; ctx.stroke();
 
                 } else if (now < A2.splashdown) {
-                    // Around Moon or returning
-                    const moonPhaseMs  = 3 * 3600000; // ~3 hrs swinging around Moon
-                    const moonDoneTime = new Date(A2.flyby.getTime() + moonPhaseMs);
-
-                    // Light up full outbound path
+                    // Full outbound lit
                     ctx.beginPath(); ctx.moveTo(earthX, earthY);
                     ctx.bezierCurveTo(o1x, o1y, o2x, o2y, outEndX, outEndY);
-                    ctx.strokeStyle = 'rgba(0,212,255,0.6)'; ctx.lineWidth = 2; ctx.stroke();
+                    ctx.strokeStyle = 'rgba(0,212,255,0.7)'; ctx.lineWidth = 2; ctx.stroke();
 
-                    if (now < moonDoneTime) {
+                    if (!pastLoop) {
                         // Swinging around Moon
-                        const loopT   = (now - A2.flyby) / moonPhaseMs;
-                        const angle   = -Math.PI/2 + Math.PI * loopT; // top to bottom
+                        const loopT = (now - A2.flyby) / moonPhaseMs;
+                        const angle = -Math.PI/2 + Math.PI * loopT;
                         ox = moonX + Math.cos(angle) * loopR;
                         oy = moonY + Math.sin(angle) * loopR;
-
-                        // Lit arc so far
                         ctx.beginPath();
                         ctx.arc(moonX, moonY, loopR, -Math.PI/2, angle, false);
-                        ctx.strokeStyle = 'rgba(0,212,255,0.6)'; ctx.stroke();
+                        ctx.strokeStyle = 'rgba(0,212,255,0.7)'; ctx.stroke();
                     } else {
-                        // Returning home — light up full Moon loop
+                        // Returning — full Moon loop lit
                         ctx.beginPath();
                         ctx.arc(moonX, moonY, loopR, -Math.PI/2, Math.PI/2, false);
-                        ctx.strokeStyle = 'rgba(0,212,255,0.6)'; ctx.stroke();
+                        ctx.strokeStyle = 'rgba(0,212,255,0.7)'; ctx.stroke();
 
                         const pathT = Math.min((now - moonDoneTime) / (A2.splashdown - moonDoneTime), 1);
                         const m = 1 - pathT;
                         ox = m*m*m*retStartX + 3*m*m*pathT*r1x + 3*m*pathT*pathT*r2x + pathT*pathT*pathT*earthX;
                         oy = m*m*m*retStartY + 3*m*m*pathT*r1y + 3*m*pathT*pathT*r2y + pathT*pathT*pathT*earthY;
 
-                        // Lit return segment
                         ctx.beginPath(); ctx.moveTo(retStartX, retStartY);
                         ctx.bezierCurveTo(r1x, r1y, r2x, r2y, ox, oy);
-                        ctx.strokeStyle = 'rgba(0,255,136,0.6)'; ctx.lineWidth = 2; ctx.stroke();
+                        ctx.strokeStyle = 'rgba(0,255,136,0.7)'; ctx.lineWidth = 2; ctx.stroke();
                     }
                 } else {
                     ox = earthX; oy = earthY;
