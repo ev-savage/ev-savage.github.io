@@ -1678,12 +1678,6 @@
         .stream-card-title { font-family: 'Orbitron', sans-serif; font-size: 1rem; color: var(--sc, var(--accent-blue)); letter-spacing: 1px; text-align: center; }
         .stream-card-sub { font-size: 0.82rem; color: var(--text-secondary); text-align: center; }
 
-        .artemis-img-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(195px, 1fr));
-            gap: 1rem;
-        }
-
         .artemis-img-item {
             border-radius: 12px;
             overflow: hidden;
@@ -1717,7 +1711,7 @@
             letter-spacing: 0.4px;
         }
 
-        .artemis-gallery-note {
+        .artemis-gallery-note-REMOVED {
             text-align: center;
             font-size: 0.72rem;
             letter-spacing: 1px;
@@ -2006,14 +2000,6 @@
                 </div>
             </div>
 
-            <!-- NASA Mission Images -->
-            <div class="reveal">
-                <p class="artemis-gallery-sub">— Mission Imagery —</p>
-                <div class="artemis-img-grid" id="artemis-img-grid">
-                    <div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-secondary);font-size:.82rem;letter-spacing:2px;text-transform:uppercase;">Loading NASA imagery…</div>
-                </div>
-                <p class="artemis-gallery-note">Images via <a href="https://images.nasa.gov" target="_blank" rel="noopener">NASA Image and Video Library</a></p>
-            </div>
 
             <!-- Crew Cards -->
             <p class="artemis-gallery-sub reveal">— Mission Crew —</p>
@@ -3674,55 +3660,6 @@
             });
         }
 
-        // ---- NASA Images gallery ----
-        async function a2LoadImages() {
-            const grid = document.getElementById('artemis-img-grid');
-            if (!grid) return;
-            // Try queries from most to least specific — use first one that has results
-            const queries = [
-                'artemis+II+2026&year_start=2026',
-                'artemis+2+launch+2026&year_start=2026',
-                'orion+spacecraft+2026&year_start=2026',
-                'artemis+II+orion',
-                'artemis+moon+mission',
-            ];
-            try {
-                for (const q of queries) {
-                    const res   = await fetch(`https://images-api.nasa.gov/search?q=${q}&media_type=image&page_size=16`);
-                    const data  = await res.json();
-                    const items = data?.collection?.items;
-                    if (items && items.length > 0) { a2RenderImages(items); return; }
-                }
-                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-secondary);font-size:.82rem;letter-spacing:1px;">No images found yet — check back soon</div>';
-            } catch(e) {
-                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-secondary);font-size:.82rem;letter-spacing:1px;">Could not load NASA imagery</div>';
-            }
-        }
-
-        function a2RenderImages(items) {
-            const grid = document.getElementById('artemis-img-grid');
-            if (!grid) return;
-            if (!items.length) {
-                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-secondary);font-size:.82rem;letter-spacing:1px;">No images found yet</div>';
-                return;
-            }
-            grid.innerHTML = '';
-            grid.addEventListener('click', (e) => {
-                const item = e.target.closest('.artemis-img-item');
-                if (item) openLightbox(item.dataset.src, item.dataset.title);
-            });
-            items.forEach(item => {
-                const thumb = item.links?.[0]?.href;
-                const title = item.data?.[0]?.title || 'Artemis II';
-                if (!thumb) return;
-                const div = document.createElement('div');
-                div.className = 'artemis-img-item';
-                div.dataset.src   = thumb;
-                div.dataset.title = title;
-                div.innerHTML = `<img src="${thumb}" alt="${title}" loading="lazy"><div class="artemis-img-caption">${title}</div>`;
-                grid.appendChild(div);
-            });
-        }
 
         // ---- Init ----
         // ---- Orbital Map Canvas — driven by real JPL HORIZONS data ----
@@ -3921,7 +3858,6 @@
             setInterval(a2FetchPosition, 5 * 60 * 1000);
             initOrbitCanvas();
             a2RenderCrew();
-            a2LoadImages();
         }
 
         initArtemis();
