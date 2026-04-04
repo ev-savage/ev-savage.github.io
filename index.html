@@ -3872,7 +3872,7 @@
                 og.addColorStop(1, 'rgba(0,212,255,0)');
                 ctx.beginPath(); ctx.arc(ox, oy, 30, 0, Math.PI * 2); ctx.fillStyle = og; ctx.fill();
                 // Rotate rocket to face toward the Moon
-                const angle = Math.atan2(moonY - oy, moonX - ox) - Math.PI / 2;
+                const angle = Math.atan2(moonY - oy, moonX - ox) + Math.PI / 2;
                 ctx.save();
                 ctx.translate(ox, oy);
                 ctx.rotate(angle);
