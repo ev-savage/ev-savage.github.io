@@ -1402,11 +1402,13 @@
             box-shadow: 0 0 20px rgba(0,212,255,0.15);
         }
 
-        .astat-value {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 3.8rem;
-            font-weight: 900;
-            color: var(--accent-blue);
+        .astat-value,
+        #space-section .astat .astat-value {
+            font-family: 'Orbitron', sans-serif !important;
+            font-size: 5rem !important;
+            font-weight: 900 !important;
+            font-style: normal !important;
+            color: var(--accent-blue) !important;
             font-variant-numeric: tabular-nums;
             text-shadow: 0 0 22px rgba(0,212,255,0.5);
             line-height: 1.1;
@@ -1414,7 +1416,7 @@
         }
 
         .astat-label {
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             font-weight: 700;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -1811,15 +1813,15 @@
             <!-- Live Stats — 3 col -->
             <div class="artemis-stats reveal">
                 <div class="astat">
-                    <div class="astat-value" id="astat-dist-earth">---</div>
+                    <div class="astat-value" id="astat-dist-earth" style="font-size:5rem;font-weight:900;font-style:normal;">---</div>
                     <div class="astat-label">miles from Earth</div>
                 </div>
                 <div class="astat">
-                    <div class="astat-value" id="astat-dist-moon">---</div>
+                    <div class="astat-value" id="astat-dist-moon" style="font-size:5rem;font-weight:900;font-style:normal;">---</div>
                     <div class="astat-label">miles to the Moon</div>
                 </div>
                 <div class="astat">
-                    <div class="astat-value" id="astat-speed">---</div>
+                    <div class="astat-value" id="astat-speed" style="font-size:5rem;font-weight:900;font-style:normal;">---</div>
                     <div class="astat-label">miles per hour</div>
                 </div>
             </div>
