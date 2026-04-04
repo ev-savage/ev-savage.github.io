@@ -1644,7 +1644,7 @@
             <li><a href="#interests-section">Interests</a></li>
             <li><a href="#games-section">Games</a></li>
             <li><a href="#facts-section">Facts</a></li>
-            <li><a href="#space-section">Space</a></li>
+            <li><a href="#space-section">🚀 Space</a></li>
         </ul>
 
         <div class="nav-right">
@@ -1699,7 +1699,84 @@
 
 
     <!-- ============================================================
-         SECTION 2: SAVAGE INTERESTS
+         SECTION 2: ARTEMIS II MISSION TRACKER
+         ============================================================ -->
+    <div id="space-section">
+        <div class="section-wrap">
+
+            <div class="section-header reveal">
+                <span class="section-eyebrow">// Live Mission</span>
+                <h2 class="section-title">Artemis <span class="hl">II</span></h2>
+                <p class="section-sub">First crewed mission to the Moon since Apollo 17 · April 2026</p>
+            </div>
+
+            <!-- Mission Phase Timeline -->
+            <div class="artemis-phases reveal">
+                <div class="artemis-phase" id="phase-launch">Launch</div>
+                <span class="artemis-phase-arrow">→</span>
+                <div class="artemis-phase" id="phase-tli">TLI Burn</div>
+                <span class="artemis-phase-arrow">→</span>
+                <div class="artemis-phase" id="phase-transit">Lunar Transit</div>
+                <span class="artemis-phase-arrow">→</span>
+                <div class="artemis-phase" id="phase-flyby">Lunar Flyby</div>
+                <span class="artemis-phase-arrow">→</span>
+                <div class="artemis-phase" id="phase-return">Return</div>
+                <span class="artemis-phase-arrow">→</span>
+                <div class="artemis-phase" id="phase-splashdown">Splashdown</div>
+            </div>
+
+            <!-- Live Stats -->
+            <div class="artemis-stats reveal">
+                <div class="astat">
+                    <div class="astat-value" id="astat-elapsed">--D --H --M --S</div>
+                    <div class="astat-label">Mission Elapsed Time</div>
+                </div>
+                <div class="astat">
+                    <div class="astat-value astat-loading" id="astat-dist-earth">Fetching…</div>
+                    <div class="astat-label">Distance from Earth</div>
+                </div>
+                <div class="astat">
+                    <div class="astat-value astat-loading" id="astat-dist-moon">Fetching…</div>
+                    <div class="astat-label">Distance to Moon</div>
+                </div>
+                <div class="astat">
+                    <div class="astat-value astat-loading" id="astat-speed">Fetching…</div>
+                    <div class="astat-label">Spacecraft Speed</div>
+                </div>
+            </div>
+
+            <!-- Crew Cards -->
+            <p class="artemis-gallery-sub reveal">— Mission Crew —</p>
+            <div class="crew-grid reveal" id="crew-grid">
+                <!-- Populated by JS -->
+            </div>
+
+            <!-- NASA Eyes 3D Trajectory -->
+            <div class="artemis-tracker reveal">
+                <iframe
+                    src="https://eyes.nasa.gov/apps/solar-system/#/sc_orion_artemis_2?embed=true"
+                    title="NASA Eyes on the Solar System — Artemis II Trajectory"
+                    loading="lazy"
+                    allowfullscreen>
+                </iframe>
+                <div class="tracker-label">Live 3D Trajectory · NASA Eyes on the Solar System</div>
+            </div>
+
+            <!-- NASA Mission Images -->
+            <div class="reveal">
+                <p class="artemis-gallery-sub">— Mission Imagery —</p>
+                <div class="artemis-img-grid" id="artemis-img-grid">
+                    <div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-secondary);font-size:.82rem;letter-spacing:2px;text-transform:uppercase;">Loading NASA imagery…</div>
+                </div>
+                <p class="artemis-gallery-note">Images via <a href="https://images.nasa.gov" target="_blank" rel="noopener">NASA Image and Video Library</a></p>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ============================================================
+         SECTION 3: SAVAGE INTERESTS
          ============================================================ -->
     <div id="interests-section">
         <div class="section-wrap">
@@ -1995,84 +2072,7 @@
 
 
     <!-- ============================================================
-         SECTION 5: ARTEMIS II MISSION TRACKER
-         ============================================================ -->
-    <div id="space-section">
-        <div class="section-wrap">
-
-            <div class="section-header reveal">
-                <span class="section-eyebrow">// Live Mission</span>
-                <h2 class="section-title">Artemis <span class="hl">II</span></h2>
-                <p class="section-sub">First crewed mission to the Moon since Apollo 17 · April 2026</p>
-            </div>
-
-            <!-- Mission Phase Timeline -->
-            <div class="artemis-phases reveal">
-                <div class="artemis-phase" id="phase-launch">Launch</div>
-                <span class="artemis-phase-arrow">→</span>
-                <div class="artemis-phase" id="phase-tli">TLI Burn</div>
-                <span class="artemis-phase-arrow">→</span>
-                <div class="artemis-phase" id="phase-transit">Lunar Transit</div>
-                <span class="artemis-phase-arrow">→</span>
-                <div class="artemis-phase" id="phase-flyby">Lunar Flyby</div>
-                <span class="artemis-phase-arrow">→</span>
-                <div class="artemis-phase" id="phase-return">Return</div>
-                <span class="artemis-phase-arrow">→</span>
-                <div class="artemis-phase" id="phase-splashdown">Splashdown</div>
-            </div>
-
-            <!-- Live Stats -->
-            <div class="artemis-stats reveal">
-                <div class="astat">
-                    <div class="astat-value" id="astat-elapsed">--D --H --M --S</div>
-                    <div class="astat-label">Mission Elapsed Time</div>
-                </div>
-                <div class="astat">
-                    <div class="astat-value astat-loading" id="astat-dist-earth">Fetching…</div>
-                    <div class="astat-label">Distance from Earth</div>
-                </div>
-                <div class="astat">
-                    <div class="astat-value astat-loading" id="astat-dist-moon">Fetching…</div>
-                    <div class="astat-label">Distance to Moon</div>
-                </div>
-                <div class="astat">
-                    <div class="astat-value astat-loading" id="astat-speed">Fetching…</div>
-                    <div class="astat-label">Spacecraft Speed</div>
-                </div>
-            </div>
-
-            <!-- Crew Cards -->
-            <p class="artemis-gallery-sub reveal">— Mission Crew —</p>
-            <div class="crew-grid reveal" id="crew-grid">
-                <!-- Populated by JS -->
-            </div>
-
-            <!-- NASA Eyes 3D Trajectory -->
-            <div class="artemis-tracker reveal">
-                <iframe
-                    src="https://eyes.nasa.gov/apps/solar-system/#/sc_orion_artemis_2?embed=true"
-                    title="NASA Eyes on the Solar System — Artemis II Trajectory"
-                    loading="lazy"
-                    allowfullscreen>
-                </iframe>
-                <div class="tracker-label">Live 3D Trajectory · NASA Eyes on the Solar System</div>
-            </div>
-
-            <!-- NASA Mission Images -->
-            <div class="reveal">
-                <p class="artemis-gallery-sub">— Mission Imagery —</p>
-                <div class="artemis-img-grid" id="artemis-img-grid">
-                    <div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-secondary);font-size:.82rem;letter-spacing:2px;text-transform:uppercase;">Loading NASA imagery…</div>
-                </div>
-                <p class="artemis-gallery-note">Images via <a href="https://images.nasa.gov" target="_blank" rel="noopener">NASA Image and Video Library</a></p>
-            </div>
-
-        </div>
-    </div>
-
-
-    <!-- ============================================================
-         SECTION 4: SAVAGE FACTS
+         SECTION 5: SAVAGE FACTS
          ============================================================ -->
     <div id="facts-section">
         <div class="section-wrap">
