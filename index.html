@@ -2001,11 +2001,6 @@
             </div>
 
 
-            <!-- Crew Cards -->
-            <p class="artemis-gallery-sub reveal">— Mission Crew —</p>
-            <div class="crew-grid reveal" id="crew-grid">
-                <!-- Populated by JS -->
-            </div>
 
         </div>
     </div>
@@ -3477,29 +3472,6 @@
             splashdown: new Date('2026-04-11T04:00:00Z'),
         };
 
-        // Crew data — hardcoded so the cards always render even if API is slow
-        const A2_CREW = [
-            {
-                id: 568, flag: '🇺🇸', agency: 'NASA',
-                name: 'Reid Wiseman', role: 'Commander',
-                bio: 'USN Captain. ISS Expedition 40/41 veteran. Selected as Artemis II Commander in April 2023.',
-            },
-            {
-                id: 571, flag: '🇺🇸', agency: 'NASA',
-                name: 'Victor Glover', role: 'Pilot',
-                bio: 'USN CDR. ISS Expedition 64/65 veteran. First Black astronaut assigned to a lunar mission.',
-            },
-            {
-                id: 635, flag: '🇺🇸', agency: 'NASA',
-                name: 'Christina Koch', role: 'Mission Specialist',
-                bio: 'Holds the record for longest single spaceflight by a woman (328 days). First woman to lunar vicinity.',
-            },
-            {
-                id: 125, flag: '🇨🇦', agency: 'CSA',
-                name: 'Jeremy Hansen', role: 'Mission Specialist',
-                bio: 'RCAF Colonel. First Canadian to fly beyond low Earth orbit. First non-American on a lunar mission.',
-            },
-        ];
 
         // ---- Phase logic ----
         function a2CurrentPhase() {
@@ -3619,46 +3591,6 @@
             }
         }
 
-        // ---- Crew cards (renders instantly, then swaps in photos) ----
-        function a2RenderCrew() {
-            const grid = document.getElementById('crew-grid');
-            if (!grid) return;
-            grid.innerHTML = A2_CREW.map(c => `
-                <div class="crew-card">
-                    <div class="crew-photo-placeholder" id="photo-${c.id}">
-                        <span>👨‍🚀</span>
-                    </div>
-                    <span class="crew-flag">${c.flag}</span>
-                    <div class="crew-name">${c.name}</div>
-                    <div class="crew-role">${c.role}</div>
-                    <p class="crew-bio">${c.bio}</p>
-                    <span class="card-badge">${c.agency}</span>
-                </div>
-            `).join('');
-            // Async photo swap
-            A2_CREW.forEach(async c => {
-                try {
-                    const res  = await fetch(`https://images-api.nasa.gov/search?q=${encodeURIComponent(c.name)}&media_type=image&page_size=8`);
-                    const data = await res.json();
-                    const items = data?.collection?.items || [];
-                    // Prefer official portrait/headshot images
-                    const match = items.find(i => {
-                        const t = (i.data?.[0]?.title || '').toLowerCase();
-                        return t.includes('portrait') || t.includes('headshot') || t.includes('official');
-                    }) || items[0];
-                    const thumb = match?.links?.[0]?.href;
-                    if (!thumb) return;
-                    const wrap = document.getElementById('photo-' + c.id);
-                    if (wrap) {
-                        const img = document.createElement('img');
-                        img.className = 'crew-photo';
-                        img.alt = c.name;
-                        img.src = thumb;
-                        wrap.replaceWith(img);
-                    }
-                } catch(e) { /* keep emoji placeholder */ }
-            });
-        }
 
 
         // ---- Init ----
@@ -3857,7 +3789,6 @@
             a2FetchPosition();
             setInterval(a2FetchPosition, 5 * 60 * 1000);
             initOrbitCanvas();
-            a2RenderCrew();
         }
 
         initArtemis();
