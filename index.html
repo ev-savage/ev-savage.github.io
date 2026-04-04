@@ -1318,44 +1318,76 @@
         .artemis-phase-arrow { color: var(--border-color); font-size: 0.7rem; }
 
         /* Stats row */
+        /* Mission elapsed time — standalone big clock */
+        .artemis-clock {
+            background: var(--bg-card);
+            border: 1px solid var(--accent-blue);
+            border-radius: 16px;
+            padding: 1.2rem 2rem;
+            text-align: center;
+            margin-bottom: 1.2rem;
+            box-shadow: 0 0 30px rgba(0,212,255,0.12);
+        }
+
+        .artemis-clock-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2rem, 7vw, 4.5rem);
+            font-weight: 900;
+            color: var(--accent-blue);
+            letter-spacing: 4px;
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+            text-shadow: 0 0 28px rgba(0,212,255,0.6);
+            line-height: 1.1;
+        }
+
+        .artemis-clock-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-top: 0.4rem;
+        }
+
+        /* 3-stat row below the clock */
         .artemis-stats {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1rem;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
             margin-bottom: 3rem;
         }
 
         .astat {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2rem 1rem;
+            border-radius: 14px;
+            padding: 1rem 0.75rem;
             text-align: center;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         .astat:hover {
             border-color: var(--accent-blue);
-            box-shadow: 0 0 24px rgba(0,212,255,0.15);
+            box-shadow: 0 0 20px rgba(0,212,255,0.15);
         }
 
         .astat-value {
             font-family: 'Orbitron', sans-serif;
-            font-size: clamp(1.1rem, 2.2vw, 2rem);
+            font-size: clamp(1.4rem, 4vw, 3rem);
             font-weight: 900;
             color: var(--accent-blue);
             letter-spacing: 1px;
-            margin-bottom: 0.6rem;
-            /* tabular-nums keeps digit widths fixed so the clock never causes reflow */
+            margin-bottom: 0.35rem;
             font-variant-numeric: tabular-nums;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            text-shadow: 0 0 18px rgba(0,212,255,0.45);
+            text-shadow: 0 0 20px rgba(0,212,255,0.5);
         }
 
         .astat-label {
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             font-weight: 700;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -1538,7 +1570,7 @@
         @media (max-width: 600px) {
             .artemis-phases { gap: 0.25rem; }
             .artemis-phase  { font-size: 0.52rem; padding: 0.25rem 0.55rem; }
-            .artemis-stats  { grid-template-columns: repeat(2, 1fr); }
+            .artemis-stats  { grid-template-columns: repeat(1, 1fr); }
             .crew-grid      { grid-template-columns: repeat(2, 1fr); }
             .artemis-tracker iframe { height: 300px; }
         }
@@ -1725,12 +1757,14 @@
                 <div class="artemis-phase" id="phase-splashdown">Splashdown</div>
             </div>
 
-            <!-- Live Stats -->
+            <!-- Mission Elapsed Time Clock -->
+            <div class="artemis-clock reveal">
+                <div class="artemis-clock-value" id="astat-elapsed">--D --H --M --S</div>
+                <div class="artemis-clock-label">Mission Elapsed Time</div>
+            </div>
+
+            <!-- Live Stats — 3 col -->
             <div class="artemis-stats reveal">
-                <div class="astat">
-                    <div class="astat-value" id="astat-elapsed">--D --H --M --S</div>
-                    <div class="astat-label">Mission Elapsed Time</div>
-                </div>
                 <div class="astat">
                     <div class="astat-value astat-loading" id="astat-dist-earth">Fetching…</div>
                     <div class="astat-label">Distance from Earth</div>
