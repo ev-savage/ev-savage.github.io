@@ -3757,11 +3757,11 @@
                 ctx.strokeStyle = 'rgba(0,212,255,0.4)'; ctx.lineWidth = 1; ctx.stroke();
                 ctx.font = `900 ${Math.round(H*0.042)}px Orbitron, sans-serif`;
                 ctx.fillStyle = '#00d4ff'; ctx.textAlign = 'center';
-                ctx.fillText('ORION', ox, lblY);
+                ctx.fillText('ARTEMIS', ox, lblY);
 
                 // Data badge — real distance from JPL
                 if (orionDistMi > 0) {
-                    const badge = `${Math.round(orionDistMi).toLocaleString()} mi from Earth`;
+                    const badge = `${Math.round(orionDistMi).toLocaleString()} miles from Earth`;
                     const bw = ctx.measureText(badge).width + 24;
                     const bx = ox - bw / 2, by = lblY + (oy > H/2 ? -38 : 16);
                     ctx.fillStyle = 'rgba(0,20,40,0.75)';
