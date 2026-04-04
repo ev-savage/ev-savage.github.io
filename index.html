@@ -1477,7 +1477,7 @@
             position: absolute;
             top: 50%;
             left: 0%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%) rotate(45deg);
             font-size: 1.5rem;
             transition: left 1.2s ease;
             filter: drop-shadow(0 0 6px rgba(0,212,255,0.7));
@@ -3761,13 +3761,9 @@
                 og.addColorStop(0, `rgba(0,212,255,${pulse * 0.6})`);
                 og.addColorStop(1, 'rgba(0,212,255,0)');
                 ctx.beginPath(); ctx.arc(ox, oy, 30, 0, Math.PI * 2); ctx.fillStyle = og; ctx.fill();
-                ctx.save();
-                ctx.translate(ox, oy);
-                ctx.rotate(rocketAngle);
                 ctx.font = `${Math.round(H * 0.07)}px serif`;
                 ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-                ctx.fillText('🚀', 0, 0);
-                ctx.restore();
+                ctx.fillText('🚀', ox, oy);
 
                 // Orion callout line + label
                 const rocketR = Math.round(H * 0.035);
