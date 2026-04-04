@@ -3724,19 +3724,18 @@
                 const earthX = pad, earthY = H * 0.5;
                 const moonX  = W - pad, moonY = H * 0.5;
 
-                // Free-return trajectory: Earth → sweep above → loop around Moon → sweep below → Earth
-                // The loop happens at the Moon on the right side — not two separate arcs
+                // Free-return trajectory: Earth → gentle arc above → loop around Moon → gentle arc below → Earth
                 const moonR = Math.max(W, H) * 0.028;
-                const loopR = moonR * 3.2; // radius of swing around Moon
+                const loopR = moonR * 2.4; // tight loop radius around Moon
 
-                // Outbound bezier: Earth → top of Moon loop
-                const o1x = W*0.30, o1y = H*0.06;
-                const o2x = W*0.72, o2y = H*0.06;
+                // Outbound bezier: slight curve above center line
+                const o1x = W*0.35, o1y = H*0.30;
+                const o2x = W*0.70, o2y = H*0.22;
                 const outEndX = moonX, outEndY = moonY - loopR; // arrive above Moon
 
-                // Return bezier: bottom of Moon loop → Earth
-                const r1x = W*0.72, r1y = H*0.94;
-                const r2x = W*0.30, r2y = H*0.94;
+                // Return bezier: slight curve below center line
+                const r1x = W*0.70, r1y = H*0.78;
+                const r2x = W*0.35, r2y = H*0.70;
                 const retStartX = moonX, retStartY = moonY + loopR; // leave below Moon
 
                 // Draw dim full outbound
