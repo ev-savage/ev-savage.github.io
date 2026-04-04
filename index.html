@@ -1232,6 +1232,312 @@
 
 
         /* ============================================================
+           SECTION 5: ARTEMIS II MISSION TRACKER
+           ============================================================ */
+        #space-section {
+            position: relative;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        /* Subtle star field */
+        #space-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(1px 1px at 8% 18%,  rgba(255,255,255,0.55) 0%, transparent 100%),
+                radial-gradient(1px 1px at 22% 65%,  rgba(255,255,255,0.4)  0%, transparent 100%),
+                radial-gradient(1px 1px at 38% 12%,  rgba(255,255,255,0.6)  0%, transparent 100%),
+                radial-gradient(1px 1px at 52% 80%,  rgba(255,255,255,0.35) 0%, transparent 100%),
+                radial-gradient(1px 1px at 67% 30%,  rgba(255,255,255,0.5)  0%, transparent 100%),
+                radial-gradient(1px 1px at 80% 55%,  rgba(255,255,255,0.4)  0%, transparent 100%),
+                radial-gradient(1px 1px at 92% 8%,   rgba(255,255,255,0.55) 0%, transparent 100%),
+                radial-gradient(1px 1px at 15% 92%,  rgba(255,255,255,0.4)  0%, transparent 100%),
+                radial-gradient(2px 2px at 44% 48%,  rgba(0,212,255,0.5)   0%, transparent 100%),
+                radial-gradient(2px 2px at 76% 78%,  rgba(0,212,255,0.35)  0%, transparent 100%);
+            pointer-events: none;
+            opacity: 0.55;
+        }
+        [data-theme="light"] #space-section::before { opacity: 0.12; }
+
+        #space-section .section-title .hl { color: var(--accent-blue); }
+        #space-section .section-eyebrow   { color: var(--accent-blue); }
+
+        .section-sub {
+            margin-top: 0.8rem;
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+        }
+
+        /* Mission phase bar */
+        .artemis-phases {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-bottom: 3rem;
+        }
+
+        .artemis-phase {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 0.35rem 0.85rem;
+            border-radius: 50px;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .artemis-phase.done {
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+            background: rgba(0,255,136,0.06);
+        }
+
+        .artemis-phase.active {
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+            background: rgba(0,212,255,0.1);
+            animation: phasePulse 2.2s ease-in-out infinite;
+        }
+
+        @keyframes phasePulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(0,212,255,0.2); }
+            50%       { box-shadow: 0 0 22px rgba(0,212,255,0.45); }
+        }
+
+        .artemis-phase-arrow { color: var(--border-color); font-size: 0.7rem; }
+
+        /* Stats row */
+        .artemis-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .astat {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .astat:hover {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 20px rgba(0,212,255,0.1);
+        }
+
+        .astat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(0.9rem, 2.5vw, 1.3rem);
+            font-weight: 700;
+            color: var(--accent-blue);
+            letter-spacing: 1px;
+            margin-bottom: 0.4rem;
+            min-height: 1.8rem;
+        }
+
+        .astat-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
+
+        /* Crew grid */
+        .crew-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.4rem;
+            margin-bottom: 3rem;
+        }
+
+        .crew-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 1.8rem 1.4rem;
+            text-align: center;
+            transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .crew-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent-blue);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 20px rgba(0,212,255,0.15);
+        }
+
+        .crew-photo {
+            width: 88px;
+            height: 88px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-blue);
+            object-fit: cover;
+            margin: 0 auto 1rem;
+            display: block;
+            box-shadow: 0 0 14px rgba(0,212,255,0.2);
+            background: var(--bg-card-hover);
+        }
+
+        .crew-photo-placeholder {
+            width: 88px;
+            height: 88px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-blue);
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            background: var(--bg-card-hover);
+            box-shadow: 0 0 14px rgba(0,212,255,0.2);
+        }
+
+        .crew-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-primary);
+            margin-bottom: 0.3rem;
+        }
+
+        .crew-role {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--accent-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .crew-flag { font-size: 1.3rem; display: block; margin-bottom: 0.4rem; }
+
+        .crew-bio {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 0.8rem;
+        }
+
+        /* Trajectory iframe */
+        .artemis-tracker {
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            margin-bottom: 3rem;
+        }
+
+        .artemis-tracker iframe {
+            display: block;
+            width: 100%;
+            height: 460px;
+            border: none;
+            background: #000;
+        }
+
+        .tracker-label {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            padding: 0.75rem 1.2rem;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        /* NASA images gallery */
+        .artemis-gallery-sub {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent-blue);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .artemis-img-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(195px, 1fr));
+            gap: 1rem;
+        }
+
+        .artemis-img-item {
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            aspect-ratio: 4/3;
+            background: var(--bg-card);
+            position: relative;
+        }
+
+        .artemis-img-item:hover {
+            transform: scale(1.04);
+            border-color: var(--accent-blue);
+        }
+
+        .artemis-img-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .artemis-img-caption {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            padding: 0.5rem 0.7rem;
+            background: linear-gradient(transparent, rgba(0,0,0,0.82));
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.88);
+            letter-spacing: 0.4px;
+        }
+
+        .artemis-gallery-note {
+            text-align: center;
+            font-size: 0.72rem;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            margin-top: 1rem;
+        }
+
+        .artemis-gallery-note a { color: var(--accent-blue); text-decoration: none; }
+        .artemis-gallery-note a:hover { text-decoration: underline; }
+
+        .astat-loading {
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        @media (max-width: 600px) {
+            .artemis-phases { gap: 0.25rem; }
+            .artemis-phase  { font-size: 0.52rem; padding: 0.25rem 0.55rem; }
+            .crew-grid      { grid-template-columns: repeat(2, 1fr); }
+            .artemis-tracker iframe { height: 300px; }
+        }
+
+        /* ============================================================
            FOOTER
            ============================================================ */
         footer {
@@ -1332,6 +1638,7 @@
             <li><a href="#interests-section">Interests</a></li>
             <li><a href="#games-section">Games</a></li>
             <li><a href="#facts-section">Facts</a></li>
+            <li><a href="#space-section">Space</a></li>
         </ul>
 
         <div class="nav-right">
@@ -1675,6 +1982,83 @@
                     <p class="click-reaction" id="clickReaction">Can you handle the Savage Zone? 👀</p>
                     <button class="smash-btn" onclick="handleClick()">⚡ SMASH THIS BUTTON</button>
                 </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ============================================================
+         SECTION 5: ARTEMIS II MISSION TRACKER
+         ============================================================ -->
+    <div id="space-section">
+        <div class="section-wrap">
+
+            <div class="section-header reveal">
+                <span class="section-eyebrow">// Live Mission</span>
+                <h2 class="section-title">Artemis <span class="hl">II</span></h2>
+                <p class="section-sub">First crewed mission to the Moon since Apollo 17 · April 2026</p>
+            </div>
+
+            <!-- Mission Phase Timeline -->
+            <div class="artemis-phases reveal">
+                <div class="artemis-phase" id="phase-launch">Launch</div>
+                <span class="artemis-phase-arrow">→</span>
+                <div class="artemis-phase" id="phase-tli">TLI Burn</div>
+                <span class="artemis-phase-arrow">→</span>
+                <div class="artemis-phase" id="phase-transit">Lunar Transit</div>
+                <span class="artemis-phase-arrow">→</span>
+                <div class="artemis-phase" id="phase-flyby">Lunar Flyby</div>
+                <span class="artemis-phase-arrow">→</span>
+                <div class="artemis-phase" id="phase-return">Return</div>
+                <span class="artemis-phase-arrow">→</span>
+                <div class="artemis-phase" id="phase-splashdown">Splashdown</div>
+            </div>
+
+            <!-- Live Stats -->
+            <div class="artemis-stats reveal">
+                <div class="astat">
+                    <div class="astat-value" id="astat-elapsed">--D --H --M --S</div>
+                    <div class="astat-label">Mission Elapsed Time</div>
+                </div>
+                <div class="astat">
+                    <div class="astat-value astat-loading" id="astat-dist-earth">Fetching…</div>
+                    <div class="astat-label">Distance from Earth</div>
+                </div>
+                <div class="astat">
+                    <div class="astat-value astat-loading" id="astat-dist-moon">Fetching…</div>
+                    <div class="astat-label">Distance to Moon</div>
+                </div>
+                <div class="astat">
+                    <div class="astat-value astat-loading" id="astat-speed">Fetching…</div>
+                    <div class="astat-label">Spacecraft Speed</div>
+                </div>
+            </div>
+
+            <!-- Crew Cards -->
+            <p class="artemis-gallery-sub reveal">— Mission Crew —</p>
+            <div class="crew-grid reveal" id="crew-grid">
+                <!-- Populated by JS -->
+            </div>
+
+            <!-- NASA Eyes 3D Trajectory -->
+            <div class="artemis-tracker reveal">
+                <iframe
+                    src="https://eyes.nasa.gov/apps/solar-system/#/sc_orion_artemis_2?embed=true"
+                    title="NASA Eyes on the Solar System — Artemis II Trajectory"
+                    loading="lazy"
+                    allowfullscreen>
+                </iframe>
+                <div class="tracker-label">Live 3D Trajectory · NASA Eyes on the Solar System</div>
+            </div>
+
+            <!-- NASA Mission Images -->
+            <div class="reveal">
+                <p class="artemis-gallery-sub">— Mission Imagery —</p>
+                <div class="artemis-img-grid" id="artemis-img-grid">
+                    <div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-secondary);font-size:.82rem;letter-spacing:2px;text-transform:uppercase;">Loading NASA imagery…</div>
+                </div>
+                <p class="artemis-gallery-note">Images via <a href="https://images.nasa.gov" target="_blank" rel="noopener">NASA Image and Video Library</a></p>
             </div>
 
         </div>
@@ -2815,6 +3199,245 @@
                 document.body.style.overflow = '';
             }
         });
+
+        // ============================================================
+        // ARTEMIS II MISSION TRACKER
+        // ============================================================
+
+        // Known mission timestamps (UTC)
+        const A2 = {
+            launch:     new Date('2026-04-01T22:35:00Z'),
+            tli:        new Date('2026-04-02T18:00:00Z'),
+            transitEnd: new Date('2026-04-06T18:00:00Z'), // lunar flyby
+            flyby:      new Date('2026-04-06T20:00:00Z'),
+            returnEnd:  new Date('2026-04-11T00:00:00Z'),
+            splashdown: new Date('2026-04-11T04:00:00Z'),
+        };
+
+        // Crew data — hardcoded so the cards always render even if API is slow
+        const A2_CREW = [
+            {
+                id: 568, flag: '🇺🇸', agency: 'NASA',
+                name: 'Reid Wiseman', role: 'Commander',
+                bio: 'USN Captain. ISS Expedition 40/41 veteran. Selected as Artemis II Commander in April 2023.',
+            },
+            {
+                id: 571, flag: '🇺🇸', agency: 'NASA',
+                name: 'Victor Glover', role: 'Pilot',
+                bio: 'USN CDR. ISS Expedition 64/65 veteran. First Black astronaut assigned to a lunar mission.',
+            },
+            {
+                id: 635, flag: '🇺🇸', agency: 'NASA',
+                name: 'Christina Koch', role: 'Mission Specialist',
+                bio: 'Holds the record for longest single spaceflight by a woman (328 days). First woman to lunar vicinity.',
+            },
+            {
+                id: 125, flag: '🇨🇦', agency: 'CSA',
+                name: 'Jeremy Hansen', role: 'Mission Specialist',
+                bio: 'RCAF Colonel. First Canadian to fly beyond low Earth orbit. First non-American on a lunar mission.',
+            },
+        ];
+
+        // ---- Phase logic ----
+        function a2CurrentPhase() {
+            const now = new Date();
+            if (now >= A2.splashdown)  return 'splashdown';
+            if (now >= A2.flyby)       return 'return';
+            if (now >= A2.transitEnd)  return 'flyby';
+            if (now >= A2.tli)         return 'transit';
+            if (now >= A2.launch)      return 'tli';
+            return 'prelaunch';
+        }
+
+        function a2UpdatePhases() {
+            const order = ['launch','tli','transit','flyby','return','splashdown'];
+            const current = a2CurrentPhase();
+            const ci = order.indexOf(current);
+            order.forEach((p, i) => {
+                const el = document.getElementById('phase-' + p);
+                if (!el) return;
+                el.className = 'artemis-phase';
+                if (i < ci) el.classList.add('done');
+                else if (i === ci) el.classList.add('active');
+            });
+        }
+
+        // ---- Elapsed time clock (ticks every second) ----
+        function a2Tick() {
+            const now = new Date();
+            const el  = document.getElementById('astat-elapsed');
+            if (!el) return;
+            const diff = now - A2.launch;
+            if (diff < 0) { el.textContent = 'Pre-Launch'; return; }
+            const d = Math.floor(diff / 86400000);
+            const h = Math.floor((diff % 86400000) / 3600000);
+            const m = Math.floor((diff % 3600000) / 60000);
+            const s = Math.floor((diff % 60000) / 1000);
+            el.textContent = `${String(d).padStart(2,'0')}D ${String(h).padStart(2,'0')}H ${String(m).padStart(2,'0')}M ${String(s).padStart(2,'0')}S`;
+        }
+
+        // ---- Estimated position (fallback when API unavailable) ----
+        function a2SetEstimated() {
+            const now = new Date();
+            if (now < A2.launch) {
+                document.getElementById('astat-dist-earth').textContent = '0 mi';
+                document.getElementById('astat-dist-moon').textContent  = '238,855 mi';
+                document.getElementById('astat-speed').textContent      = '0 mph';
+                return;
+            }
+            if (now < A2.tli) {
+                document.getElementById('astat-dist-earth').textContent = '~250 mi';
+                document.getElementById('astat-dist-moon').textContent  = '~238,600 mi';
+                document.getElementById('astat-speed').textContent      = '~17,500 mph';
+                return;
+            }
+            const totalMs = A2.transitEnd - A2.tli;
+            const doneFrac = Math.min((now - A2.tli) / totalMs, 1);
+            const moonDist = 238855;
+            const tliDist  = 22000;
+            // Slightly curved progress (spacecraft slows as it approaches)
+            const distFromEarth = tliDist + (moonDist - tliDist) * Math.pow(doneFrac, 0.82);
+            const distToMoon    = Math.max(0, moonDist - distFromEarth);
+            // Speed: ~25k mph at TLI, ~2k at closest approach
+            const speed = 25000 * (1 - doneFrac * 0.92);
+            document.getElementById('astat-dist-earth').textContent = '~' + Math.round(distFromEarth).toLocaleString() + ' mi';
+            document.getElementById('astat-dist-moon').textContent  = '~' + Math.round(distToMoon).toLocaleString() + ' mi';
+            document.getElementById('astat-speed').textContent      = '~' + Math.round(speed).toLocaleString() + ' mph';
+        }
+
+        // ---- JPL HORIZONS real position fetch ----
+        async function a2FetchPosition() {
+            const now   = new Date();
+            const start = now.toISOString().replace('T', ' ').slice(0, 16);
+            const stop  = new Date(now.getTime() + 30 * 60000).toISOString().replace('T', ' ').slice(0, 16);
+            const url   = 'https://ssd.jpl.nasa.gov/api/horizons.api?format=json'
+                + '&COMMAND=%27-1024%27'
+                + '&EPHEM_TYPE=VECTORS'
+                + '&CENTER=%27500%40399%27'
+                + '&VEC_TABLE=3'
+                + `&START_TIME=${encodeURIComponent("'" + start + "'")}`
+                + `&STOP_TIME=${encodeURIComponent("'" + stop + "'")}`
+                + '&STEP_SIZE=30+m';
+            try {
+                const res  = await fetch(url, { signal: AbortSignal.timeout(8000) });
+                const json = await res.json();
+                const raw  = json.result || '';
+                const soe  = raw.match(/\$\$SOE([\s\S]*?)\$\$EOE/);
+                if (!soe) { a2SetEstimated(); return; }
+                const block = soe[1];
+                const xm  = block.match(/X\s*=\s*([-\d.E+]+)/i);
+                const ym  = block.match(/Y\s*=\s*([-\d.E+]+)/i);
+                const zm  = block.match(/Z\s*=\s*([-\d.E+]+)/i);
+                const vxm = block.match(/VX\s*=\s*([-\d.E+]+)/i);
+                const vym = block.match(/VY\s*=\s*([-\d.E+]+)/i);
+                const vzm = block.match(/VZ\s*=\s*([-\d.E+]+)/i);
+                if (!xm || !ym || !zm) { a2SetEstimated(); return; }
+                const distKm = Math.sqrt(parseFloat(xm[1])**2 + parseFloat(ym[1])**2 + parseFloat(zm[1])**2);
+                const distMi = distKm * 0.621371;
+                document.getElementById('astat-dist-earth').textContent = Math.round(distMi).toLocaleString() + ' mi';
+                document.getElementById('astat-dist-moon').textContent  = Math.round(Math.max(0, 238855 - distMi)).toLocaleString() + ' mi';
+                if (vxm && vym && vzm) {
+                    const spdKms = Math.sqrt(parseFloat(vxm[1])**2 + parseFloat(vym[1])**2 + parseFloat(vzm[1])**2);
+                    document.getElementById('astat-speed').textContent = Math.round(spdKms * 2236.94).toLocaleString() + ' mph';
+                }
+            } catch(e) {
+                a2SetEstimated();
+            }
+        }
+
+        // ---- Crew cards (renders instantly, then swaps in photos) ----
+        function a2RenderCrew() {
+            const grid = document.getElementById('crew-grid');
+            if (!grid) return;
+            grid.innerHTML = A2_CREW.map(c => `
+                <div class="crew-card">
+                    <div class="crew-photo-placeholder" id="photo-${c.id}">
+                        <span>👨‍🚀</span>
+                    </div>
+                    <span class="crew-flag">${c.flag}</span>
+                    <div class="crew-name">${c.name}</div>
+                    <div class="crew-role">${c.role}</div>
+                    <p class="crew-bio">${c.bio}</p>
+                    <span class="card-badge">${c.agency}</span>
+                </div>
+            `).join('');
+            // Async photo swap
+            A2_CREW.forEach(async c => {
+                try {
+                    const res  = await fetch(`https://ll.thespacedevs.com/2.2.0/astronaut/${c.id}/`, { signal: AbortSignal.timeout(6000) });
+                    if (!res.ok) return;
+                    const data = await res.json();
+                    if (!data.profile_image_thumbnail) return;
+                    const wrap = document.getElementById('photo-' + c.id);
+                    if (wrap) {
+                        const img = document.createElement('img');
+                        img.className = 'crew-photo';
+                        img.alt = c.name;
+                        img.src = data.profile_image_thumbnail;
+                        wrap.replaceWith(img);
+                    }
+                } catch(e) { /* keep emoji placeholder */ }
+            });
+        }
+
+        // ---- NASA Images gallery ----
+        async function a2LoadImages() {
+            const grid = document.getElementById('artemis-img-grid');
+            if (!grid) return;
+            try {
+                const res  = await fetch('https://images-api.nasa.gov/search?q=artemis+II&media_type=image&year_start=2026&page_size=12');
+                const data = await res.json();
+                const items = data?.collection?.items;
+                if (!items || items.length === 0) {
+                    // Broaden search if nothing from 2026 yet
+                    const res2  = await fetch('https://images-api.nasa.gov/search?q=artemis+2+crew&media_type=image&page_size=12');
+                    const data2 = await res2.json();
+                    return a2RenderImages(data2?.collection?.items || []);
+                }
+                a2RenderImages(items);
+            } catch(e) {
+                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-secondary);font-size:.82rem;letter-spacing:1px;">Could not load NASA imagery — check back soon</div>';
+            }
+        }
+
+        function a2RenderImages(items) {
+            const grid = document.getElementById('artemis-img-grid');
+            if (!grid) return;
+            if (!items.length) {
+                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-secondary);font-size:.82rem;letter-spacing:1px;">No images found yet</div>';
+                return;
+            }
+            grid.innerHTML = '';
+            grid.addEventListener('click', (e) => {
+                const item = e.target.closest('.artemis-img-item');
+                if (item) openLightbox(item.dataset.src, item.dataset.title);
+            });
+            items.forEach(item => {
+                const thumb = item.links?.[0]?.href;
+                const title = item.data?.[0]?.title || 'Artemis II';
+                if (!thumb) return;
+                const div = document.createElement('div');
+                div.className = 'artemis-img-item';
+                div.dataset.src   = thumb;
+                div.dataset.title = title;
+                div.innerHTML = `<img src="${thumb}" alt="${title}" loading="lazy"><div class="artemis-img-caption">${title}</div>`;
+                grid.appendChild(div);
+            });
+        }
+
+        // ---- Init ----
+        function initArtemis() {
+            a2UpdatePhases();
+            a2Tick();
+            setInterval(a2Tick, 1000);
+            a2FetchPosition();
+            setInterval(a2FetchPosition, 5 * 60 * 1000); // refresh every 5 min
+            a2RenderCrew();
+            a2LoadImages();
+        }
+
+        initArtemis();
+
 
         // ============================================================
         // AUTO FOOTER YEAR
