@@ -1402,13 +1402,11 @@
             box-shadow: 0 0 20px rgba(0,212,255,0.15);
         }
 
-        .astat-value,
-        #space-section .astat .astat-value {
-            font-family: 'Orbitron', sans-serif !important;
-            font-size: 5rem !important;
-            font-weight: 900 !important;
-            font-style: normal !important;
-            color: var(--accent-blue) !important;
+        .astat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 5rem;
+            font-weight: 900;
+            color: var(--accent-blue);
             font-variant-numeric: tabular-nums;
             text-shadow: 0 0 22px rgba(0,212,255,0.5);
             line-height: 1.1;
@@ -1813,15 +1811,15 @@
             <!-- Live Stats — 3 col -->
             <div class="artemis-stats reveal">
                 <div class="astat">
-                    <div class="astat-value" id="astat-dist-earth" style="font-size:5rem;font-weight:900;font-style:normal;">---</div>
+                    <div class="astat-value" id="astat-dist-earth">---</div>
                     <div class="astat-label">miles from Earth</div>
                 </div>
                 <div class="astat">
-                    <div class="astat-value" id="astat-dist-moon" style="font-size:5rem;font-weight:900;font-style:normal;">---</div>
+                    <div class="astat-value" id="astat-dist-moon">---</div>
                     <div class="astat-label">miles to the Moon</div>
                 </div>
                 <div class="astat">
-                    <div class="astat-value" id="astat-speed" style="font-size:5rem;font-weight:900;font-style:normal;">---</div>
+                    <div class="astat-value" id="astat-speed">---</div>
                     <div class="astat-label">miles per hour</div>
                 </div>
             </div>
@@ -3449,16 +3447,22 @@
             // Async photo swap
             A2_CREW.forEach(async c => {
                 try {
-                    const res  = await fetch(`https://ll.thespacedevs.com/2.2.0/astronaut/${c.id}/`, { signal: AbortSignal.timeout(6000) });
-                    if (!res.ok) return;
+                    const res  = await fetch(`https://images-api.nasa.gov/search?q=${encodeURIComponent(c.name)}&media_type=image&page_size=8`);
                     const data = await res.json();
-                    if (!data.profile_image_thumbnail) return;
+                    const items = data?.collection?.items || [];
+                    // Prefer official portrait/headshot images
+                    const match = items.find(i => {
+                        const t = (i.data?.[0]?.title || '').toLowerCase();
+                        return t.includes('portrait') || t.includes('headshot') || t.includes('official');
+                    }) || items[0];
+                    const thumb = match?.links?.[0]?.href;
+                    if (!thumb) return;
                     const wrap = document.getElementById('photo-' + c.id);
                     if (wrap) {
                         const img = document.createElement('img');
                         img.className = 'crew-photo';
                         img.alt = c.name;
-                        img.src = data.profile_image_thumbnail;
+                        img.src = thumb;
                         wrap.replaceWith(img);
                     }
                 } catch(e) { /* keep emoji placeholder */ }
