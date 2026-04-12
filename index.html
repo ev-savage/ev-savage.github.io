@@ -585,16 +585,23 @@
            GALLERY HINT on outdoor card
            ============================================================ */
         .gallery-hint {
-            margin-top: 0.8rem;
-            font-size: 0.78rem;
+            margin-top: 1rem;
+            font-size: 0.95rem;
             font-weight: 700;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
-            color: #ff7043;
-            opacity: 0.7;
-            transition: opacity 0.3s ease;
+            color: #0a0a0a;
+            background: linear-gradient(135deg, #ff7043, #ffab91);
+            padding: 0.5rem 1.2rem;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 0 10px rgba(255, 112, 67, 0.4);
         }
-        .card-outdoor:hover .gallery-hint { opacity: 1; }
+        .card-outdoor:hover .gallery-hint {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 112, 67, 0.6);
+        }
 
         /* ============================================================
            GALLERY MODAL
@@ -1704,9 +1711,8 @@
                         <p>• Turkey season is elite</p>
                         <br>
                         <p><strong>Fishing:</strong></p>
-                        <!-- ↓ Replace with your real biggest catch! -->
-                        <p>• Bass fishing champion 🎣</p>
-                        <p>• Biggest catch: ??? lbs</p>
+                        <p>• Bass Fishing Champion 🎣</p>
+                        <p>• Biggest Catch: 6.7 lbs 🏆</p>
                         <br>
                         <!-- ↓ Add your secret spot — or keep it secret! -->
                         <p><strong>Favorite spot:</strong> Classified 🤫</p>
@@ -1728,10 +1734,9 @@
                         <p><strong>Position:</strong> Your Position</p>
                         <br>
                         <p><strong>Stats:</strong></p>
-                        <!-- ↓ Update these with your real stats! -->
-                        <p>• Batting Avg: .???</p>
-                        <p>• Home Runs: ?</p>
-                        <p>• RBIs: ?</p>
+                        <p>• Batting Average: 1.000 🔥</p>
+                        <p>• Home Runs: Always 💪</p>
+                        <p>• RBIs: The Most 👑</p>
                         <br>
                         <!-- ↓ Change to YOUR favorite MLB team! -->
                         <p><strong>Fav MLB Team:</strong> Your Fav Team</p>
