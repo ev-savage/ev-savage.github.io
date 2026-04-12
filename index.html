@@ -2142,25 +2142,13 @@
         // Kick off the typewriter after the hero has faded in
         setTimeout(runTypewriter, 1600);
 
-        // ---- Visitor counter ----
+        // ---- Visitor counter (localStorage-based) ----
         (function() {
             const BASE = 2000;
             const el = document.getElementById('visitor-count');
-            function fmt(n) { return n.toLocaleString(); }
-
-            // Increment via CountAPI (free, no auth needed, persists across all visitors)
-            fetch('https://api.countapi.xyz/hit/ev-savage.github.io/visitors')
-                .then(r => r.json())
-                .then(data => {
-                    const total = BASE + (data.value || 1);
-                    el.textContent = fmt(total);
-                })
-                .catch(() => {
-                    // Fallback: localStorage so at least the device remembers
-                    let v = parseInt(localStorage.getItem('sz_visits') || '0') + 1;
-                    localStorage.setItem('sz_visits', v);
-                    el.textContent = fmt(BASE + v);
-                });
+            let v = parseInt(localStorage.getItem('sz_visits') || '0') + 1;
+            localStorage.setItem('sz_visits', v);
+            el.textContent = (BASE + v).toLocaleString();
         })();
 
 
