@@ -1335,321 +1335,19 @@
 
         .artemis-phase-arrow { color: var(--border-color); font-size: 0.7rem; }
 
-        /* Stats row */
-        /* Mission elapsed time — segmented clock */
-        .artemis-clock {
+        /* Mission summary paragraph */
+        .mission-summary {
             background: var(--bg-card);
-            border: 1px solid var(--accent-blue);
+            border: 1px solid var(--border-color);
             border-radius: 16px;
-            padding: 1.5rem 1rem 1.2rem;
+            padding: 1.8rem 2rem;
+            margin-bottom: 3rem;
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
             text-align: center;
-            margin-bottom: 1.2rem;
-            box-shadow: 0 0 30px rgba(0,212,255,0.12);
         }
-
-        .clock-segments {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            gap: 0.5rem;
-        }
-
-        .clock-seg {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-width: 3.5ch;
-        }
-
-        .clock-num {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 6rem;
-            font-weight: 900;
-            color: var(--accent-blue);
-            font-variant-numeric: tabular-nums;
-            text-shadow: 0 0 28px rgba(0,212,255,0.6);
-            line-height: 1;
-        }
-
-        .clock-unit {
-            font-size: 0.8rem;
-            font-weight: 700;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--text-secondary);
-            margin-top: 0.4rem;
-        }
-
-        .clock-colon {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 5rem;
-            font-weight: 900;
-            color: rgba(0,212,255,0.35);
-            line-height: 1;
-            padding-top: 0.05em;
-        }
-
-        .artemis-clock-label {
-            font-size: 0.68rem;
-            font-weight: 700;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            color: var(--text-secondary);
-            margin-top: 0.8rem;
-        }
-
-        /* 3-stat row — big numbers, almost no padding */
-        .artemis-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0.75rem;
-            margin-bottom: 3rem;
-        }
-
-        .astat {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 0.75rem 0.5rem 0.6rem;
-            text-align: center;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .astat:hover {
-            border-color: var(--accent-blue);
-            box-shadow: 0 0 20px rgba(0,212,255,0.15);
-        }
-
-        .astat-value {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 3rem;
-            font-weight: 900;
-            color: var(--accent-blue);
-            font-variant-numeric: tabular-nums;
-            text-shadow: 0 0 18px rgba(0,212,255,0.45);
-            line-height: 1.1;
-            margin-bottom: 0.2rem;
-        }
-
-        .astat-label {
-            font-size: 0.78rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--text-secondary);
-        }
-
-        /* Earth → Moon progress tracker */
-        .artemis-progress {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 1.4rem 1.8rem;
-            margin-bottom: 3rem;
-        }
-
-        .progress-track {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 0.6rem;
-        }
-
-        .progress-planet { font-size: 2rem; flex-shrink: 0; }
-
-        .progress-bar-wrap {
-            flex: 1;
-            height: 14px;
-            background: var(--border-color);
-            border-radius: 7px;
-            position: relative;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
-            border-radius: 7px;
-            width: 0%;
-            transition: width 1.2s ease;
-        }
-
-        .progress-rocket {
-            position: absolute;
-            top: 50%;
-            left: 0%;
-            transform: translate(-50%, -50%) rotate(45deg);
-            font-size: 1.5rem;
-            transition: left 1.2s ease;
-            filter: drop-shadow(0 0 6px rgba(0,212,255,0.7));
-        }
-
-        .progress-labels {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.72rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--text-secondary);
-        }
-
-        .progress-pct {
-            color: var(--accent-blue);
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.8rem;
-        }
-
-        /* Crew grid */
-        .crew-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1.4rem;
-            margin-bottom: 3rem;
-        }
-
-        .crew-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 18px;
-            padding: 1.8rem 1.4rem;
-            text-align: center;
-            transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
-        }
-
-        .crew-card:hover {
-            transform: translateY(-8px);
-            border-color: var(--accent-blue);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 20px rgba(0,212,255,0.15);
-        }
-
-        .crew-photo {
-            width: 88px;
-            height: 88px;
-            border-radius: 50%;
-            border: 2px solid var(--accent-blue);
-            object-fit: cover;
-            margin: 0 auto 1rem;
-            display: block;
-            box-shadow: 0 0 14px rgba(0,212,255,0.2);
-            background: var(--bg-card-hover);
-        }
-
-        .crew-photo-placeholder {
-            width: 88px;
-            height: 88px;
-            border-radius: 50%;
-            border: 2px solid var(--accent-blue);
-            margin: 0 auto 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            background: var(--bg-card-hover);
-            box-shadow: 0 0 14px rgba(0,212,255,0.2);
-        }
-
-        .crew-name {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--text-primary);
-            margin-bottom: 0.3rem;
-        }
-
-        .crew-role {
-            font-size: 0.72rem;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--accent-blue);
-            margin-bottom: 0.5rem;
-        }
-
-        .crew-flag { font-size: 1.3rem; display: block; margin-bottom: 0.4rem; }
-
-        .crew-bio {
-            font-size: 0.82rem;
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 0.8rem;
-        }
-
-        /* Trajectory iframe */
-        .artemis-tracker {
-            border-radius: 16px;
-            border: 1px solid var(--accent-blue);
-            margin-bottom: 3rem;
-            overflow: hidden;
-            box-shadow: 0 0 30px rgba(0,212,255,0.1);
-        }
-
-        #orbit-canvas {
-            display: block;
-            width: 100%;
-            height: 400px;
-            background: #020209;
-            cursor: default;
-        }
-
-        .planet-overlay {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-60%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-            pointer-events: none;
-            font-size: 3.2rem;
-            line-height: 1;
-        }
-        #planet-earth { left: 70px; transform: translate(-50%, -50%); }
-        #planet-moon  { right: 70px; transform: translate(50%, -50%); }
-        .planet-overlay span {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 0.72rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            color: rgba(255,255,255,0.7);
-            margin-top: 4px;
-        }
-        }
-
-        .tracker-footer {
-            background: var(--bg-card);
-            border-top: 1px solid var(--border-color);
-            padding: 1rem 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .tracker-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: var(--accent-blue);
-            color: #000;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.75rem;
-            font-weight: 900;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            text-decoration: none;
-            padding: 0.6rem 1.4rem;
-            border-radius: 50px;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .tracker-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(0,212,255,0.5);
-        }
+        .mission-summary strong { color: var(--accent-blue); }
 
         /* NASA images gallery */
         .artemis-gallery-sub {
@@ -1663,44 +1361,98 @@
             margin-bottom: 1.5rem;
         }
 
-        .artemis-stream-wrap {
-            position: relative;
-            width: 100%;
-            padding-bottom: 56.25%;
-            border-radius: 16px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            background: #000;
-        }
-        .artemis-stream-wrap iframe {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
+        .artemis-photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
         }
 
-        .artemis-stream-links {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 1rem;
+        .artemis-gallery-credit {
+            text-align: center;
+            font-size: 0.72rem;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
         }
-        .stream-card {
+
+        /* Artemis III countdown */
+        .artemis-next {
+            background: var(--bg-card);
+            border: 1px solid var(--accent-blue);
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0,212,255,0.12);
+        }
+
+        .artemis-next-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 900;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .artemis-next-sub {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+            margin-bottom: 2rem;
+        }
+
+        .artemis-countdown {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .countdown-seg {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 0.5rem;
-            padding: 1.8rem 1.5rem;
-            background: var(--bg-card);
-            border: 1px solid var(--sc, var(--accent-blue));
-            border-radius: 16px;
-            text-decoration: none;
-            color: inherit;
-            transition: transform .15s, box-shadow .15s;
+            min-width: 3.5ch;
         }
-        .stream-card:hover { transform: translateY(-3px); box-shadow: 0 0 18px var(--sc, var(--accent-blue)); }
-        .stream-card-icon { font-size: 2.4rem; }
-        .stream-card-title { font-family: 'Orbitron', sans-serif; font-size: 1rem; color: var(--sc, var(--accent-blue)); letter-spacing: 1px; text-align: center; }
-        .stream-card-sub { font-size: 0.82rem; color: var(--text-secondary); text-align: center; }
+
+        .countdown-num {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--accent-blue);
+            font-variant-numeric: tabular-nums;
+            text-shadow: 0 0 20px rgba(0,212,255,0.5);
+            line-height: 1;
+        }
+
+        .countdown-unit {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-top: 0.4rem;
+        }
+
+        .countdown-colon {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: rgba(0,212,255,0.35);
+            line-height: 1;
+            padding-top: 0.05em;
+        }
+
+        .artemis-countdown-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
 
         .artemis-img-item {
             border-radius: 12px;
@@ -1735,26 +1487,13 @@
             letter-spacing: 0.4px;
         }
 
-        .artemis-gallery-note-REMOVED {
-            text-align: center;
-            font-size: 0.72rem;
-            letter-spacing: 1px;
-            color: var(--text-secondary);
-            margin-top: 1rem;
-        }
-
-        .artemis-gallery-note a { color: var(--accent-blue); text-decoration: none; }
-        .artemis-gallery-note a:hover { text-decoration: underline; }
-
-
         @media (max-width: 600px) {
             .artemis-phases { gap: 0.25rem; }
             .artemis-phase  { font-size: 0.52rem; padding: 0.25rem 0.55rem; }
-            .clock-num      { font-size: 3rem; }
-            .clock-colon    { font-size: 2.5rem; }
-            .artemis-stats  { grid-template-columns: repeat(1, 1fr); }
-            .astat-value    { font-size: 3rem; }
-            .crew-grid      { grid-template-columns: repeat(2, 1fr); }
+            .artemis-photo-grid { grid-template-columns: 1fr; }
+            .countdown-num  { font-size: 2.2rem; }
+            .countdown-colon { font-size: 1.8rem; }
+            .mission-summary { padding: 1.2rem 1rem; font-size: 0.9rem; }
         }
 
         /* ============================================================
@@ -1920,121 +1659,7 @@
 
 
     <!-- ============================================================
-         SECTION 2: ARTEMIS II MISSION TRACKER
-         ============================================================ -->
-    <div id="space-section">
-        <div class="section-wrap">
-
-            <div class="section-header reveal">
-                <span class="section-eyebrow">// Live Mission</span>
-                <h2 class="section-title">Artemis <span class="hl">II</span></h2>
-                <p class="section-sub">First crewed mission to the Moon since Apollo 17 · April 2026</p>
-            </div>
-
-            <!-- Mission Phase Timeline -->
-            <div class="artemis-phases reveal">
-                <div class="artemis-phase" id="phase-launch">Launch</div>
-                <span class="artemis-phase-arrow">→</span>
-                <div class="artemis-phase" id="phase-tli">TLI Burn</div>
-                <span class="artemis-phase-arrow">→</span>
-                <div class="artemis-phase" id="phase-transit">Lunar Transit</div>
-                <span class="artemis-phase-arrow">→</span>
-                <div class="artemis-phase" id="phase-flyby">Lunar Flyby</div>
-                <span class="artemis-phase-arrow">→</span>
-                <div class="artemis-phase" id="phase-return">Return</div>
-                <span class="artemis-phase-arrow">→</span>
-                <div class="artemis-phase" id="phase-splashdown">Splashdown</div>
-            </div>
-
-            <!-- Mission Elapsed Time Clock -->
-            <div class="artemis-clock reveal">
-                <div class="clock-segments">
-                    <div class="clock-seg">
-                        <span class="clock-num" id="clock-d">--</span>
-                        <span class="clock-unit">Days</span>
-                    </div>
-                    <span class="clock-colon">:</span>
-                    <div class="clock-seg">
-                        <span class="clock-num" id="clock-h">--</span>
-                        <span class="clock-unit">Hours</span>
-                    </div>
-                    <span class="clock-colon">:</span>
-                    <div class="clock-seg">
-                        <span class="clock-num" id="clock-m">--</span>
-                        <span class="clock-unit">Minutes</span>
-                    </div>
-                    <span class="clock-colon">:</span>
-                    <div class="clock-seg">
-                        <span class="clock-num" id="clock-s">--</span>
-                        <span class="clock-unit">Seconds</span>
-                    </div>
-                </div>
-                <div class="artemis-clock-label">Mission Elapsed Time</div>
-            </div>
-
-            <!-- Live Stats — 3 col -->
-            <div class="artemis-stats reveal">
-                <div class="astat">
-                    <div class="astat-value" id="astat-dist-earth">---</div>
-                    <div class="astat-label">miles from Earth</div>
-                </div>
-                <div class="astat">
-                    <div class="astat-value" id="astat-dist-moon">---</div>
-                    <div class="astat-label">miles to the Moon</div>
-                </div>
-                <div class="astat">
-                    <div class="astat-value" id="astat-speed">---</div>
-                    <div class="astat-label">miles per hour</div>
-                </div>
-            </div>
-
-            <!-- Earth → Moon Progress Bar -->
-            <div class="artemis-progress reveal">
-                <div class="progress-track">
-                    <span class="progress-planet">🌍</span>
-                    <div class="progress-bar-wrap">
-                        <div class="progress-bar-fill" id="progress-fill"></div>
-                        <span class="progress-rocket" id="progress-rocket">🚀</span>
-                    </div>
-                    <span class="progress-planet">🌕</span>
-                </div>
-                <div class="progress-labels">
-                    <span>Earth</span>
-                    <span class="progress-pct" id="progress-pct">calculating...</span>
-                    <span>Moon</span>
-                </div>
-            </div>
-
-            <!-- Live Orbital Tracker Canvas -->
-            <div class="artemis-tracker reveal" style="position:relative;">
-                <canvas id="orbit-canvas"></canvas>
-                <div class="planet-overlay" id="planet-earth">🌍<span>EARTH</span></div>
-                <div class="planet-overlay" id="planet-moon">🌕<span>MOON</span></div>
-            </div>
-
-            <!-- NASA Live Stream -->
-            <div class="reveal">
-                <p class="artemis-gallery-sub">— Live Views From Orion —</p>
-                <p style="text-align:center;font-size:0.78rem;color:var(--text-secondary);margin-bottom:0.8rem;letter-spacing:1px;">Stream goes dark when crew is sleeping or signal is weak — that's normal 🚀</p>
-                <div class="artemis-stream-wrap">
-                    <iframe
-                        src="https://www.youtube.com/embed/6RwfNBtepa4?autoplay=1&mute=1"
-                        title="NASA Artemis II Live Views From Orion"
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen>
-                    </iframe>
-                </div>
-            </div>
-
-
-
-        </div>
-    </div>
-
-
-    <!-- ============================================================
-         SECTION 3: SAVAGE INTERESTS
+         SECTION 2: SAVAGE INTERESTS
          ============================================================ -->
     <div id="interests-section">
         <div class="section-wrap">
@@ -2354,6 +1979,117 @@
                 <button class="fact-btn" onclick="dropFact()">🎲 DROP A FACT</button>
                 <span class="fact-tally" id="factTally"></span>
 
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ============================================================
+         SECTION 5: ARTEMIS II — MISSION COMPLETE
+         ============================================================ -->
+    <div id="space-section">
+        <div class="section-wrap">
+
+            <div class="section-header reveal">
+                <span class="section-eyebrow">// Mission Complete</span>
+                <h2 class="section-title">Artemis <span class="hl">II</span></h2>
+                <p class="section-sub">Humanity returned to the Moon — April 1–10, 2026</p>
+            </div>
+
+            <!-- Mission Phase Timeline — all complete -->
+            <div class="artemis-phases reveal">
+                <div class="artemis-phase done">Launch</div>
+                <span class="artemis-phase-arrow">→</span>
+                <div class="artemis-phase done">TLI Burn</div>
+                <span class="artemis-phase-arrow">→</span>
+                <div class="artemis-phase done">Lunar Transit</div>
+                <span class="artemis-phase-arrow">→</span>
+                <div class="artemis-phase done">Lunar Flyby</div>
+                <span class="artemis-phase-arrow">→</span>
+                <div class="artemis-phase done">Return</div>
+                <span class="artemis-phase-arrow">→</span>
+                <div class="artemis-phase done">Splashdown</div>
+            </div>
+
+            <!-- Mission Summary -->
+            <div class="mission-summary reveal">
+                <p>On April 1, 2026, NASA's Artemis II mission launched four astronauts — <strong>Reid Wiseman</strong>, <strong>Victor Glover</strong>, <strong>Christina Koch</strong>, and <strong>Jeremy Hansen</strong> — on a 10-day journey around the Moon aboard the Orion spacecraft. It was the first crewed lunar mission since Apollo 17 in 1972. The crew flew a free-return trajectory, capturing breathtaking photos of Earth, the Moon, and even a rare in-space solar eclipse. They splashed down safely in the Pacific Ocean on April 10.</p>
+            </div>
+
+            <!-- Photo Gallery -->
+            <p class="artemis-gallery-sub reveal">— Mission Photo Gallery —</p>
+            <div class="artemis-photo-grid reveal">
+                <div class="artemis-img-item" onclick="openLightbox('https://www.nasa.gov/wp-content/uploads/2026/04/55182696113-0c4398702d-o-2.jpg?w=1024', 'SLS lifts off from Launch Pad 39B — April 1, 2026')">
+                    <img src="https://www.nasa.gov/wp-content/uploads/2026/04/55182696113-0c4398702d-o-2.jpg?w=1024" alt="Artemis II SLS launch" loading="lazy">
+                    <div class="artemis-img-caption">SLS lifts off from Pad 39B</div>
+                </div>
+                <div class="artemis-img-item" onclick="openLightbox('https://www.nasa.gov/wp-content/uploads/2026/04/55181686977-7e768c5ab5-o.jpg?w=1024', 'Three-minute exposure of the Artemis II launch')">
+                    <img src="https://www.nasa.gov/wp-content/uploads/2026/04/55181686977-7e768c5ab5-o.jpg?w=1024" alt="Artemis II long-exposure launch" loading="lazy">
+                    <div class="artemis-img-caption">Long-exposure launch arc</div>
+                </div>
+                <div class="artemis-img-item" onclick="openLightbox('https://images-assets.nasa.gov/image/art002e000191/art002e000191~large.jpg', 'Earth seen from Orion after the translunar injection burn — April 2')">
+                    <img src="https://images-assets.nasa.gov/image/art002e000191/art002e000191~large.jpg" alt="Earth from Orion spacecraft" loading="lazy">
+                    <div class="artemis-img-caption">Earth from Orion after TLI burn</div>
+                </div>
+                <div class="artemis-img-item" onclick="openLightbox('https://images-assets.nasa.gov/image/art002e004357/art002e004357~large.jpg', 'Orion spacecraft selfie in deep space — April 3')">
+                    <img src="https://images-assets.nasa.gov/image/art002e004357/art002e004357~large.jpg" alt="Orion selfie in space" loading="lazy">
+                    <div class="artemis-img-caption">Orion spacecraft selfie</div>
+                </div>
+                <div class="artemis-img-item" onclick="openLightbox('https://images-assets.nasa.gov/image/art002e004429/art002e004429~large.jpg', 'The Artemis II crew en route to the Moon — April 3')">
+                    <img src="https://images-assets.nasa.gov/image/art002e004429/art002e004429~large.jpg" alt="Artemis II crew en route to Moon" loading="lazy">
+                    <div class="artemis-img-caption">Crew en route to the Moon</div>
+                </div>
+                <div class="artemis-img-item" onclick="openLightbox('https://images-assets.nasa.gov/image/art002e009212/art002e009212~large.jpg', 'Fully illuminated Moon as seen from Orion — April 6')">
+                    <img src="https://images-assets.nasa.gov/image/art002e009212/art002e009212~large.jpg" alt="Full Moon from Orion" loading="lazy">
+                    <div class="artemis-img-caption">The Moon from Orion</div>
+                </div>
+                <div class="artemis-img-item" onclick="openLightbox('https://www.nasa.gov/wp-content/uploads/2026/04/art002e009288orig.jpg', 'Earthset captured through the Orion window — April 6')">
+                    <img src="https://www.nasa.gov/wp-content/uploads/2026/04/art002e009288orig.jpg" alt="Earthset from Orion" loading="lazy">
+                    <div class="artemis-img-caption">Earthset from the far side</div>
+                </div>
+                <div class="artemis-img-item" onclick="openLightbox('https://images-assets.nasa.gov/image/art002e009298/art002e009298~large.jpg', 'The Moon eclipses the Sun — a rare in-space solar eclipse')">
+                    <img src="https://images-assets.nasa.gov/image/art002e009298/art002e009298~large.jpg" alt="Solar eclipse from Orion" loading="lazy">
+                    <div class="artemis-img-caption">Solar eclipse from deep space</div>
+                </div>
+                <div class="artemis-img-item" onclick="openLightbox('https://images-assets.nasa.gov/image/art002e015231/art002e015231~large.jpg', 'Crescent Earth above the lunar horizon')">
+                    <img src="https://images-assets.nasa.gov/image/art002e015231/art002e015231~large.jpg" alt="Crescent Earth above Moon" loading="lazy">
+                    <div class="artemis-img-caption">Earth above the lunar horizon</div>
+                </div>
+                <div class="artemis-img-item" onclick="openLightbox('https://www.nasa.gov/wp-content/uploads/2026/04/nhq202604100019.jpg', 'Orion splashdown in the Pacific Ocean — April 10, 2026')">
+                    <img src="https://www.nasa.gov/wp-content/uploads/2026/04/nhq202604100019.jpg" alt="Artemis II splashdown" loading="lazy">
+                    <div class="artemis-img-caption">Splashdown — April 10, 2026</div>
+                </div>
+            </div>
+
+            <p class="artemis-gallery-credit reveal">All photos: NASA / JSC — public domain</p>
+
+            <!-- Countdown to Artemis III -->
+            <div class="artemis-next reveal">
+                <h3 class="artemis-next-title">Next Up: Artemis III</h3>
+                <p class="artemis-next-sub">Orbital tests with Starship HLS & new spacesuits — targeting mid-2027</p>
+                <div class="artemis-countdown" id="a3-countdown">
+                    <div class="countdown-seg">
+                        <span class="countdown-num" id="a3-days">---</span>
+                        <span class="countdown-unit">Days</span>
+                    </div>
+                    <span class="countdown-colon">:</span>
+                    <div class="countdown-seg">
+                        <span class="countdown-num" id="a3-hours">--</span>
+                        <span class="countdown-unit">Hours</span>
+                    </div>
+                    <span class="countdown-colon">:</span>
+                    <div class="countdown-seg">
+                        <span class="countdown-num" id="a3-min">--</span>
+                        <span class="countdown-unit">Min</span>
+                    </div>
+                    <span class="countdown-colon">:</span>
+                    <div class="countdown-seg">
+                        <span class="countdown-num" id="a3-sec">--</span>
+                        <span class="countdown-unit">Sec</span>
+                    </div>
+                </div>
+                <p class="artemis-countdown-label">Countdown to Artemis III (estimated)</p>
             </div>
 
         </div>
@@ -3486,328 +3222,36 @@
         });
 
         // ============================================================
-        // ARTEMIS II MISSION TRACKER
+        // ARTEMIS III COUNTDOWN
         // ============================================================
+        (function() {
+            const A3_TARGET = new Date('2027-07-01T00:00:00Z');
 
-        // Known mission timestamps (UTC)
-        const A2 = {
-            launch:     new Date('2026-04-01T22:35:00Z'),
-            tli:        new Date('2026-04-02T18:00:00Z'),
-            transitEnd: new Date('2026-04-06T18:00:00Z'), // lunar flyby
-            flyby:      new Date('2026-04-06T20:00:00Z'),
-            returnEnd:  new Date('2026-04-11T00:00:00Z'),
-            splashdown: new Date('2026-04-11T04:00:00Z'),
-        };
+            function a3Tick() {
+                const now  = new Date();
+                const diff = A3_TARGET - now;
+                const set  = (id, val) => {
+                    const el = document.getElementById(id);
+                    if (el) el.textContent = val;
+                };
 
+                if (diff <= 0) {
+                    set('a3-days', '00');
+                    set('a3-hours', '00');
+                    set('a3-min', '00');
+                    set('a3-sec', '00');
+                    return;
+                }
 
-        // ---- Phase logic ----
-        function a2CurrentPhase() {
-            const now = new Date();
-            if (now >= A2.splashdown)  return 'splashdown';
-            if (now >= A2.flyby)       return 'return';
-            if (now >= A2.transitEnd)  return 'flyby';
-            if (now >= A2.tli)         return 'transit';
-            if (now >= A2.launch)      return 'tli';
-            return 'prelaunch';
-        }
-
-        function a2UpdatePhases() {
-            const order = ['launch','tli','transit','flyby','return','splashdown'];
-            const current = a2CurrentPhase();
-            const ci = order.indexOf(current);
-            order.forEach((p, i) => {
-                const el = document.getElementById('phase-' + p);
-                if (!el) return;
-                el.className = 'artemis-phase';
-                if (i < ci) el.classList.add('done');
-                else if (i === ci) el.classList.add('active');
-            });
-        }
-
-        // ---- Elapsed time clock (ticks every second) ----
-        function a2Tick() {
-            const now  = new Date();
-            const diff = now - A2.launch;
-            const set  = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
-            if (diff < 0) { set('clock-d','--'); set('clock-h','--'); set('clock-m','--'); set('clock-s','--'); return; }
-            set('clock-d', String(Math.floor(diff / 86400000)).padStart(2,'0'));
-            set('clock-h', String(Math.floor((diff % 86400000) / 3600000)).padStart(2,'0'));
-            set('clock-m', String(Math.floor((diff % 3600000) / 60000)).padStart(2,'0'));
-            set('clock-s', String(Math.floor((diff % 60000) / 1000)).padStart(2,'0'));
-        }
-
-        // ---- Estimated position (fallback when API unavailable) ----
-        function updateProgress(distFromEarth) {
-            orionDistMi = distFromEarth; // feed real data into the canvas
-            const pct = Math.min(Math.max(distFromEarth / 238855, 0), 1);
-            const fill   = document.getElementById('progress-fill');
-            const rocket = document.getElementById('progress-rocket');
-            const label  = document.getElementById('progress-pct');
-            if (fill)   fill.style.width = (pct * 100).toFixed(1) + '%';
-            if (rocket) rocket.style.left = (pct * 100).toFixed(1) + '%';
-            if (label)  label.textContent = Math.round(pct * 100) + '% of the way to the Moon';
-        }
-
-        function a2SetEstimated() {
-            const now = new Date();
-            if (now < A2.launch) {
-                document.getElementById('astat-dist-earth').textContent = '0';
-                document.getElementById('astat-dist-moon').textContent  = '238,855';
-                document.getElementById('astat-speed').textContent      = '0';
-                return;
+                set('a3-days',  String(Math.floor(diff / 86400000)));
+                set('a3-hours', String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0'));
+                set('a3-min',   String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0'));
+                set('a3-sec',   String(Math.floor((diff % 60000) / 1000)).padStart(2, '0'));
             }
-            if (now < A2.tli) {
-                document.getElementById('astat-dist-earth').textContent = '~250';
-                document.getElementById('astat-dist-moon').textContent  = '~238,600';
-                document.getElementById('astat-speed').textContent      = '~17,500';
-                return;
-            }
-            const totalMs = A2.transitEnd - A2.tli;
-            const doneFrac = Math.min((now - A2.tli) / totalMs, 1);
-            const moonDist = 238855;
-            const tliDist  = 22000;
-            // Slightly curved progress (spacecraft slows as it approaches)
-            const distFromEarth = tliDist + (moonDist - tliDist) * Math.pow(doneFrac, 0.82);
-            const distToMoon    = Math.max(0, moonDist - distFromEarth);
-            // Speed: ~25k mph at TLI, ~2k at closest approach
-            const speed = 25000 * (1 - doneFrac * 0.92);
-            document.getElementById('astat-dist-earth').textContent = '~' + Math.round(distFromEarth).toLocaleString();
-            document.getElementById('astat-dist-moon').textContent  = '~' + Math.round(distToMoon).toLocaleString();
-            document.getElementById('astat-speed').textContent      = '~' + Math.round(speed).toLocaleString();
-            updateProgress(distFromEarth);
-        }
 
-        // ---- JPL HORIZONS real position fetch ----
-        async function a2FetchPosition() {
-            const now   = new Date();
-            const start = now.toISOString().replace('T', ' ').slice(0, 16);
-            const stop  = new Date(now.getTime() + 30 * 60000).toISOString().replace('T', ' ').slice(0, 16);
-            const url   = 'https://ssd.jpl.nasa.gov/api/horizons.api?format=json'
-                + '&COMMAND=%27-1024%27'
-                + '&EPHEM_TYPE=VECTORS'
-                + '&CENTER=%27500%40399%27'
-                + '&VEC_TABLE=3'
-                + `&START_TIME=${encodeURIComponent("'" + start + "'")}`
-                + `&STOP_TIME=${encodeURIComponent("'" + stop + "'")}`
-                + '&STEP_SIZE=30+m';
-            try {
-                const res  = await fetch(url, { signal: AbortSignal.timeout(8000) });
-                const json = await res.json();
-                const raw  = json.result || '';
-                const soe  = raw.match(/\$\$SOE([\s\S]*?)\$\$EOE/);
-                if (!soe) { a2SetEstimated(); return; }
-                const block = soe[1];
-                const xm  = block.match(/X\s*=\s*([-\d.E+]+)/i);
-                const ym  = block.match(/Y\s*=\s*([-\d.E+]+)/i);
-                const zm  = block.match(/Z\s*=\s*([-\d.E+]+)/i);
-                const vxm = block.match(/VX\s*=\s*([-\d.E+]+)/i);
-                const vym = block.match(/VY\s*=\s*([-\d.E+]+)/i);
-                const vzm = block.match(/VZ\s*=\s*([-\d.E+]+)/i);
-                if (!xm || !ym || !zm) { a2SetEstimated(); return; }
-                const distKm = Math.sqrt(parseFloat(xm[1])**2 + parseFloat(ym[1])**2 + parseFloat(zm[1])**2);
-                const distMi = distKm * 0.621371;
-                document.getElementById('astat-dist-earth').textContent = Math.round(distMi).toLocaleString();
-                document.getElementById('astat-dist-moon').textContent  = Math.round(Math.max(0, 238855 - distMi)).toLocaleString();
-                updateProgress(distMi);
-                if (vxm && vym && vzm) {
-                    const spdKms = Math.sqrt(parseFloat(vxm[1])**2 + parseFloat(vym[1])**2 + parseFloat(vzm[1])**2);
-                    document.getElementById('astat-speed').textContent = Math.round(spdKms * 2236.94).toLocaleString();
-                }
-            } catch(e) {
-                a2SetEstimated();
-            }
-        }
-
-
-
-        // ---- Init ----
-        // ---- Orbital Map Canvas — driven by real JPL HORIZONS data ----
-        let orionDistMi = 0; // set by updateProgress() from real telemetry
-
-        function initOrbitCanvas() {
-            const canvas = document.getElementById('orbit-canvas');
-            if (!canvas) return;
-            function resize() { canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; }
-            resize();
-            window.addEventListener('resize', resize);
-            let frame = 0;
-
-            const stars = Array.from({length: 200}, (_, i) => ({
-                x:     (Math.sin(i * 127.1 + 3)  * 0.5 + 0.5),
-                y:     (Math.cos(i * 311.7 + 1)  * 0.5 + 0.5),
-                r:     (Math.sin(i * 53.3)        * 0.5 + 0.5) * 1.6 + 0.2,
-                speed: (Math.sin(i * 17.1)        * 0.5 + 0.5) * 0.03 + 0.008,
-            }));
-
-
-            function draw() {
-                frame++;
-                const W = canvas.width, H = canvas.height;
-                const ctx = canvas.getContext('2d');
-
-                // Background
-                ctx.fillStyle = '#020209';
-                ctx.fillRect(0, 0, W, H);
-
-                // Twinkling stars
-                stars.forEach(s => {
-                    const a = 0.45 + Math.sin(frame * s.speed + s.x * 9) * 0.45;
-                    ctx.beginPath();
-                    ctx.arc(s.x * W, s.y * H, s.r, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(255,255,255,${a})`;
-                    ctx.fill();
-                });
-
-                // Layout — Earth left, Moon right, room for data overlays
-                const pad = 70;
-                const earthX = pad, earthY = H * 0.5;
-                const moonX  = W - pad, moonY = H * 0.5;
-
-                // Free-return trajectory — nearly flat, like the real path looks from the side
-                const moonR = Math.max(W, H) * 0.028;
-                const loopR = moonR * 1.8;
-
-                // Outbound: stays close to the horizontal Earth-Moon line, curves just slightly above
-                const o1x = W*0.38, o1y = H*0.46;
-                const o2x = W*0.72, o2y = H*0.43;
-                const outEndX = moonX, outEndY = moonY - loopR;
-
-                // Return: mirror below
-                const retStartX = moonX, retStartY = moonY + loopR;
-                const r1x = W*0.72, r1y = H*0.57;
-                const r2x = W*0.38, r2y = H*0.54;
-
-                // --- Artemis position from REAL distance data ---
-                const MOON_DIST = 238855;
-                const now = new Date();
-                const moonPhaseMs  = 3 * 3600000;
-                const moonDoneTime = new Date(A2.flyby.getTime() + moonPhaseMs);
-                const pastFlyby    = now >= A2.flyby;
-                const pastLoop     = now >= moonDoneTime;
-                let ox, oy, rocketAngle = 0;
-
-                // Cubic bezier tangent (direction of travel) at parameter t
-                function bezTangent(t, p0x,p0y,p1x,p1y,p2x,p2y,p3x,p3y) {
-                    const m = 1 - t;
-                    const dx = 3*(m*m*(p1x-p0x) + 2*m*t*(p2x-p1x) + t*t*(p3x-p2x));
-                    const dy = 3*(m*m*(p1y-p0y) + 2*m*t*(p2y-p1y) + t*t*(p3y-p2y));
-                    return Math.atan2(dy, dx);
-                }
-
-                // Helper: split cubic bezier at t using De Casteljau — returns control points for first segment
-                function splitBez(t, p0x,p0y,p1x,p1y,p2x,p2y) {
-                    const q1x = p0x + (p1x-p0x)*t, q1y = p0y + (p1y-p0y)*t;
-                    const m1x = p1x + (p2x-p1x)*t, m1y = p1y + (p2y-p1y)*t;
-                    const q2x = q1x + (m1x-q1x)*t, q2y = q1y + (m1y-q1y)*t;
-                    return [q1x, q1y, q2x, q2y];
-                }
-
-                if (now < A2.flyby) {
-                    // Outbound — driven by actual JPL distance
-                    const pathT = Math.min(Math.max(orionDistMi / MOON_DIST, 0), 1);
-                    const m = 1 - pathT;
-                    ox = m*m*m*earthX   + 3*m*m*pathT*o1x + 3*m*pathT*pathT*o2x + pathT*pathT*pathT*outEndX;
-                    oy = m*m*m*earthY   + 3*m*m*pathT*o1y + 3*m*pathT*pathT*o2y + pathT*pathT*pathT*outEndY;
-                    rocketAngle = Math.PI / 2; // point right toward Moon
-
-                    // Only draw the traveled portion — no future dashed arc causing boomerang
-                    const [c1x,c1y,c2x,c2y] = splitBez(pathT, earthX,earthY, o1x,o1y, o2x,o2y);
-                    ctx.beginPath(); ctx.moveTo(earthX, earthY);
-                    ctx.bezierCurveTo(c1x,c1y, c2x,c2y, ox,oy);
-                    ctx.strokeStyle = 'rgba(0,212,255,0.8)'; ctx.lineWidth = 2;
-                    ctx.setLineDash([]); ctx.stroke();
-
-                } else if (now < A2.splashdown) {
-                    // Full outbound lit
-                    ctx.beginPath(); ctx.moveTo(earthX, earthY);
-                    ctx.bezierCurveTo(o1x, o1y, o2x, o2y, outEndX, outEndY);
-                    ctx.strokeStyle = 'rgba(0,212,255,0.7)'; ctx.lineWidth = 2; ctx.stroke();
-
-                    if (!pastLoop) {
-                        // Swinging around Moon
-                        const loopT = (now - A2.flyby) / moonPhaseMs;
-                        const angle = -Math.PI/2 + Math.PI * loopT;
-                        ox = moonX + Math.cos(angle) * loopR;
-                        oy = moonY + Math.sin(angle) * loopR;
-                        // Tangent to circle = perpendicular to radius, clockwise
-                        rocketAngle = angle + Math.PI;
-                        ctx.beginPath();
-                        ctx.arc(moonX, moonY, loopR, -Math.PI/2, angle, false);
-                        ctx.strokeStyle = 'rgba(0,212,255,0.7)'; ctx.stroke();
-                    } else {
-                        // Returning — full Moon loop lit
-                        ctx.beginPath();
-                        ctx.arc(moonX, moonY, loopR, -Math.PI/2, Math.PI/2, false);
-                        ctx.strokeStyle = 'rgba(0,212,255,0.7)'; ctx.stroke();
-
-                        const pathT = Math.min((now - moonDoneTime) / (A2.splashdown - moonDoneTime), 1);
-                        const m = 1 - pathT;
-                        ox = m*m*m*retStartX + 3*m*m*pathT*r1x + 3*m*pathT*pathT*r2x + pathT*pathT*pathT*earthX;
-                        oy = m*m*m*retStartY + 3*m*m*pathT*r1y + 3*m*pathT*pathT*r2y + pathT*pathT*pathT*earthY;
-                        rocketAngle = -Math.PI / 2; // point left toward Earth
-
-                        ctx.beginPath(); ctx.moveTo(retStartX, retStartY);
-                        ctx.bezierCurveTo(r1x, r1y, r2x, r2y, ox, oy);
-                        ctx.strokeStyle = 'rgba(0,255,136,0.7)'; ctx.lineWidth = 2; ctx.stroke();
-                    }
-                } else {
-                    ox = earthX; oy = earthY;
-                }
-
-                const earthR = Math.max(W, H) * 0.045;
-
-                // Rocket emoji pointing toward Moon, with glow
-                const pulse = 0.6 + Math.sin(frame * 0.08) * 0.35;
-                const og = ctx.createRadialGradient(ox, oy, 0, ox, oy, 30);
-                og.addColorStop(0, `rgba(0,212,255,${pulse * 0.6})`);
-                og.addColorStop(1, 'rgba(0,212,255,0)');
-                ctx.beginPath(); ctx.arc(ox, oy, 30, 0, Math.PI * 2); ctx.fillStyle = og; ctx.fill();
-                ctx.font = `${Math.round(H * 0.07)}px serif`;
-                ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-                ctx.fillText('🚀', ox, oy);
-
-                // Orion callout line + label
-                const rocketR = Math.round(H * 0.035);
-                const lblY = oy > H / 2 ? oy - rocketR - 30 : oy + rocketR + 30;
-                ctx.beginPath(); ctx.moveTo(ox, oy > H/2 ? oy - rocketR : oy + rocketR); ctx.lineTo(ox, lblY + (oy > H/2 ? 16 : -16));
-                ctx.strokeStyle = 'rgba(0,212,255,0.4)'; ctx.lineWidth = 1; ctx.stroke();
-                ctx.font = `900 ${Math.round(H*0.042)}px Orbitron, sans-serif`;
-                ctx.fillStyle = '#00d4ff'; ctx.textAlign = 'center';
-                ctx.fillText('ARTEMIS', ox, lblY);
-
-                // Data badge — real distance from JPL
-                if (orionDistMi > 0) {
-                    const badge = `${Math.round(orionDistMi).toLocaleString()} miles from Earth`;
-                    const bw = ctx.measureText(badge).width + 24;
-                    const bx = ox - bw / 2, by = lblY + (oy > H/2 ? -38 : 16);
-                    ctx.fillStyle = 'rgba(0,20,40,0.75)';
-                    ctx.beginPath(); ctx.roundRect(bx, by, bw, 22, 5); ctx.fill();
-                    ctx.font = `600 ${Math.round(H*0.033)}px Rajdhani, sans-serif`;
-                    ctx.fillStyle = 'rgba(0,212,255,0.85)';
-                    ctx.fillText(badge, ox, by + 15);
-                }
-
-                // Source tag
-                ctx.font = `500 ${Math.round(H*0.028)}px Rajdhani, sans-serif`;
-                ctx.fillStyle = 'rgba(255,255,255,0.2)';
-                ctx.textAlign = 'right';
-                ctx.fillText('DATA: JPL HORIZONS', W - 10, H - 8);
-
-                requestAnimationFrame(draw);
-            }
-            draw();
-        }
-
-        function initArtemis() {
-            a2UpdatePhases();
-            a2Tick();
-            setInterval(a2Tick, 1000);
-            a2FetchPosition();
-            setInterval(a2FetchPosition, 5 * 60 * 1000);
-            initOrbitCanvas();
-        }
-
-        initArtemis();
+            a3Tick();
+            setInterval(a3Tick, 1000);
+        })();
 
 
         // ============================================================
