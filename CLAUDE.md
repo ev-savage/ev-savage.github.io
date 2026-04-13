@@ -2,7 +2,7 @@
 
 ## About this project
 This is Everett Savage's personal website, hosted on GitHub Pages at **ev-savage.github.io**.
-It's a single-file static site: everything lives in `index.html`.
+It's a small static site split across a few files: `index.html`, `css/styles.css`, `js/main.js`, `js/games.js`.
 Photos go in the `photos/` folder.
 
 ## IMPORTANT: Always commit AND push after every change
@@ -13,7 +13,7 @@ Pushing to main is what makes the site go live on the internet — Everett can r
 Do this after every successful edit:
 
 ```bash
-git add index.html
+git add -A
 git commit -m "<short description of what changed>"
 git push origin main
 ```
@@ -23,7 +23,10 @@ The whole point is that he can see his site update in seconds — that's what ma
 
 ## Site structure
 
-- Everything is in `index.html` — one big file with HTML, CSS, and JavaScript all together
+- `index.html` — HTML only (structure & content)
+- `css/styles.css` — all CSS (dark/light theme, layout, animations, responsive)
+- `js/main.js` — typewriter, theme toggle, nav, facts, scroll reveal, gallery, Artemis countdown, footer year
+- `js/games.js` — all 4 arcade games (Hunt, Snake, Tetris, Clicks) + tab switcher
 - `photos/` — images for the hunting & fishing gallery
 - `favicon.svg` — the browser tab icon
 
@@ -48,7 +51,7 @@ The whole point is that he can see his site update in seconds — that's what ma
 
 ## Adding content
 
-- New interests card: copy an existing `.card` block, change the emoji, title, and `--c-accent` color
-- New game: add a tab button + tab panel inside `#games-section`
-- New gallery photos: add `<div class="gallery-item">` blocks inside `.gallery-grid`
-- New facts: add to the `facts` array in the JS section
+- New interests card: copy an existing `.card` block in `index.html`, change the emoji, title, and `--c-accent` color
+- New game: add a tab button + tab panel in `index.html`, add logic in `js/games.js`
+- New gallery photos: add `<div class="gallery-item">` blocks inside `.gallery-grid` in `index.html`
+- New facts: add to the `facts` array in `js/main.js`

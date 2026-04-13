@@ -1,0 +1,1558 @@
+
+/* ============================================================
+   CSS VARIABLES — Controls dark mode vs light mode colors
+   Change these hex values to retheme the whole site at once!
+   ============================================================ */
+:root {
+    /* Dark Mode (default) */
+    --bg-primary:     #0a0a0a;
+    --bg-secondary:   #0d0d0d;
+    --bg-card:        #111827;
+    --bg-card-hover:  #1a2234;
+    --border-color:   #1f2937;
+    --accent-green:   #00ff88;  /* ← Main neon green color */
+    --accent-blue:    #00d4ff;  /* ← Electric blue accent */
+    --text-primary:   #f0f0f0;
+    --text-secondary: #9ca3af;
+    --shadow-glow:    0 0 20px rgba(0, 255, 136, 0.3);
+    --shadow-card:    0 4px 20px rgba(0, 0, 0, 0.5);
+    --nav-bg:         rgba(10, 10, 10, 0.88);
+}
+
+[data-theme="light"] {
+    /* Light Mode */
+    --bg-primary:     #f0f4f8;
+    --bg-secondary:   #e2e8f0;
+    --bg-card:        #ffffff;
+    --bg-card-hover:  #f8fafc;
+    --border-color:   #cbd5e1;
+    --accent-green:   #009955;
+    --accent-blue:    #0077aa;
+    --text-primary:   #1a1a2e;
+    --text-secondary: #475569;
+    --shadow-glow:    0 0 20px rgba(0, 153, 85, 0.2);
+    --shadow-card:    0 4px 20px rgba(0, 0, 0, 0.08);
+    --nav-bg:         rgba(240, 244, 248, 0.90);
+}
+
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: 'Rajdhani', sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    overflow-x: hidden;
+    line-height: 1.6;
+    transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+/* Custom scrollbar — stays on brand */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--accent-green); border-radius: 3px; }
+
+/* Selection highlight */
+::selection {
+    background: rgba(0, 255, 136, 0.25);
+    color: var(--text-primary);
+}
+
+
+/* ============================================================
+   NAVIGATION BAR
+   ============================================================ */
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--nav-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-color);
+    transition: all 0.4s ease;
+}
+
+.nav-logo {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: 1.1rem;
+    letter-spacing: 3px;
+    color: var(--accent-green);
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+}
+
+.nav-links a {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover { color: var(--accent-green); }
+
+/* Theme toggle button */
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 50px;
+    padding: 0.4rem 1rem;
+    cursor: pointer;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+    border-color: var(--accent-green);
+    color: var(--accent-green);
+    box-shadow: var(--shadow-glow);
+}
+
+/* Hamburger menu for small screens */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.hamburger span {
+    width: 22px;
+    height: 2px;
+    background: var(--text-primary);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+/* Nav right cluster */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+
+/* ============================================================
+   HERO SECTION
+   ============================================================ */
+#hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 7rem 2rem 5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Subtle moving grid in the background */
+#hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(0, 255, 136, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 136, 0.04) 1px, transparent 1px);
+    background-size: 55px 55px;
+    animation: gridScroll 25s linear infinite;
+    pointer-events: none;
+}
+
+[data-theme="light"] #hero::before {
+    background-image:
+        linear-gradient(rgba(0, 153, 85, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 153, 85, 0.06) 1px, transparent 1px);
+}
+
+@keyframes gridScroll {
+    from { transform: translateY(0); }
+    to   { transform: translateY(55px); }
+}
+
+/* Glowing blobs — atmospheric background lights */
+.orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.12;
+    pointer-events: none;
+    animation: orbDrift 10s ease-in-out infinite;
+}
+
+.orb-1 {
+    width: 500px;
+    height: 500px;
+    background: var(--accent-green);
+    top: -150px;
+    left: -150px;
+    animation-duration: 10s;
+}
+
+.orb-2 {
+    width: 350px;
+    height: 350px;
+    background: var(--accent-blue);
+    bottom: -100px;
+    right: -80px;
+    animation-duration: 13s;
+    animation-delay: -5s;
+}
+
+@keyframes orbDrift {
+    0%, 100% { transform: translate(0px, 0px) scale(1); }
+    50%       { transform: translate(25px, -25px) scale(1.08); }
+}
+
+/* "// Welcome to the" label above main title */
+.hero-eyebrow {
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 7px;
+    text-transform: uppercase;
+    color: var(--accent-green);
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 1;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.4s;
+}
+
+/* ===== MAIN TITLE — "SAVAGE ZONE" ===== */
+.hero-title {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    /* clamp(min, preferred, max) — scales with screen size */
+    font-size: clamp(3.2rem, 13vw, 9rem);
+    line-height: 1;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, var(--accent-green) 0%, var(--accent-blue) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+    z-index: 1;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.6s;
+}
+
+/* Glowing echo behind title */
+.hero-title-glow {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: clamp(3.2rem, 13vw, 9rem);
+    line-height: 1;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, var(--accent-green) 0%, var(--accent-blue) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    filter: blur(25px);
+    opacity: 0.35;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.hero-title-wrap {
+    position: relative;
+    display: inline-block;
+    z-index: 1;
+}
+
+/* "EVERETT SAVAGE" subtitle */
+.hero-name {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    font-size: clamp(0.9rem, 3.5vw, 1.7rem);
+    letter-spacing: 10px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-top: 0.6rem;
+    position: relative;
+    z-index: 1;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.8s;
+}
+
+/* Divider line between name and tagline */
+.hero-divider {
+    width: 120px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent-green), transparent);
+    margin: 2rem auto;
+    position: relative;
+    z-index: 1;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 1s;
+}
+
+/* Typewriter tagline */
+.hero-tagline {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(1rem, 3.5vw, 1.6rem);
+    letter-spacing: 4px;
+    color: var(--text-primary);
+    min-height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    position: relative;
+    z-index: 1;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 1.2s;
+}
+
+/* The animated word that changes */
+#typewriterWord { color: var(--accent-green); }
+
+/* Blinking cursor after the typewriter word */
+.cursor {
+    display: inline-block;
+    width: 3px;
+    height: 1.1em;
+    background: var(--accent-green);
+    margin-left: 3px;
+    vertical-align: middle;
+    animation: cursorBlink 0.9s step-end infinite;
+}
+
+@keyframes cursorBlink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+}
+
+.visitor-counter {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.4rem;
+    padding: 0.5rem 1.2rem;
+    background: rgba(0,212,255,0.07);
+    border: 1px solid rgba(0,212,255,0.25);
+    border-radius: 999px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    color: var(--accent-blue);
+}
+.visitor-counter .visitor-icon { font-size: 1rem; }
+#visitor-count { font-weight: 700; font-size: 1rem; }
+.visitor-label { color: rgba(255,255,255,0.5); font-size: 0.72rem; letter-spacing: 3px; text-transform: uppercase; }
+
+/* Scroll down hint at bottom of hero */
+.scroll-hint {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 2s;
+    z-index: 1;
+}
+
+.scroll-hint span {
+    font-size: 0.7rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+.scroll-chevron {
+    width: 18px;
+    height: 18px;
+    border-right: 2px solid var(--accent-green);
+    border-bottom: 2px solid var(--accent-green);
+    transform: rotate(45deg);
+    animation: chevronBounce 1.4s ease-in-out infinite;
+}
+
+@keyframes chevronBounce {
+    0%, 100% { transform: rotate(45deg) translateY(0); }
+    50%       { transform: rotate(45deg) translateY(6px); }
+}
+
+
+/* ============================================================
+   SHARED SECTION STYLES
+   ============================================================ */
+.section-wrap {
+    padding: 6rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+}
+
+/* Small label above section title — e.g. "// Level 2" */
+.section-eyebrow {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--accent-green);
+    margin-bottom: 0.6rem;
+}
+
+/* Section title — e.g. "Savage INTERESTS" */
+.section-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(1.6rem, 4.5vw, 2.8rem);
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    line-height: 1.2;
+}
+
+.section-title .hl { color: var(--accent-green); }
+
+/* Scroll-reveal base class — added by JS when in viewport */
+.reveal {
+    opacity: 0;
+    transform: translateY(35px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* ============================================================
+   SECTION 2: SAVAGE INTERESTS CARDS
+   ============================================================ */
+.interests-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(265px, 1fr));
+    gap: 1.5rem;
+}
+
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 18px;
+    padding: 2rem 1.8rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, background 0.4s ease;
+    cursor: default;
+}
+
+/* Subtle inner gradient on hover */
+.card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    background: radial-gradient(ellipse at top left, var(--c-accent), transparent 65%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    border-color: var(--c-accent);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.35), 0 0 25px var(--c-glow);
+    background: var(--bg-card-hover);
+}
+
+.card:hover::after { opacity: 0.05; }
+
+/* Each card gets its own accent color via CSS custom props */
+.card-roblox   { --c-accent: #00ff88; --c-glow: rgba(0, 255, 136, 0.25); }
+.card-outdoor  { --c-accent: #ff7043; --c-glow: rgba(255, 112, 67, 0.25); }
+.card-baseball { --c-accent: #00d4ff; --c-glow: rgba(0, 212, 255, 0.25); }
+.card-coding   { --c-accent: #b06aff; --c-glow: rgba(176, 106, 255, 0.25); }
+
+.card-icon {
+    font-size: 2.8rem;
+    display: block;
+    margin-bottom: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.card:hover .card-icon {
+    transform: scale(1.2) rotate(-6deg);
+}
+
+.card-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--c-accent);
+    margin-bottom: 1rem;
+}
+
+.card-body {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+}
+
+.card-body strong {
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+/* Small pill badge at bottom of card */
+
+
+/* ============================================================
+   GALLERY HINT on outdoor card
+   ============================================================ */
+.gallery-hint {
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #0a0a0a;
+    background: linear-gradient(135deg, #ff7043, #ffab91);
+    padding: 0.5rem 1.2rem;
+    border-radius: 8px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 0 10px rgba(255, 112, 67, 0.4);
+}
+.card-outdoor:hover .gallery-hint {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(255, 112, 67, 0.6);
+}
+
+/* ============================================================
+   GALLERY MODAL
+   ============================================================ */
+.gallery-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(6px);
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+.gallery-modal.open { display: flex; }
+
+.gallery-modal-content {
+    background: var(--bg-card);
+    border: 1px solid #ff7043;
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 900px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 0 40px rgba(255, 112, 67, 0.25);
+}
+
+.gallery-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.3rem;
+    color: #ff7043;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    letter-spacing: 2px;
+}
+
+.gallery-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 1.3rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+.gallery-close:hover { border-color: #ff7043; color: #ff7043; }
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 0.75rem;
+}
+
+.gallery-item {
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid var(--border-color);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.gallery-item:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 16px rgba(255,112,67,0.4);
+}
+.gallery-item img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    display: block;
+}
+.gallery-item-label {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+/* ============================================================
+   LIGHTBOX
+   ============================================================ */
+.lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 3000;
+    background: rgba(0,0,0,0.95);
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+}
+.lightbox.open { display: flex; }
+.lightbox img {
+    max-width: 90vw;
+    max-height: 80vh;
+    border-radius: 8px;
+    object-fit: contain;
+    box-shadow: 0 0 40px rgba(255,112,67,0.3);
+}
+.lightbox-close { position: absolute; top: 1.5rem; right: 1.5rem; }
+.lightbox-label {
+    color: #ff7043;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+}
+
+/* ============================================================
+   SECTION 3: SAVAGE HUNT
+   ============================================================ */
+#games-section {
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.hunt-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    padding: 2rem 1.8rem;
+    max-width: 680px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+}
+
+/* HUD row */
+.hunt-hud {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.1rem;
+    gap: 0.5rem;
+}
+
+.hunt-hud-stat { text-align: center; flex: 1; }
+
+.hunt-hud-label {
+    font-size: 0.62rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 0.15rem;
+}
+
+.hunt-hud-value {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.9rem;
+    font-weight: 900;
+    color: var(--accent-green);
+    line-height: 1;
+}
+
+.hunt-hud-value.timer-urgent {
+    color: #ff4444;
+    animation: timerPulse 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes timerPulse {
+    from { text-shadow: 0 0 6px rgba(255,68,68,0.3); }
+    to   { text-shadow: 0 0 22px rgba(255,68,68,0.9); }
+}
+
+/* Timer drain bar */
+.hunt-timer-bar-wrap {
+    background: var(--border-color);
+    border-radius: 4px;
+    height: 6px;
+    margin-bottom: 1.2rem;
+    overflow: hidden;
+}
+
+.hunt-timer-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
+    border-radius: 4px;
+    transition: width 1s linear, background 0.5s ease;
+    width: 100%;
+}
+
+.hunt-timer-bar.urgent { background: linear-gradient(90deg, #ff4444, #ff7043); }
+
+/* Point legend */
+.hunt-legend {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--text-secondary);
+    margin-bottom: 1.2rem;
+    text-transform: uppercase;
+}
+
+/* Game grid */
+.hunt-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.65rem;
+    margin-bottom: 0;
+    user-select: none;
+}
+
+.hunt-hole {
+    aspect-ratio: 1;
+    background: var(--bg-primary);
+    border: 2px solid var(--border-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.hunt-hole:hover { border-color: var(--accent-green); }
+
+.hunt-target {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(1.5rem, 4.5vw, 2.2rem);
+    transform: translateY(110%);
+    transition: transform 0.14s cubic-bezier(0.34, 1.56, 0.64, 1);
+    pointer-events: none;
+}
+
+.hunt-hole.active .hunt-target { transform: translateY(0); }
+.hunt-hole.hit  { background: rgba(0, 255, 136, 0.15); border-color: var(--accent-green); }
+.hunt-hole.miss { background: rgba(255, 68, 68, 0.12); border-color: #ff4444; }
+
+/* Floating score pop */
+.score-pop {
+    position: absolute;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: 1rem;
+    color: var(--accent-green);
+    pointer-events: none;
+    animation: scorePop 0.65s ease forwards;
+    z-index: 10;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+@keyframes scorePop {
+    0%   { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateX(-50%) translateY(-40px) scale(1.5); }
+}
+
+.score-pop.pts-2 { color: var(--accent-blue); }
+.score-pop.pts-3 { color: #b06aff; }
+.score-pop.pts-5 { color: #ffd700; font-size: 1.3rem; }
+
+/* Start / Game-over overlay */
+.hunt-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(10,10,10,0.9);
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    backdrop-filter: blur(4px);
+    z-index: 5;
+    padding: 2rem;
+}
+
+.hunt-overlay-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(1.3rem, 4vw, 2rem);
+    font-weight: 900;
+    color: var(--accent-green);
+    text-shadow: 0 0 20px rgba(0,255,136,0.5);
+    text-align: center;
+}
+
+.hunt-overlay-sub {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.7;
+}
+
+.hunt-start-btn {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #050505;
+    background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
+    border: none;
+    padding: 0.9rem 2.5rem;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 0 25px rgba(0,255,136,0.4);
+}
+
+.hunt-start-btn:hover {
+    transform: scale(1.06) translateY(-2px);
+    box-shadow: 0 0 45px rgba(0,255,136,0.6);
+}
+
+.hunt-start-btn:active { transform: scale(0.95); }
+
+
+/* ============================================================
+   GAME TABS
+   ============================================================ */
+.games-tabs {
+    display: flex;
+    gap: 0.6rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.games-tab {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 50px;
+    padding: 0.55rem 1.4rem;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: all 0.25s ease;
+}
+
+.games-tab:hover { border-color: var(--accent-green); color: var(--accent-green); }
+
+.games-tab.active {
+    background: var(--accent-green);
+    border-color: var(--accent-green);
+    color: #050505;
+    box-shadow: 0 0 20px rgba(0,255,136,0.35);
+}
+
+/* ============================================================
+   TETRIS LAYOUT
+   ============================================================ */
+.tetris-layout {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.tetris-side {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    padding-top: 0.2rem;
+}
+
+.tetris-side-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    font-weight: 700;
+}
+
+#tetNext {
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background: #0a0a0a;
+}
+
+.tetris-controls-help {
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+    line-height: 1.9;
+    text-align: left;
+    letter-spacing: 0.5px;
+    margin-top: 0.4rem;
+}
+
+/* ============================================================
+   SNAKE GAME
+   ============================================================ */
+.snake-canvas-wrap {
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+#snakeCanvas {
+    display: block;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    max-width: 100%;
+}
+
+.snake-dpad {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    margin-top: 0.85rem;
+}
+
+.snake-dpad-row { display: flex; gap: 0.25rem; }
+
+.snake-dpad-btn {
+    width: 56px;
+    height: 56px;
+    font-size: 1.35rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    cursor: pointer;
+    color: var(--text-primary);
+    transition: all 0.1s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.snake-dpad-btn:active { background: var(--accent-green); color: #050505; transform: scale(0.9); }
+
+.snake-dpad { display: flex; }
+
+.snake-legend {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--text-secondary);
+    margin-top: 0.9rem;
+    text-transform: uppercase;
+}
+
+/* ============================================================
+   CLICKS GAME (restored)
+   ============================================================ */
+.clicks-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    padding: 3.5rem 2rem;
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.clicks-box::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    padding-bottom: 70%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,255,136,0.06) 0%, transparent 70%);
+    animation: pulseGlow 4s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes pulseGlow {
+    0%, 100% { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+    50%       { opacity: 0.5; transform: translate(-50%,-50%) scale(1.15); }
+}
+
+.click-label-top {
+    font-size: 0.78rem;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    position: relative;
+    z-index: 1;
+}
+
+.click-number {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(5rem, 18vw, 9rem);
+    font-weight: 900;
+    line-height: 1;
+    color: var(--accent-green);
+    text-shadow: 0 0 30px rgba(0,255,136,0.35);
+    transition: transform 0.12s ease, text-shadow 0.12s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.click-number.pop { transform: scale(1.18); text-shadow: 0 0 60px rgba(0,255,136,0.8); }
+
+.click-reaction {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(0.75rem, 2.2vw, 1rem);
+    letter-spacing: 2px;
+    color: var(--accent-blue);
+    min-height: 1.8em;
+    margin: 1.2rem 0 2rem;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.smash-btn {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #050505;
+    background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
+    border: none;
+    padding: 1rem 3rem;
+    border-radius: 50px;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 0 25px rgba(0,255,136,0.4);
+}
+
+.smash-btn:hover { transform: scale(1.06) translateY(-2px); box-shadow: 0 0 45px rgba(0,255,136,0.6); }
+.smash-btn:active { transform: scale(0.95); }
+
+/* ============================================================
+   SECTION 4: SAVAGE FACTS
+   ============================================================ */
+.facts-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.fact-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 18px;
+    padding: 2.8rem 2.5rem;
+    min-height: 160px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 2rem;
+    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.fact-box.lit {
+    border-color: var(--accent-green);
+    box-shadow: 0 0 30px rgba(0, 255, 136, 0.12);
+}
+
+.fact-cat {
+    font-size: 0.72rem;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--accent-green);
+    font-weight: 700;
+}
+
+.fact-text {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.65;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.4s ease 0.1s, transform 0.4s ease 0.1s;
+}
+
+.fact-text.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.fact-prompt {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    letter-spacing: 1px;
+}
+
+.fact-btn {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent-green);
+    background: transparent;
+    border: 2px solid var(--accent-green);
+    padding: 0.85rem 2.8rem;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.fact-btn:hover {
+    background: var(--accent-green);
+    color: #050505;
+    box-shadow: 0 0 30px rgba(0, 255, 136, 0.4);
+    transform: translateY(-2px);
+}
+
+.fact-btn:active { transform: translateY(0); }
+
+.fact-tally {
+    display: block;
+    margin-top: 1.2rem;
+    font-size: 0.78rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+
+/* ============================================================
+   SECTION 5: ARTEMIS II MISSION TRACKER
+   ============================================================ */
+#space-section {
+    position: relative;
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+/* Subtle star field */
+#space-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(1px 1px at 8% 18%,  rgba(255,255,255,0.55) 0%, transparent 100%),
+        radial-gradient(1px 1px at 22% 65%,  rgba(255,255,255,0.4)  0%, transparent 100%),
+        radial-gradient(1px 1px at 38% 12%,  rgba(255,255,255,0.6)  0%, transparent 100%),
+        radial-gradient(1px 1px at 52% 80%,  rgba(255,255,255,0.35) 0%, transparent 100%),
+        radial-gradient(1px 1px at 67% 30%,  rgba(255,255,255,0.5)  0%, transparent 100%),
+        radial-gradient(1px 1px at 80% 55%,  rgba(255,255,255,0.4)  0%, transparent 100%),
+        radial-gradient(1px 1px at 92% 8%,   rgba(255,255,255,0.55) 0%, transparent 100%),
+        radial-gradient(1px 1px at 15% 92%,  rgba(255,255,255,0.4)  0%, transparent 100%),
+        radial-gradient(2px 2px at 44% 48%,  rgba(0,212,255,0.5)   0%, transparent 100%),
+        radial-gradient(2px 2px at 76% 78%,  rgba(0,212,255,0.35)  0%, transparent 100%);
+    pointer-events: none;
+    opacity: 0.55;
+}
+[data-theme="light"] #space-section::before { opacity: 0.12; }
+
+#space-section .section-title .hl { color: var(--accent-blue); }
+#space-section .section-eyebrow   { color: var(--accent-blue); }
+
+.section-sub {
+    margin-top: 0.8rem;
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    letter-spacing: 1px;
+}
+
+/* Mission phase bar */
+.artemis-phases {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 3rem;
+}
+
+.artemis-phase {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 0.35rem 0.85rem;
+    border-radius: 50px;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    white-space: nowrap;
+    transition: all 0.3s ease;
+}
+
+.artemis-phase.done {
+    border-color: var(--accent-green);
+    color: var(--accent-green);
+    background: rgba(0,255,136,0.06);
+}
+
+.artemis-phase.active {
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+    background: rgba(0,212,255,0.1);
+    animation: phasePulse 2.2s ease-in-out infinite;
+}
+
+@keyframes phasePulse {
+    0%, 100% { box-shadow: 0 0 10px rgba(0,212,255,0.2); }
+    50%       { box-shadow: 0 0 22px rgba(0,212,255,0.45); }
+}
+
+.artemis-phase-arrow { color: var(--border-color); font-size: 0.7rem; }
+
+/* Mission summary paragraph */
+.mission-summary {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 1.8rem 2rem;
+    margin-bottom: 3rem;
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    text-align: center;
+}
+.mission-summary strong { color: var(--accent-blue); }
+
+/* NASA images gallery */
+.artemis-gallery-sub {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent-blue);
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.artemis-photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.artemis-gallery-credit {
+    text-align: center;
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    color: var(--text-secondary);
+    margin-bottom: 3rem;
+}
+
+/* Artemis III countdown */
+.artemis-next {
+    background: var(--bg-card);
+    border: 1px solid var(--accent-blue);
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(0,212,255,0.12);
+}
+
+.artemis-next-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 900;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent-blue);
+    margin-bottom: 0.5rem;
+}
+
+.artemis-next-sub {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    letter-spacing: 1px;
+    margin-bottom: 2rem;
+}
+
+.artemis-countdown {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.countdown-seg {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 3.5ch;
+}
+
+.countdown-num {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: var(--accent-blue);
+    font-variant-numeric: tabular-nums;
+    text-shadow: 0 0 20px rgba(0,212,255,0.5);
+    line-height: 1;
+}
+
+.countdown-unit {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-top: 0.4rem;
+}
+
+.countdown-colon {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: rgba(0,212,255,0.35);
+    line-height: 1;
+    padding-top: 0.05em;
+}
+
+.artemis-countdown-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+.artemis-img-item {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+    aspect-ratio: 4/3;
+    background: var(--bg-card);
+    position: relative;
+}
+
+.artemis-img-item:hover {
+    transform: scale(1.04);
+    border-color: var(--accent-blue);
+}
+
+.artemis-img-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.artemis-img-caption {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 0.5rem 0.7rem;
+    background: linear-gradient(transparent, rgba(0,0,0,0.82));
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.88);
+    letter-spacing: 0.4px;
+}
+
+@media (max-width: 600px) {
+    .artemis-phases { gap: 0.25rem; }
+    .artemis-phase  { font-size: 0.52rem; padding: 0.25rem 0.55rem; }
+    .artemis-photo-grid { grid-template-columns: 1fr; }
+    .countdown-num  { font-size: 2.2rem; }
+    .countdown-colon { font-size: 1.8rem; }
+    .mission-summary { padding: 1.2rem 1rem; font-size: 0.9rem; }
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer {
+    padding: 2.5rem 2rem;
+    border-top: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    text-align: center;
+}
+
+.footer-wordmark {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 900;
+    letter-spacing: 5px;
+    color: var(--accent-green);
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+    margin-bottom: 0.5rem;
+}
+
+.footer-credit {
+    font-size: 0.88rem;
+    letter-spacing: 2px;
+    color: var(--text-secondary);
+}
+
+.footer-credit .hl {
+    color: var(--accent-green);
+    font-weight: 700;
+}
+
+
+/* ============================================================
+   BASE ANIMATIONS
+   ============================================================ */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0);    }
+}
+
+
+/* ============================================================
+   RESPONSIVE — MOBILE STYLES
+   ============================================================ */
+@media (max-width: 768px) {
+    nav { padding: 1rem 1.2rem; }
+
+    /* Hide nav links, show hamburger */
+    .nav-links {
+        display: none;
+        position: fixed;
+        top: 61px;
+        left: 0;
+        width: 100%;
+        background: var(--nav-bg);
+        flex-direction: column;
+        padding: 1.5rem 1.5rem 2rem;
+        gap: 1.2rem;
+        border-bottom: 1px solid var(--border-color);
+        backdrop-filter: blur(12px);
+    }
+
+    .nav-links.open { display: flex; }
+    .hamburger { display: flex; }
+
+    .section-wrap { padding: 5rem 1.2rem; }
+
+    .interests-grid { grid-template-columns: 1fr; }
+
+    .hero-name { letter-spacing: 5px; }
+
+    .hunt-box { padding: 1.5rem 1rem; }
+    .hunt-grid { gap: 0.45rem; }
+    .clicks-box { padding: 2.5rem 1.2rem; }
+
+    .fact-box { padding: 2rem 1.5rem; }
+}
+
+@media (max-width: 400px) {
+    .hero-title { letter-spacing: 2px; }
+    .hunt-start-btn { padding: 0.8rem 1.8rem; font-size: 0.78rem; }
+    .smash-btn { padding: 0.9rem 2rem; font-size: 0.8rem; }
+}
+
